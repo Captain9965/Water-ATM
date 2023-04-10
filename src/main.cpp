@@ -17,7 +17,7 @@ HardwareSerial GSMSerial(PA3, PA2);
 #define SerialMon Serial
 #define SerialAT GSMSerial
 
-#define GSM_POWER_KEY PB15
+#define GSM_POWER_KEY PB12
 //#define DUMP_AT_COMMANDS
 
 #define TINY_GSM_DEBUG SerialMon
@@ -55,12 +55,12 @@ const char mqttDeviceID[] = DEVICE_ID;
  */
 const char *birthTopic = TOPIC_PREFIX "birth";
 const char *willTopic = TOPIC_PREFIX "will";
-const char * topic = TOPIC_PREFIX "test";
+const char * topic = TOPIC_PREFIX "669ff52-48487183-67222131";
 
 const char birthMessage[] = "CONNECTED";
 const char willMessage[] = "DISCONNECTED";
 
-char brokerAddress[] = "broker.africastalking.com";
+char brokerAddress[] = "broker.hivemq.com";
 int brokerPort = 1883;
 
 // END MQTT CONFIG
@@ -70,7 +70,7 @@ bool brokerConnect(void);
 bool gsmConnect(void);
 void getModemData(void);
 void incomingMessageHandler(MQTT::MessageData &messageData);
-void send_message(const char* message);
+void publishMessage(char *payload, const char *topic);
 
 constexpr unsigned int str2int(const char *str, int h)
 {
@@ -95,6 +95,7 @@ void setup() {
     delay(100);
 
     // GSM ON
+    pinMode(GSM_POWER_KEY, OUTPUT);
     digitalWrite(GSM_POWER_KEY, 1);
     delay(3000);
     digitalWrite(GSM_POWER_KEY, 0);
@@ -105,36 +106,39 @@ void setup() {
         ; // Serial Not working
     }
 
-    pinMode(GSM_POWER_KEY, OUTPUT);
+    
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
     SerialMon.println("Starting up");
     getModemData();
-    sprintf(buffer, "Is network connected(0 False / 1 True)? : %i ", modem.isNetworkConnected());
-    SerialMon.println(buffer);
-    if (!modem.isGprsConnected() || !mqttClient.isConnected())
-    {
-        if (gsmConnect()== false)
-        {
-            SerialMon.println("[ERROR] GPRS Reconnection failed. Trying again.");
-        }
+    while(1){
+      sprintf(buffer, "Is network connected(0 False / 1 True)? : %i ", modem.isNetworkConnected());
+      SerialMon.println(buffer);
+      if (!modem.isGprsConnected() || !mqttClient.isConnected())
+      {
+          if (gsmConnect()== false)
+          {
+              SerialMon.println("[ERROR] GPRS Reconnection failed. Trying again.");
+          }
 
-        // Let's reconnect to the broker
+          // Let's reconnect to the broker
 
-        // Clean up connection???
-        mqttClient.disconnect();
-        if (brokerConnect() == true)
-        {
-            SerialMon.println("[ERROR] Failed to reconnnect to the broker. Trying again.");
-        }
+          // Clean up connection???
+          mqttClient.disconnect();
+          if (!brokerConnect())
+          {
+              SerialMon.println("[ERROR] Failed to reconnnect to the broker. Trying again.");
+          }
+      }
+      mqttClient.yield();
+
+      /* send dummy message: */
+      publishMessage("Hello","w/p/669ff52-48487183-67222131");
+
+      delay(1500); 
     }
-    mqttClient.yield(1000);
-
-    /* send dummy message: */
-
-    delay(1500); 
 }
 
 void getModemData(void)
@@ -250,7 +254,7 @@ bool brokerConnect(void)
     returnCode = mqttClient.subscribe(topic, MQTT::QOS1, incomingMessageHandler);
     if (returnCode != 0)
     {
-        snprintf(buffer, sizeof(buffer), "Unable to subscribe to servo topic. Hanginng the process\r\n");
+        snprintf(buffer, sizeof(buffer), "Unable to subscribe to servo topic. Hanging the process\r\n");
         SerialMon.print(buffer);
         return false; // Exit immediately
     }
@@ -277,18 +281,11 @@ void publishMessage(char *payload, const char *topic)
 
 void incomingMessageHandler(MQTT::MessageData &messageData)
 {
-    char cmd[10];
+    char cmd[messageData.message.payloadlen];
     MQTT::Message &message = messageData.message;
     snprintf(cmd, sizeof(cmd), "%s", messageData.message.payload);
     SerialMon.print(F("Incoming message: "));
     SerialMon.println(cmd);
-    switch (str2int(cmd, 0))
-    {
-    default:
-        SerialMon.print("Received command");
-        SerialMon.println(cmd);
-        break;
-    }
     memset((char *)message.payload, NULL, sizeof(cmd));
 }
 
