@@ -77,8 +77,8 @@ constexpr unsigned int str2int(const char *str, int h)
     return !str[h] ? 5381 : (str2int(str, h + 1) * 33) ^ str[h];
 }
 
-IPStack ipstack(tinyGSMClient);
-MQTT::Client<IPStack, Countdown, 128, 3> mqttClient = MQTT::Client<IPStack, Countdown, 128, 3>(ipstack);
+IPStack * ipstack = nullptr;
+MQTT::Client<IPStack, Countdown, 128, 3> * mqttClient = nullptr;
 
 char buffer[100];
 int returnCode = 0;
@@ -116,7 +116,7 @@ void loop() {
     while(1){
       sprintf(buffer, "Is network connected(0 False / 1 True)? : %i ", modem.isNetworkConnected());
       SerialMon.println(buffer);
-      if (!modem.isGprsConnected() || !mqttClient.isConnected())
+      if (!modem.isGprsConnected() || !mqttClient || !mqttClient->isConnected())
       {
           if (gsmConnect()== false)
           {
@@ -126,13 +126,19 @@ void loop() {
           // Let's reconnect to the broker
 
           // Clean up connection???
-          mqttClient.disconnect();
+          if (mqttClient){
+              mqttClient->disconnect();
+          }
+          
           if (!brokerConnect())
           {
               SerialMon.println("[ERROR] Failed to reconnnect to the broker. Trying again.");
           }
       }
-      mqttClient.yield();
+      if (mqttClient){
+        mqttClient->yield();
+      }
+      
 
       /* send dummy message: */
       publishMessage("Hello","w/p/669ff52-48487183-67222131");
@@ -210,7 +216,15 @@ bool brokerConnect(void)
 {
     MQTT::Message mqttMessage;
     snprintf(buffer, sizeof(buffer), "Connecting to %s on port %i \r\n", brokerAddress, brokerPort);
-    returnCode = ipstack.connect(brokerAddress, brokerPort);
+    if (ipstack){
+      delete ipstack;
+      ipstack = nullptr;
+    }
+    ipstack =  new IPStack(tinyGSMClient);
+    if (!ipstack){
+      return false;
+    }
+    returnCode = ipstack->connect(brokerAddress, brokerPort);
     SerialMon.println(buffer);
     if (returnCode != 1)
     {
@@ -234,7 +248,16 @@ bool brokerConnect(void)
     data.will.qos = MQTT::QOS1;
     data.will.retained = 0;
     data.will.topicName.cstring = (char *)willTopic;
-    returnCode = mqttClient.connect(data);
+
+    if(mqttClient){
+      delete mqttClient;
+      mqttClient = nullptr;
+    }
+    mqttClient = new MQTT::Client<IPStack, Countdown, 128, 3>(*ipstack);
+    if(!mqttClient){
+      return false;
+    }
+    returnCode = mqttClient->connect(data);
     if (returnCode != 0)
     {
         snprintf(buffer, sizeof(buffer), "Error establishing connection session with  broker. Error Code %i. \r\n", returnCode);
@@ -246,12 +269,12 @@ bool brokerConnect(void)
     mqttMessage.dup = false;
     mqttMessage.payload = (void *)birthMessage;
     mqttMessage.payloadlen = strlen(birthMessage) + 1;
-    returnCode = mqttClient.publish(birthTopic, mqttMessage);
+    returnCode = mqttClient->publish(birthTopic, mqttMessage);
 
     snprintf(buffer, sizeof(buffer), "Birth topic publish return code %i \n", returnCode);
     SerialMon.println(buffer);
 
-    returnCode = mqttClient.subscribe(topic, MQTT::QOS1, incomingMessageHandler);
+    returnCode = mqttClient->subscribe(topic, MQTT::QOS1, incomingMessageHandler);
     if (returnCode != 0)
     {
         snprintf(buffer, sizeof(buffer), "Unable to subscribe to servo topic. Hanging the process\r\n");
@@ -274,14 +297,14 @@ void publishMessage(char *payload, const char *topic)
     message.payload = (void *)payload;
     message.retained = 0;
     message.payloadlen = strlen(payload) + 1;
-    returnCode = mqttClient.publish(topic, message);
+    returnCode = mqttClient->publish(topic, message);
     snprintf(buffer, sizeof(buffer), "%s topic publish return code %i \n", topic, returnCode);
     SerialMon.println(buffer);
 }
 
 void incomingMessageHandler(MQTT::MessageData &messageData)
 {
-    char cmd[messageData.message.payloadlen];
+    char cmd[messageData.message.payloadlen + 1];
     MQTT::Message &message = messageData.message;
     snprintf(cmd, sizeof(cmd), "%s", messageData.message.payload);
     SerialMon.print(F("Incoming message: "));
