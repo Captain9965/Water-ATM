@@ -25,27 +25,29 @@ Comms* Comms::get_instance(){
 }
 
 void Comms::run(){
-    DEBUG_LN("Comms::run()");
+    DEBUG_INFO_LN("Comms::run()");
     init();
-    DEBUG_LN("Comms init success");
+    DEBUG_INFO_LN("Comms init success");
     while (1){
         if (!_ipstack->connected() || !_mqtt_client->is_connected()){
                 if(!_ipstack->connect()){
-                    DEBUG_LN("Failed to connect to network || GPRS");
+                    DEBUG_INFO_LN("Failed to connect to network || GPRS");
                 }
                 _mqtt_client->disconnect();
                 if(!_mqtt_client->connect()){
-                    DEBUG_LN("Failed to connect to broker");
+                    DEBUG_INFO_LN("Failed to connect to broker");
                 }
                 last_send_time = millis();
         }
         _mqtt_client->yield();
-        DEBUG("Signal strength: ");
-        DEBUG_LN(_ipstack->get_signal_strength());
+        DEBUG_INFO("Signal strength: ");
+        DEBUG_INFO_LN(_ipstack->get_signal_strength());
+
 
         if(millis() - last_send_time > 20000){
-            if(!_mqtt_client->publish_event((std::string(MQTT_PUB_TOPIC_PREFIX) + stm32f1_uid()).c_str(), "{Hello}")){
-                DEBUG_LN("Failed to publish message");
+            const char * topic = (std::string(MQTT_PUB_TOPIC_PREFIX) + stm32f1_uid()).c_str();
+            if(!_mqtt_client->publish_event(topic, "{Hello}")){
+                DEBUG_INFO_LN("Failed to publish message");
             }
             last_send_time = millis();
         }
