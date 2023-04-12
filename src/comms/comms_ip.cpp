@@ -6,7 +6,7 @@
  * 
  */
 void CommsGsmStack::init(){
-    DEBUG_LN("Powering on modem");
+    DEBUG_INFO_LN("Powering on modem");
     GSMSerial.begin(SYSTEM_GSM_BAUDRATE);
     delay(100);
     pinMode(SYSTEM_GSM_POWER_KEY, OUTPUT);
@@ -18,8 +18,8 @@ void CommsGsmStack::modem_power_on(){
     delay(3000);
     digitalWrite(SYSTEM_GSM_POWER_KEY, LOW);
     delay(100);
-    DEBUG("Found Modem IMEI: ");
-    DEBUG_LN(get_modem_imei());
+    DEBUG_INFO("Found Modem IMEI: ");
+    DEBUG_INFO_LN(get_modem_imei());
 }
 
 String CommsGsmStack::get_modem_imei(){
@@ -43,11 +43,11 @@ bool CommsGsmStack::is_network_connected(){
 }
 bool CommsGsmStack::connected(){
     if(!is_network_connected()){
-        DEBUG_LN("Network is not connected");
+        DEBUG_INFO_LN("Network is not connected");
         return false;
     }
     if(!is_GPRS_connected()){
-        DEBUG_LN("GPRS is not connected");
+        DEBUG_INFO_LN("GPRS is not connected");
         return false;
     }
     return true;
@@ -55,7 +55,7 @@ bool CommsGsmStack::connected(){
 
 bool CommsGsmStack::connect(){
     if (modem_connection_attempt_count > 0){
-        DEBUG_LN("Reconnecting to network, restarting modem");
+        DEBUG_INFO_LN("Reconnecting to network, restarting modem");
         modem_power_on();
         modem_power_on();
         modem.restart();
@@ -69,10 +69,10 @@ bool CommsGsmStack::connect(){
 }
 
 bool CommsGsmStack::connect_to_network(){
-    DEBUG_LN("Connecting to network");
+    DEBUG_INFO_LN("Connecting to network");
     if(!modem.waitForNetwork()){
         increment_reconnection_count();
-        DEBUG_LN("Unable to initialize network registration");
+        DEBUG_INFO_LN("Unable to initialize network registration");
         return false;
     }
     return true;
@@ -80,10 +80,10 @@ bool CommsGsmStack::connect_to_network(){
 }
 
 bool CommsGsmStack::connect_to_gprs(){
-    DEBUG_LN("Connecting to GPRS");
+    DEBUG_INFO_LN("Connecting to GPRS");
     if (!!modem.gprsConnect(APN_NAME, CELLULAR_USER_NAME, CELLULAR_PASSWORD)){
         increment_reconnection_count();
-        DEBUG_LN("Cannot connect to GPRS");
+        DEBUG_INFO_LN("Cannot connect to GPRS");
         return false;
 
     }

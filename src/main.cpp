@@ -10,7 +10,7 @@ void setup() {
         /* maybe reset mcu??*/
       }
     }
-    DEBUG_LN("*****************Starting Application***************");
+    DEBUG_INFO_LN("*****************Starting Application***************");
 }
 
 void loop() {

@@ -9,10 +9,10 @@
 void debug_init(int * error);
 #ifdef SYSTEM_DEBUG
 #define DEBUG_INIT(x) debug_init(x)
-#define DEBUG(x) SerialDebug.print(x)
-#define DEBUG_LN(x) SerialDebug.println(x)
+#define DEBUG_INFO(x) SerialDebug.print(x)
+#define DEBUG_INFO_LN(x) SerialDebug.println(x)
 #else
-#define DEBUG(x)
+#define DEBUG_INFO(x)
 #define DEBUG_INIT(x)
-#define DEBUG_LN(x)
+#define DEBUG_INFO_LN(x)
 #endif
