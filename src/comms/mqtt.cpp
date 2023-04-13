@@ -92,8 +92,10 @@ void CommsMQTTClient::disconnect(void){
 void CommsMQTTClient::message_callback(MQTT::MessageData &md){
     MQTT::Message &message = md.message;
     DEBUG_INFO("Received Message -> ");
-    DEBUG_INFO_LN((char *)message.payload);
     /* handle server side event at this point */
+    char display_buffer[message.payloadlen + 1];
+    snprintf(display_buffer, sizeof(display_buffer),"%s",message.payload);
+    DEBUG_INFO_LN(display_buffer);
     return;
 }
 
