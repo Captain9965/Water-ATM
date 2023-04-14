@@ -82,11 +82,26 @@ bool CommsMQTTClient::connect(void){
 }
 
 void CommsMQTTClient::disconnect(void){
-    DEBUG_INFO_LN("Disconnecting mqtt client");
+    DEBUG_INFO_LN("Unsubscribing and Disconnecting mqtt client");
+    _error = unsubscribe();
     if (_client){
         _client->disconnect();
     }
     _free_client();
+}
+
+int CommsMQTTClient::unsubscribe(){
+    DEBUG_INFO_LN("Unsubscribing from topic");
+    const char * topic = (std::string(MQTT_SUB_TOPIC_PREFIX) + stm32f1_uid()).c_str();
+    if (!_client){
+        return -3;
+    }
+    if ((_error = _client->unsubscribe(topic)) < 0){
+        DEBUG_INFO("Failed to unsubscribe to topic : ");
+        DEBUG_INFO_LN(topic);
+        return -5;
+    }
+    return 0;
 }
 
 void CommsMQTTClient::message_callback(MQTT::MessageData &md){

@@ -48,6 +48,7 @@ class CommsMQTTClient{
         static void message_callback(MQTT::MessageData &md);
         static CommsMQTTClient * get_instance(void);
     private:
+        void unsubscribe();
         void _free_client(void);
         IPStack * _ipstack = nullptr;
         MQTT::Client<IPStack, Countdown, MQTT_MAX_PACKET_SIZE, MQTT_MAX_MESSAGE_HANDLERS> * _client = nullptr;

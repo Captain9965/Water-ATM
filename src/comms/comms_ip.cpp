@@ -14,12 +14,21 @@ void CommsGsmStack::init(){
 }
 
 void CommsGsmStack::modem_power_on(){
+    DEBUG_INFO_LN("Turning on modem");
+    modem_cycle_power();
+    DEBUG_INFO("Found Modem IMEI: ");
+    DEBUG_INFO_LN(get_modem_imei());
+}
+void CommsGsmStack::modem_power_off(){
+    DEBUG_INFO_LN("Turning off modem");
+    modem_cycle_power();
+}
+
+void CommsGsmStack::modem_cycle_power(){
     digitalWrite(SYSTEM_GSM_POWER_KEY, HIGH);
     delay(3000);
     digitalWrite(SYSTEM_GSM_POWER_KEY, LOW);
     delay(100);
-    DEBUG_INFO("Found Modem IMEI: ");
-    DEBUG_INFO_LN(get_modem_imei());
 }
 
 String CommsGsmStack::get_modem_imei(){
@@ -56,7 +65,7 @@ bool CommsGsmStack::connected(){
 bool CommsGsmStack::connect(){
     if (modem_connection_attempt_count > 0){
         DEBUG_INFO_LN("Reconnecting to network, restarting modem");
-        modem_power_on();
+        modem_power_off();
         modem_power_on();
         modem.restart();
     }
@@ -66,6 +75,13 @@ bool CommsGsmStack::connect(){
     }
     reset_reconnection_count();
     return true;
+}
+
+void CommsGsmStack::disconnect(){
+    DEBUG_INFO_LN("Modem disconnecting");
+    modem.gprsDisconnect();
+    modem.poweroff();
+
 }
 
 bool CommsGsmStack::connect_to_network(){

@@ -15,6 +15,7 @@ class CommsIpstack{
         virtual bool connect() = 0;
         virtual bool connected() = 0;
         virtual int16_t get_signal_strength() = 0;
+        virtual void disconnect()= 0;
         virtual IPStack * get_ipstack() = 0;
     
 };
@@ -24,7 +25,9 @@ class CommsGsmStack: public CommsIpstack{
         CommsGsmStack(){};
         ~CommsGsmStack(){};
         void init()override;
+        void disconnect()override;
         void modem_power_on();
+        void modem_power_off();
         String get_modem_imei();
         int16_t get_signal_strength()override;
         String get_network_operator();
@@ -40,6 +43,7 @@ class CommsGsmStack: public CommsIpstack{
         IPStack * get_ipstack()override;
     private:
         /* declare modem serial interface */
+        void modem_cycle_power();
         HardwareSerial GSMSerial = HardwareSerial(SYSTEM_GSM_RX_PIN, SYSTEM_GSM_TX_PIN);
 
         #ifdef DUMP_AT_COMMANDS
