@@ -29,7 +29,42 @@ void Comms::run(){
     init();
     DEBUG_INFO_LN("Comms init success");
     while (1){
-        if (!_ipstack->connected() || !_mqtt_client->is_connected()){
+       switch (comms_state){
+        case COMMS_STATE_OFF:
+            comms_sleep();
+            break;
+        default:
+            comms_loop();
+            break;
+       };
+    if (millis() - toggle_on_time > 60000){
+        comms_state == COMMS_STATE_HIGH_FREQUENCY ? set_comms_state(COMMS_STATE_OFF) : init();
+        toggle_on_time = millis();
+    }
+    delay(1500);
+    }
+
+}
+
+/* initialize comms resources here and set state: */
+void Comms::init(){
+    _ipstack->init();
+    set_comms_state(COMMS_STATE_HIGH_FREQUENCY);
+    return;
+}
+
+int16_t Comms::get_rss(){
+    return _ipstack->get_signal_strength();
+}
+
+
+void Comms::set_comms_state(comms_state_t state){
+    if (comms_state != state){
+        comms_state = state;
+    }
+}
+void Comms::comms_loop(){
+    if (!_ipstack->connected() || !_mqtt_client->is_connected()){
                 if(!_ipstack->connect()){
                     DEBUG_INFO_LN("Failed to connect to network || GPRS");
                 }
@@ -38,6 +73,7 @@ void Comms::run(){
                     DEBUG_INFO_LN("Failed to connect to broker");
                 }
                 last_send_time = millis();
+                COMMS_ON = true;
         }
         _mqtt_client->yield();
         DEBUG_INFO("Signal strength: ");
@@ -52,18 +88,14 @@ void Comms::run(){
             last_send_time = millis();
         }
 
-        delay(1500);
-    }
-
 }
 
-/* initialize comms resources here: */
-void Comms::init(){
-    _ipstack->init();
+void Comms::comms_sleep(){
+    if (COMMS_ON){
+        _mqtt_client->disconnect();
+        _ipstack->disconnect();
+        COMMS_ON = false;
+    }
+ 
     return;
 }
-
-int16_t Comms::get_rss(){
-    return _ipstack->get_signal_strength();
-}
-
