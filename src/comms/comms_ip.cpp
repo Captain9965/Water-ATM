@@ -21,7 +21,7 @@ void CommsGsmStack::modem_power_on(){
 }
 void CommsGsmStack::modem_power_off(){
     DEBUG_INFO_LN("Turning off modem");
-    modem_cycle_power();
+    modem.poweroff();
 }
 
 void CommsGsmStack::modem_cycle_power(){
@@ -64,7 +64,8 @@ bool CommsGsmStack::connected(){
 
 bool CommsGsmStack::connect(){
     if (modem_connection_attempt_count > 0){
-        DEBUG_INFO_LN("Reconnecting to network, restarting modem");
+        DEBUG_INFO("Reconnecting to network, restarting modem Reconnection count is -> ");
+        DEBUG_INFO_LN(modem_connection_attempt_count);
         modem_power_off();
         modem_power_on();
         modem.restart();
@@ -97,7 +98,7 @@ bool CommsGsmStack::connect_to_network(){
 
 bool CommsGsmStack::connect_to_gprs(){
     DEBUG_INFO_LN("Connecting to GPRS");
-    if (!!modem.gprsConnect(APN_NAME, CELLULAR_USER_NAME, CELLULAR_PASSWORD)){
+    if (!modem.gprsConnect(APN_NAME, CELLULAR_USER_NAME, CELLULAR_PASSWORD)){
         increment_reconnection_count();
         DEBUG_INFO_LN("Cannot connect to GPRS");
         return false;
