@@ -1,5 +1,6 @@
 #pragma once
 #include <Arduino.h>
+#include <STM32FreeRTOS.h>
 #include "pinouts.h"
 #include "config.h"
 #include "stm32f1_uid.h"
