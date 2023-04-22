@@ -1,5 +1,6 @@
 #include "common.h"
 
+char taskListBuffer[120];
 void debug_init(int * error){
     SerialDebug.setRx(SYSTEM_SERIAL_DEBUG_RX);
     SerialDebug.setTx(SYSTEM_SERIAL_DEBUG_TX);
@@ -11,3 +12,13 @@ void debug_init(int * error){
     }
     return;
 }
+
+char * stack_debug(){
+    vTaskList(taskListBuffer);
+    DEBUG_INFO_LN(F("Task       State   Prio    Stack    Num"));
+    DEBUG_INFO_LN(F("*******************************************"));
+    DEBUG_INFO(taskListBuffer);
+    DEBUG_INFO_LN(F("*******************************************"));
+    return taskListBuffer;
+}
+

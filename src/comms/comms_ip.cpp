@@ -8,7 +8,7 @@
 void CommsGsmStack::init(){
     DEBUG_INFO_LN("Powering on modem");
     GSMSerial.begin(SYSTEM_GSM_BAUDRATE);
-    delay(100);
+    wait_ms(100);
     pinMode(SYSTEM_GSM_POWER_KEY, OUTPUT);
     modem_power_on();
 }
@@ -22,13 +22,14 @@ void CommsGsmStack::modem_power_on(){
 void CommsGsmStack::modem_power_off(){
     DEBUG_INFO_LN("Turning off modem");
     modem.poweroff();
+    wait_ms(300);
 }
 
 void CommsGsmStack::modem_cycle_power(){
     digitalWrite(SYSTEM_GSM_POWER_KEY, HIGH);
-    delay(3000);
+    wait_ms(3000);
     digitalWrite(SYSTEM_GSM_POWER_KEY, LOW);
-    delay(100);
+    wait_ms(100);
 }
 
 String CommsGsmStack::get_modem_imei(){

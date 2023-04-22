@@ -31,7 +31,7 @@
 #define MQTT_WILL_MESSAGE               "DISCONNECTED";
 #define MQTT_SERVER                     "broker.hivemq.com"
 #define MQTT_PORT                       1883
-#define MQTT_MAX_PACKET_SIZE            100
+#define MQTT_MAX_PACKET_SIZE            256
 #define MQTT_MAX_MESSAGE_HANDLERS       3
 #define MQTT_KEEP_ALIVE_INTERVAL        60
 

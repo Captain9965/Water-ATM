@@ -37,11 +37,11 @@ void Comms::run(){
             comms_loop();
             break;
        };
-    if (millis() - toggle_on_time > 60000){
-        comms_state == COMMS_STATE_HIGH_FREQUENCY ? set_comms_state(COMMS_STATE_OFF) : init();
-        toggle_on_time = millis();
-    }
-    delay(1500);
+    // if (millis() - toggle_on_time > 60000){
+    //     comms_state == COMMS_STATE_HIGH_FREQUENCY ? set_comms_state(COMMS_STATE_OFF) : init();
+    //     toggle_on_time = millis();
+    // }
+    wait_ms(1500);
     }
 
 }
@@ -79,15 +79,30 @@ void Comms::comms_loop(){
         DEBUG_INFO("Signal strength: ");
         DEBUG_INFO_LN(_ipstack->get_signal_strength());
 
+        
 
         if(millis() - last_send_time > 20000){
-            const char * topic = (std::string(MQTT_PUB_TOPIC_PREFIX) + stm32f1_uid()).c_str();
-            if(!_mqtt_client->publish_event(topic, "{Hello}")){
-                DEBUG_INFO_LN("Failed to publish message");
-            }
             last_send_time = millis();
         }
+        /* dispatch comms event queue: */
+        dispatch_comms_queue();
 
+}
+int Comms::dispatch_comms_queue(){
+    outMessage_t msg;
+    if(!xQueueReceive(* CommsOutQueue::get_instance(), (void *)&msg, 0)){
+        return -1;
+    }
+    DEBUG_INFO("Received event-> ");
+    DEBUG_INFO_LN(msg.message);
+    std::string uid = stm32f1_uid();
+    std::string topic = std::string(MQTT_PUB_TOPIC_PREFIX) + uid;
+    if(!_mqtt_client->publish_event(topic.c_str(), msg.message)){
+        DEBUG_INFO_LN("Failed to publish message");
+    }
+
+
+    return 0;
 }
 
 void Comms::comms_sleep(){
