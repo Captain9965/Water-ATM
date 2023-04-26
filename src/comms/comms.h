@@ -42,7 +42,7 @@ class Comms{
 
         /* declare my comms mqtt client class */
         CommsMQTTClient * _mqtt_client = nullptr;
-        CommsIpstack * _ipstack = nullptr;
+        CommsClient * _network_client = nullptr;
 
         /* send timer: experimental*/
         long long last_send_time = millis();

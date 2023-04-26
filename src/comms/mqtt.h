@@ -1,9 +1,7 @@
 #pragma once
 #include "common/common.h"
-#include <Countdown.h>
-#include <MQTTClient.h>
-#include <MQTTPacket.h>
-#include "comms_ip.h"
+#include <PubSubClient.h>
+#include "comms_net_client.h"
 
 /**
  * @brief Setup Topics
@@ -37,21 +35,21 @@
 
 class CommsMQTTClient{
     public:
-        CommsMQTTClient(IPStack * ipstack);
+        CommsMQTTClient(Client * network_client);
         ~CommsMQTTClient(void);
 
-        bool yield(void);
         bool connect(void);
         void disconnect(void);
         bool is_connected(void);
-        bool publish_event(const char* topic, const char* payload, MQTT::QoS qos = MQTT::QOS0);
-        static void message_callback(MQTT::MessageData &md);
+        bool publish_event(const char* topic, const char* payload, uint8_t qos = 0);
+        static void message_callback(char* topic, byte* payload, unsigned int len);
         static CommsMQTTClient * get_instance(void);
+        void loop();
     private:
         int unsubscribe();
         void _free_client(void);
-        IPStack * _ipstack = nullptr;
-        MQTT::Client<IPStack, Countdown, MQTT_MAX_PACKET_SIZE, MQTT_MAX_MESSAGE_HANDLERS> * _client = nullptr;
+        Client * _network_client = nullptr;
+        PubSubClient * _client = nullptr;
         int8_t _error;
 };
 
