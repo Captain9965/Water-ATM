@@ -66,9 +66,12 @@ bool GsmClient::connected(){
 bool GsmClient::connect(){
     if (modem_connection_attempt_count > 0){
         DEBUG_INFO("Reconnecting to network, restarting modem Reconnection count is -> ");
+
+        /**
+         * @todo: maybe reset mcu after a number of reconnection attempts
+         * 
+         */
         DEBUG_INFO_LN(modem_connection_attempt_count);
-        modem_power_off();
-        modem_power_on();
         modem.restart();
     }
     modem.init();
