@@ -99,7 +99,9 @@ void CommsMQTTClient::message_callback(char* topic, byte* payload, unsigned int 
 }
 
 void CommsMQTTClient::loop(){
-    _client->loop();
+    if(_client){
+         _client->loop();
+    }
 }
 
 
