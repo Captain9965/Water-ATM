@@ -33,6 +33,15 @@
 #define MQTT_MAX_MESSAGE_HANDLERS       3
 #define MQTT_KEEP_ALIVE_INTERVAL        60
 
+typedef enum {
+    MQTT_OK = 0,
+    MQTT_ERROR_OUT_OF_MEMORY = -1,
+    MQTT_ERROR_NO_CLIENT = -2,
+    MQTT_ERROR_UNSUBSCRIBE_FAIL = -3,
+    MQTT_ERROR_NOT_CONNECTED = -4,
+    MQTT_ERROR_PUBLISH_FAIL = -5
+}mqtt_error_t;
+
 class CommsMQTTClient{
     public:
         CommsMQTTClient(Client * network_client);
@@ -46,11 +55,11 @@ class CommsMQTTClient{
         static CommsMQTTClient * get_instance(void);
         void loop();
     private:
-        int unsubscribe();
+        mqtt_error_t unsubscribe();
         void _free_client(void);
         Client * _network_client = nullptr;
         PubSubClient * _client = nullptr;
-        int8_t _error;
+        mqtt_error_t _error;
 };
 
 

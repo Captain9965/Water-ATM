@@ -38,7 +38,7 @@ bool CommsMQTTClient::connect(void){
          * @todo: create more custom errors!!
          * 
          */
-        _error = -1;
+        _error = MQTT_ERROR_OUT_OF_MEMORY;
         return false;
     }
 
@@ -70,18 +70,19 @@ void CommsMQTTClient::disconnect(void){
     _free_client();
 }
 
-int CommsMQTTClient::unsubscribe(){
+ mqtt_error_t CommsMQTTClient::unsubscribe(){
     DEBUG_INFO_LN("Unsubscribing from topic");
     const char * topic = (std::string(MQTT_SUB_TOPIC_PREFIX) + stm32f1_uid()).c_str();
     if (!_client){
-        return -3;
+        return MQTT_ERROR_NO_CLIENT;
     }
-    if ((_error = _client->unsubscribe(topic)) < 0){
+    if (!_client->unsubscribe(topic)){
         DEBUG_INFO("Failed to unsubscribe to topic : ");
+        _error = MQTT_ERROR_UNSUBSCRIBE_FAIL;
         DEBUG_INFO_LN(topic);
-        return -5;
+        return MQTT_ERROR_UNSUBSCRIBE_FAIL;
     }
-    return 0;
+    return MQTT_OK;
 }
 
 void CommsMQTTClient::message_callback(char* topic, byte* payload, unsigned int len){
@@ -114,7 +115,7 @@ bool CommsMQTTClient::is_connected(void){
 
 bool CommsMQTTClient::publish_event(const char* topic, const char* payload, uint8_t qos){
     if (!is_connected()){
-        _error = -2;
+        _error = MQTT_ERROR_NOT_CONNECTED;
         DEBUG_INFO("Publish Event: Client not connected");
         DEBUG_INFO_LN(_error);
         return false;
@@ -124,8 +125,9 @@ bool CommsMQTTClient::publish_event(const char* topic, const char* payload, uint
 
 
     if (!_client->publish(topic, payload)){
-        /* I do not yet know the proper return codes: */
-        DEBUG_INFO("Publish error code : ");
+        
+        DEBUG_INFO("Publish fail");
+        _error = MQTT_ERROR_PUBLISH_FAIL;
         return false;
     }
     return true;

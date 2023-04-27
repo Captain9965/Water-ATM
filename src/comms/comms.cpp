@@ -90,10 +90,10 @@ void Comms::comms_loop(){
         dispatch_comms_queue();
 
 }
-int Comms::dispatch_comms_queue(){
+comms_ev_error_t Comms::dispatch_comms_queue(){
     outMessage_t msg;
     if(!xQueueReceive(* CommsOutQueue::get_instance(), (void *)&msg, 0)){
-        return -1;
+        return COMMS_EV_QUEUE_EMPTY;
     }
     DEBUG_INFO("Received event-> ");
     DEBUG_INFO_LN(msg.message);
@@ -104,7 +104,7 @@ int Comms::dispatch_comms_queue(){
     }
 
 
-    return 0;
+    return COMMS_EV_OK;
 }
 
 void Comms::comms_sleep(){

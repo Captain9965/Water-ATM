@@ -31,7 +31,7 @@ class Comms{
     private:
         void comms_loop();
         void comms_sleep();
-        int dispatch_comms_queue();
+        comms_ev_error_t dispatch_comms_queue();
         // void check_net_connection(void);
         // void check_mqtt_connection(void);
 

@@ -3,6 +3,12 @@
 
 #define COMMS_EVENTS_QUEUE_SIZE 10
 
+typedef enum{
+    COMMS_EV_OK = 0, 
+    COMMS_EV_PAYLOAD_ERROR = -1,
+    COMMS_EV_QUEUE_FULL = -2,
+    COMMS_EV_QUEUE_EMPTY = -3 
+}comms_ev_error_t;
 
 typedef struct inMessage{
     char message[128];
@@ -34,6 +40,6 @@ typedef struct sleep_event{
     long long time;
 }sleep_event_t;
 
-int publish_check_event(check_event_t * event);
+comms_ev_error_t publish_check_event(check_event_t * event);
 // int publish_sleep_event(sleep_event_t *event);
-static int create_check_event_payload(char * buffer, ssize_t len);
+static comms_ev_error_t create_check_event_payload(char * buffer, ssize_t len);

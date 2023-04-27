@@ -11,23 +11,23 @@ QueueHandle_t * CommsInQueue::get_instance(){
     return &in_queue;
 }
 
-int publish_check_event(check_event_t * event){
+comms_ev_error_t publish_check_event(check_event_t * event){
     outMessage_t msg;
     
-    if(create_check_event_payload(msg.message, sizeof(msg.message))!= 0){
-        return -1;
+    if(create_check_event_payload(msg.message, sizeof(msg.message))!= COMMS_EV_OK){
+        return COMMS_EV_PAYLOAD_ERROR;
     }
     DEBUG_INFO("Enqueue event-> ");
     DEBUG_INFO_LN(msg.message);
     if(!xQueueSend(* CommsOutQueue::get_instance(), (void *)&msg, 0)){
         DEBUG_INFO_LN("Queue is full!");
-        return -1;
+        return COMMS_EV_QUEUE_FULL;
     }
-    return 0;
+    return COMMS_EV_OK;
 
 }
 
-static int create_check_event_payload(char * buffer, ssize_t len){
+static comms_ev_error_t create_check_event_payload(char * buffer, ssize_t len){
     std::string out;
     StaticJsonDocument<256> doc;
     int rss = 0;
@@ -42,6 +42,6 @@ static int create_check_event_payload(char * buffer, ssize_t len){
     const char* temp_buffer = out.c_str();
     memset(buffer, 0, len);
     memcpy(buffer, temp_buffer, strlen(temp_buffer));
-    return 0;
+    return COMMS_EV_OK;
 }
 
