@@ -14,8 +14,8 @@ void setup() {
       }
     }
     DEBUG_INFO_LN("*****************Starting Application***************");
-    xTaskCreate(comms_task, "comms_task", 1000, nullptr, 0, nullptr);
-    xTaskCreate(vmc_task, "vmc_task", 1000, nullptr, 0, nullptr);
+    xTaskCreate(comms_task, "comms_task", 500, nullptr, 0, nullptr);
+    xTaskCreate(vmc_task, "vmc_task", 500, nullptr, 0, nullptr);
     vTaskStartScheduler();
 }
 
