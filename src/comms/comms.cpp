@@ -67,10 +67,12 @@ void Comms::comms_loop(){
     if (!_network_client->connected() || !_mqtt_client->is_connected()){
                 if(!_network_client->connect()){
                     DEBUG_INFO_LN("Failed to connect to network || GPRS");
+                    return;
                 }
                 _mqtt_client->disconnect();
                 if(!_mqtt_client->connect()){
                     DEBUG_INFO_LN("Failed to connect to broker");
+                    return;
                 }
                 last_send_time = millis();
                 COMMS_ON = true;
