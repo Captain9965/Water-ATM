@@ -1,29 +1,28 @@
 #pragma once
 #include "common/common.h"
-#include <IPStack.h>
 #include <TinyGsmClient.h>
 
 #ifdef DUMP_AT_COMMANDS
 #include <StreamDebugger.h>
 #endif
 
-class CommsIpstack{
+class CommsClient{
     public:
-        CommsIpstack(){};
-        ~CommsIpstack(){};
+        CommsClient(){};
+        ~CommsClient(){};
         virtual void init() = 0;
         virtual bool connect() = 0;
         virtual bool connected() = 0;
         virtual int16_t get_signal_strength() = 0;
         virtual void disconnect()= 0;
-        virtual IPStack * get_ipstack() = 0;
+        virtual Client * get_client() = 0;
     
 };
 
-class CommsGsmStack: public CommsIpstack{
+class GsmClient: public CommsClient{
     public:
-        CommsGsmStack(){};
-        ~CommsGsmStack(){};
+        GsmClient(){};
+        ~GsmClient(){};
         void init()override;
         void disconnect()override;
         void modem_power_on();
@@ -39,8 +38,8 @@ class CommsGsmStack: public CommsIpstack{
         bool connect_to_gprs();
         void increment_reconnection_count();
         void reset_reconnection_count();
-        static CommsIpstack * get_instance();
-        IPStack * get_ipstack()override;
+        static CommsClient * get_instance();
+        Client * get_client()override;
     private:
         /* declare modem serial interface */
         void modem_cycle_power();
@@ -54,6 +53,5 @@ class CommsGsmStack: public CommsIpstack{
         #endif
         
         TinyGsmClient tinyGSMClient = TinyGsmClient(modem);
-        IPStack ipstack = IPStack(tinyGSMClient);
         int8_t modem_connection_attempt_count = 0;
 };
