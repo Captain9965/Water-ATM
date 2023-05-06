@@ -1,2 +1,2 @@
-# MQTT WRAPPER
-This is an mqtt wrapper library written in C ++ for STM 32 and SIM 800
+# WATER ATM
+Water ATM firmware for STM32F103RB on platform io.
