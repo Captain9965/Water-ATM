@@ -1,5 +1,6 @@
 #include "vmc_tasks.h"
 #include "vmc.h"
+#include "ui/ui.h"
 
 /* task handles: */
 BaseType_t * get_comms_taskhandle(){
@@ -22,6 +23,7 @@ void main_task(void * pvParameters){
 
   while(1){
     VMC::get_default_instance()->run();
+    UI::get_default_instance()->update();
     wait_ms(2000);
   } 
 }

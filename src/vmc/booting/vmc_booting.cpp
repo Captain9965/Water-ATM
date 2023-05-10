@@ -24,7 +24,6 @@ int vmc_booting::start(){
     return VMC_ERROR_COMMS_INIT;
    }
 
-   vTaskStartScheduler();
     /* initialize booting timer: */
     return 0;
 }
