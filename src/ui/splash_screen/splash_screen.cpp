@@ -1,4 +1,5 @@
 #include "splash_screen.h"
+#include "../booting_page/booting_page.h"
 
 
 
@@ -7,7 +8,12 @@ splashScreenPage::splashScreenPage(){
 }
 
 int splashScreenPage::load(){
-   screen_boot_timer = millis();
+
+    get_display1()->setCursor(0, 1);
+    get_display1()->print("Water ATM");
+    get_display1()->setCursor(0, 2);
+    get_display1()->print("Machine");
+    screen_boot_timer = millis();
     return 0;
 }
 
@@ -18,7 +24,8 @@ int splashScreenPage::update(){
     }
     if (millis() - screen_boot_timer > SPLASH_SCREEN_DELAY){
         /* change page here after booting*/
-        screen_boot_timer = millis();
+        this->ui->set_page(bootingPage::get_default_instance());
+        
     }
     return 0;
 }
