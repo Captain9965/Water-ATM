@@ -10,8 +10,7 @@ class UI{
     protected:
         Page* ui_page = nullptr;
         /* lcd instances: */
-        LiquidCrystal_I2C * display1 = nullptr;
-        LiquidCrystal_I2C * display2 = nullptr;
+        
 
     public:
         UI();
@@ -38,3 +37,6 @@ class Page{
         bool loaded = false;
 
 };
+
+LiquidCrystal_I2C * get_display1();
+LiquidCrystal_I2C * get_display2();

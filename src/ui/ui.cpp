@@ -1,5 +1,14 @@
 #include "ui.h"
-#define TRACE_GROUP "UI"
+
+LiquidCrystal_I2C * get_display1(){
+    static LiquidCrystal_I2C display1(0x25, 20, 4);
+    return &display1;
+}
+
+LiquidCrystal_I2C * get_display2(){
+    static LiquidCrystal_I2C display2(0x26, 20, 4);
+    return &display2;
+}
 
 int Page::set_ui_context(UI* ui){
     assert(ui != nullptr);
@@ -69,16 +78,8 @@ void UI::tick(){
 /* initialize lvgl and driver resources */
 int UI::init(){
     DEBUG_INFO_LN("***Initializing Display***");
-    display1 = new LiquidCrystal_I2C(0x25, 20, 4);
-    display2 = new LiquidCrystal_I2C(0x26, 20, 4);
-    display1->init();
-    display2->init();
-    display1->backlight();
-    display2->backlight();
-    display1->setCursor(0, 1);
-    display2->setCursor(0, 1);
-    display1->print("Initializing");
-    display2->print("Machine...");
+    get_display1()->init();
+    get_display1()->backlight();
     return 0;
 
 }
