@@ -1,5 +1,6 @@
 #include "vmc_booting.h"
 #include "../idle/vmc_idle.h"
+#include "../vmc_flags.h"
 
 
 vmc_booting::vmc_booting(){
@@ -69,6 +70,7 @@ int vmc_booting::run(){
    }
 
     /* clear both system flags */
+    vmc_flags_init();
 
     stop();
     return 0;
