@@ -4,6 +4,7 @@
 #include "pinouts.h"
 #include "config.h"
 #include "stm32f1_uid.h"
+#include "assert.h"
 
 /* debug utils */
 #define SerialDebug Serial

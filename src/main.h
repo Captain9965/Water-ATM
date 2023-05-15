@@ -1,4 +1,7 @@
 #pragma once
-#include "comms/comms.h"
-#define TICK_INTERVAL 10000
+#include "vmc/vmc.h"
+#include "vmc/booting/vmc_booting.h"
+#include "ui/ui.h"
+#include "ui/splash_screen/splash_screen.h"
+
 
