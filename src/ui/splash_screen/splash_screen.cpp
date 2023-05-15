@@ -10,9 +10,7 @@ splashScreenPage::splashScreenPage(){
 int splashScreenPage::load(){
 
     get_display1()->setCursor(0, 1);
-    get_display1()->print("Water ATM");
-    get_display1()->setCursor(0, 2);
-    get_display1()->print("Machine");
+    get_display1()->print("Rafiki Group");
     screen_boot_timer = millis();
     return 0;
 }

@@ -84,3 +84,21 @@ int UI::init(){
 
 }
 
+
+/* common functions: */
+
+void display_net_notConnected(){
+    get_display1()->clear();
+    get_display1()->setCursor(2, 1);
+    get_display1()->print("Connecting");
+    get_display1()->setCursor(2, 2);
+    get_display1()->print("Please wait....");
+
+};
+
+void display_net_connected(){
+    get_display1()->clear();
+    get_display1()->setCursor(2, 2);
+    get_display1()->print("Machine ready!!");
+}
+

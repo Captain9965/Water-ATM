@@ -40,3 +40,7 @@ class Page{
 
 LiquidCrystal_I2C * get_display1();
 LiquidCrystal_I2C * get_display2();
+
+/* common functions */
+void display_net_connected();
+void display_net_notConnected();
