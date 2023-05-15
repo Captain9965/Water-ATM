@@ -1,5 +1,6 @@
 #include "vmc_idle.h"
 #include "vmc/vmc_errors.h"
+#include "sensors/rfid/rfid.h"
 vmc_idle::vmc_idle(){
     id = "IDLE";
 }
@@ -48,5 +49,20 @@ vmc_idle* vmc_idle::get_default_instance(){
 }
 
 void vmc_idle::run_sensors(){
+    String read_string = RFID::get_default_instance()->read_uid();
+    if(isServiceTag(read_string)){
+
+        DEBUG_INFO_LN("Service Tag detected");
+
+    }
+
     
+}
+bool vmc_idle::isServiceTag(String &uid){
+    if (uid.substring(1) == SERVICE_TAG)
+    {
+        return true;
+    }
+    return false;
+   
 }
