@@ -2,6 +2,7 @@
 #include "../idle/vmc_idle.h"
 #include "../vmc_flags.h"
 #include "sensors/rfid/rfid.h"
+#include "sensors/rtc/rtc.h"
 
 
 vmc_booting::vmc_booting(){
@@ -114,6 +115,9 @@ vmc_error_t vmc_booting::init_sensors(){
     /* initialize rfid: */
     RFID::get_default_instance()->init();
 
+    /* initialize rtc */
+    systemTime::get_default_instance()->init();
+    
     return VMC_OK;
 }
 
