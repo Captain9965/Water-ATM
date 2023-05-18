@@ -3,6 +3,7 @@
 #include "../vmc_flags.h"
 #include "sensors/rfid/rfid.h"
 #include "sensors/rtc/rtc.h"
+#include "storage/storage.h"
 
 
 vmc_booting::vmc_booting(){
@@ -94,9 +95,11 @@ vmc_booting* vmc_booting::get_default_instance(){
 vmc_error_t vmc_booting::init_storage(){
 
     DEBUG_INFO_LN("init_storage");
-   
+    if(storage::get_default_instance()->init()){
+        return VMC_OK;
+    }
 
-    return VMC_OK;
+    return VMC_ERROR_STORAGE_INIT;
 }
 
 /*load settings to memory*/
@@ -117,7 +120,7 @@ vmc_error_t vmc_booting::init_sensors(){
 
     /* initialize rtc */
     systemTime::get_default_instance()->init();
-    
+
     return VMC_OK;
 }
 

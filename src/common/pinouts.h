@@ -8,3 +8,4 @@
 #define SYSTEM_SERIAL_DEBUG_TX              PA9
 #define SYSTEM_RFID_SS_PIN                  PA4
 #define SYSTEM_RFID_RESET_PIN               PC4
+#define SYSTEM_SD_CS_PIN                    PA15
