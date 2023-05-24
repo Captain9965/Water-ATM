@@ -11,6 +11,7 @@
 #define SYSTEM_SD_CS_PIN                    PA15
 #define SYSTEM_JOYSTICK_X                   PC1
 #define SYSTEM_JOYSTICK_Y                   PC0
+#define SYSTEM_JOYSTICK_BUTTON              PB9
 #define SYSTEM_QUANTITY_1                   PC10
 #define SYSTEM_QUANTITY_2                   PC11
 #define SYSTEM_QUANTITY_3                   PC12

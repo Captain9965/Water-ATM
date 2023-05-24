@@ -24,7 +24,9 @@ int bootingPage::update(){
         check_vmc_flag(VMC_NET_CONNECTED) ? display_net_connected() : display_net_notConnected();
         net_check_timer = millis();
     }
-    
+    if(joystick::get_default_instance()->get_state() == JOYSTICK_PRESSED){
+        DEBUG_INFO_LN("Button press detected!!");
+    }
    
     return 0;
 }

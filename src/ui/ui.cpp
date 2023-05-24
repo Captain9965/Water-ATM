@@ -80,6 +80,7 @@ int UI::init(){
     DEBUG_INFO_LN("***Initializing Display***");
     get_display1()->init();
     get_display1()->backlight();
+    joystick::get_default_instance()->init();
     return 0;
 
 }
