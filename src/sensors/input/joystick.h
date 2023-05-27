@@ -7,7 +7,6 @@ typedef enum joystick_state{
     JOYSTICK_LEFT, 
     JOYSTICK_RIGHT,
     JOYSTICK_NEUTRAL,
-    JOYSTICK_PRESSED,
     JOYSTICK_ERROR
 }joystick_state_t;
 
@@ -23,7 +22,6 @@ class joystick{
         bool is_left();
         bool is_up();
         bool is_down();
-        bool is_button_pressed();
         joystick_state_t get_state();
         static joystick * get_default_instance();
     private:

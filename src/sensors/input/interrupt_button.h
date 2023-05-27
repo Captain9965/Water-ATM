@@ -5,11 +5,14 @@
 
 class buttonInterrupt{
     public:
-        buttonInterrupt(uint32_t button, callback_function_t callback);
+        buttonInterrupt(uint32_t pin, callback_function_t callback);
         ~buttonInterrupt();
-        bool is_pressed();
+        void enable();
+        void disable();
+        // bool is_pressed();
     private:
-        void ISR();
+        uint32_t _pin;
+        callback_function_t _callback;
         long long previousPress = 0;
     
 };

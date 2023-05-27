@@ -7,7 +7,6 @@ joystick::~joystick(){};
 void joystick::init(){
     pinMode(SYSTEM_JOYSTICK_X, INPUT);
     pinMode(SYSTEM_JOYSTICK_Y, INPUT);
-    pinMode(SYSTEM_JOYSTICK_BUTTON, INPUT_PULLUP);
     return;
 }
 
@@ -62,13 +61,6 @@ bool joystick::is_down(){
     return false;
 }
 
-bool joystick::is_button_pressed(){
-    if(button_state == 0){
-        return true;
-    }
-    return false;
-}
-
 joystick_state_t joystick::get_state(){
     if(read() < 0){
         return JOYSTICK_ERROR;
@@ -82,8 +74,6 @@ joystick_state_t joystick::get_state(){
     } else if(is_down()){
         return JOYSTICK_DOWN;
         /* should the button press override all other inputs??*/
-    } else if(is_button_pressed()){
-        return JOYSTICK_PRESSED;
     }
     return JOYSTICK_ERROR;
 }
