@@ -28,6 +28,13 @@ int vmc_booting::start(){
     return VMC_ERROR_COMMS_INIT;
    }
 
+   _error = init_input_task();
+   if (_error != VMC_OK){
+    DEBUG_INFO_LN("Input task failed to initialize");
+    /* go to error state: */
+    return VMC_ERROR_INPUT_INIT;
+   }
+
     /* initialize booting timer: */
     return 0;
 }
@@ -155,6 +162,17 @@ vmc_error_t vmc_booting::init_maintask(){
     if(_main_taskhandle == nullptr){
         DEBUG_INFO_LN("_main_taskhandle == nullptr");
         return VMC_ERROR_MAINTASK_INIT;
+    }
+    return VMC_OK;
+}
+
+vmc_error_t vmc_booting::init_input_task(){
+    DEBUG_INFO_LN("init_input_task");
+    _input_taskhandle = get_input_task();
+
+    if(_input_taskhandle == nullptr){
+        DEBUG_INFO_LN("_input_taskhandle == nullptr");
+        return VMC_ERROR_INPUT_INIT;
     }
     return VMC_OK;
 }

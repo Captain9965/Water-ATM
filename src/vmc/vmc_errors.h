@@ -11,5 +11,6 @@ typedef enum vmc_errors{
     VMC_ERROR_COMMS_INIT = -7,
     VMC_ERROR_MAINTASK_INIT = -8,
     VMC_ERROR_STATUS_INIT = -9,
-    VMC_ERROR_UNHANDLED_STATE = -10,
+    VMC_ERROR_INPUT_INIT = - 10,
+    VMC_ERROR_UNHANDLED_STATE = -11,
 }vmc_error_t;

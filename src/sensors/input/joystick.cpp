@@ -13,7 +13,6 @@ void joystick::init(){
 int joystick::read(){
     int x_value = analogRead(SYSTEM_JOYSTICK_X);
     int y_value = analogRead(SYSTEM_JOYSTICK_Y);
-    button_state = digitalRead(SYSTEM_JOYSTICK_BUTTON);
     /* handle erroneous values here, default value is zero incase of errors : */
     x_reading = x_value;
     y_reading = y_value;

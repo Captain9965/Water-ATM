@@ -29,6 +29,9 @@ int bootingPage::update(){
     if(uiInput::get_default_instance()->joystick_button_pressed()){
         DEBUG_INFO_LN("Button press detected!!");
     }
+    if (uiInput::get_default_instance()->joystick_up()){
+        DEBUG_INFO_LN("Joystick up!!");
+    }
    
     return 0;
 }

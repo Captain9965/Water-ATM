@@ -1,4 +1,5 @@
 #include "ui_input.h"
+#include "sensors/input/joystick.h"
 
 static uint32_t INPUT_FLAGS = 0;
 
@@ -46,6 +47,59 @@ void uiInput::disable_joystick_button(){
 bool uiInput::joystick_button_pressed(){
     if(check_input_flag(JOYSTICK_PRESS)){
         clear_input_flag(JOYSTICK_PRESS);
+        return true;
+    }
+    return false;
+}
+
+void uiInput::update_joystick_state(){
+    joystick_state_t state = joystick::get_default_instance()->get_state();
+    switch (state)
+    {
+    case JOYSTICK_UP:
+        set_input_flag(JOYSTICK_FLAG_UP);
+        break;
+    case JOYSTICK_DOWN:
+        set_input_flag(JOYSTICK_FLAG_DOWN);
+        break;
+    case JOYSTICK_RIGHT:
+        set_input_flag(JOYSTICK_FLAG_RIGHT);
+        break;
+    case JOYSTICK_LEFT:
+        set_input_flag(JOYSTICK_FLAG_LEFT);
+        break;
+    default:
+        break;
+    }
+
+}
+bool uiInput::joystick_up(){
+    if(check_input_flag(JOYSTICK_FLAG_UP)){
+        clear_input_flag(JOYSTICK_FLAG_UP);
+        return true;
+    }
+    return false;
+}
+
+bool uiInput::joystick_down(){
+    if(check_input_flag(JOYSTICK_FLAG_DOWN)){
+        clear_input_flag(JOYSTICK_FLAG_DOWN);
+        return true;
+    }
+    return false;
+}
+
+bool uiInput::joystick_right(){
+    if(check_input_flag(JOYSTICK_FLAG_RIGHT)){
+        clear_input_flag(JOYSTICK_FLAG_RIGHT);
+        return true;
+    }
+    return false;
+}
+
+bool uiInput::joystick_left(){
+    if(check_input_flag(JOYSTICK_FLAG_LEFT)){
+        clear_input_flag(JOYSTICK_FLAG_LEFT);
         return true;
     }
     return false;

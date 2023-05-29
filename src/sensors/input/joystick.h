@@ -27,5 +27,4 @@ class joystick{
     private:
         int x_reading = 0;
         int y_reading = 0;
-        int button_state = 0;
 };
