@@ -1,6 +1,6 @@
 #pragma once
 #include "mqtt.h"
-
+#include "comms_events.h"
 /* comms states:*/
 typedef enum {
     COMMS_STATE_HIGH_FREQUENCY = 0,
@@ -10,6 +10,7 @@ typedef enum {
 }comms_state_t;
 
 /* comms class */
+
 
 class Comms{
     public:
@@ -30,6 +31,7 @@ class Comms{
     private:
         void comms_loop();
         void comms_sleep();
+        comms_ev_error_t dispatch_comms_queue();
         // void check_net_connection(void);
         // void check_mqtt_connection(void);
 
@@ -37,9 +39,10 @@ class Comms{
 
         /* declare my event queue*/
 
+
         /* declare my comms mqtt client class */
         CommsMQTTClient * _mqtt_client = nullptr;
-        CommsIpstack * _ipstack = nullptr;
+        CommsClient * _network_client = nullptr;
 
         /* send timer: experimental*/
         long long last_send_time = millis();
@@ -47,6 +50,5 @@ class Comms{
         comms_state_t comms_state = COMMS_STATE_HIGH_FREQUENCY;
         bool COMMS_ON = false;
         
-
-        
+                
 };

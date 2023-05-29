@@ -1,16 +1,17 @@
 #include "comms.h"
+#include "vmc/vmc_flags.h"
 
 
 Comms::Comms(){
-    _ipstack = CommsGsmStack::get_instance();
+    _network_client = GsmClient::get_instance();
     _mqtt_client = CommsMQTTClient::get_instance();
     return;
 }
 
 Comms::~Comms(){
-    if(_ipstack){
-        delete _ipstack;
-        _ipstack = nullptr;
+    if(_network_client){
+        delete _network_client;
+        _network_client = nullptr;
     }
     if(_mqtt_client){
         delete _mqtt_client;
@@ -37,24 +38,21 @@ void Comms::run(){
             comms_loop();
             break;
        };
-    if (millis() - toggle_on_time > 60000){
-        comms_state == COMMS_STATE_HIGH_FREQUENCY ? set_comms_state(COMMS_STATE_OFF) : init();
-        toggle_on_time = millis();
-    }
-    delay(1500);
+  
+    wait_ms(150);
     }
 
 }
 
 /* initialize comms resources here and set state: */
 void Comms::init(){
-    _ipstack->init();
+    _network_client->init();
     set_comms_state(COMMS_STATE_HIGH_FREQUENCY);
     return;
 }
 
 int16_t Comms::get_rss(){
-    return _ipstack->get_signal_strength();
+    return _network_client->get_signal_strength();
 }
 
 
@@ -64,36 +62,57 @@ void Comms::set_comms_state(comms_state_t state){
     }
 }
 void Comms::comms_loop(){
-    if (!_ipstack->connected() || !_mqtt_client->is_connected()){
-                if(!_ipstack->connect()){
+    if (!_network_client->connected() || !_mqtt_client->is_connected()){
+                if(!_network_client->connect()){
                     DEBUG_INFO_LN("Failed to connect to network || GPRS");
+                    /* clear net connected flag for display */
+                    clear_vmc_flag(VMC_NET_CONNECTED);
+                    return;
                 }
                 _mqtt_client->disconnect();
                 if(!_mqtt_client->connect()){
                     DEBUG_INFO_LN("Failed to connect to broker");
+                    clear_vmc_flag(VMC_NET_CONNECTED);
+                    return;
                 }
                 last_send_time = millis();
                 COMMS_ON = true;
         }
-        _mqtt_client->yield();
+        set_vmc_flag(VMC_NET_CONNECTED);
+        _mqtt_client->loop();
         DEBUG_INFO("Signal strength: ");
-        DEBUG_INFO_LN(_ipstack->get_signal_strength());
+        DEBUG_INFO_LN(_network_client->get_signal_strength());
 
+        
 
         if(millis() - last_send_time > 20000){
-            const char * topic = (std::string(MQTT_PUB_TOPIC_PREFIX) + stm32f1_uid()).c_str();
-            if(!_mqtt_client->publish_event(topic, "{Hello}")){
-                DEBUG_INFO_LN("Failed to publish message");
-            }
             last_send_time = millis();
         }
+        /* dispatch comms event queue: */
+        dispatch_comms_queue();
 
+}
+comms_ev_error_t Comms::dispatch_comms_queue(){
+    outMessage_t msg;
+    if(!xQueueReceive(* CommsOutQueue::get_instance(), (void *)&msg, 0)){
+        return COMMS_EV_QUEUE_EMPTY;
+    }
+    DEBUG_INFO("Received event-> ");
+    DEBUG_INFO_LN(msg.message);
+    std::string uid = stm32f1_uid();
+    std::string topic = std::string(MQTT_PUB_TOPIC_PREFIX) + uid;
+    if(!_mqtt_client->publish_event(topic.c_str(), msg.message)){
+        DEBUG_INFO_LN("Failed to publish message");
+    }
+
+
+    return COMMS_EV_OK;
 }
 
 void Comms::comms_sleep(){
     if (COMMS_ON){
         _mqtt_client->disconnect();
-        _ipstack->disconnect();
+        _network_client->disconnect();
         COMMS_ON = false;
     }
  
