@@ -1,6 +1,8 @@
 #pragma once
 #include "vmc/vmc.h"
 #include "comms/comms_events.h"
+#include "sensors/rtc/rtc.h"
+
 #define TICK_INTERVAL 10000
 /* state idle */
 class vmc_idle: public State{
@@ -14,5 +16,6 @@ class vmc_idle: public State{
         void run_sensors();
         bool isServiceTag(String &uid);
         long long tick_time = 0;
+        system_time_t _time;
         
 };

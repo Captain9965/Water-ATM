@@ -2,6 +2,8 @@
 #include "../idle/vmc_idle.h"
 #include "../vmc_flags.h"
 #include "sensors/rfid/rfid.h"
+#include "sensors/rtc/rtc.h"
+#include "storage/storage.h"
 
 
 vmc_booting::vmc_booting(){
@@ -24,6 +26,13 @@ int vmc_booting::start(){
     DEBUG_INFO_LN(" Comms failed to initialize");
     /* change state to error state*/
     return VMC_ERROR_COMMS_INIT;
+   }
+
+   _error = init_input_task();
+   if (_error != VMC_OK){
+    DEBUG_INFO_LN("Input task failed to initialize");
+    /* go to error state: */
+    return VMC_ERROR_INPUT_INIT;
    }
 
     /* initialize booting timer: */
@@ -93,9 +102,11 @@ vmc_booting* vmc_booting::get_default_instance(){
 vmc_error_t vmc_booting::init_storage(){
 
     DEBUG_INFO_LN("init_storage");
-   
+    if(storage::get_default_instance()->init()){
+        return VMC_OK;
+    }
 
-    return VMC_OK;
+    return VMC_ERROR_STORAGE_INIT;
 }
 
 /*load settings to memory*/
@@ -113,6 +124,9 @@ vmc_error_t vmc_booting::init_sensors(){
 
     /* initialize rfid: */
     RFID::get_default_instance()->init();
+
+    /* initialize rtc */
+    systemTime::get_default_instance()->init();
 
     return VMC_OK;
 }
@@ -148,6 +162,17 @@ vmc_error_t vmc_booting::init_maintask(){
     if(_main_taskhandle == nullptr){
         DEBUG_INFO_LN("_main_taskhandle == nullptr");
         return VMC_ERROR_MAINTASK_INIT;
+    }
+    return VMC_OK;
+}
+
+vmc_error_t vmc_booting::init_input_task(){
+    DEBUG_INFO_LN("init_input_task");
+    _input_taskhandle = get_input_task();
+
+    if(_input_taskhandle == nullptr){
+        DEBUG_INFO_LN("_input_taskhandle == nullptr");
+        return VMC_ERROR_INPUT_INIT;
     }
     return VMC_OK;
 }

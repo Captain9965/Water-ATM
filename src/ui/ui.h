@@ -2,6 +2,7 @@
 #include "common/common.h"
 #include "Wire.h"
 #include "LiquidCrystal_I2C.h"
+#include "sensors/input/joystick.h"
 
 
 /* This is the UI state Machine (WIP) */

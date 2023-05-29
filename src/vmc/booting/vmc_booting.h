@@ -15,7 +15,9 @@ class vmc_booting: public State{
         /* comms taskhandle:  */
         BaseType_t * _comms_taskhandle = nullptr;
         BaseType_t * _main_taskhandle = nullptr;
+        BaseType_t * _input_taskhandle = nullptr;
         vmc_error_t init_maintask();
+        vmc_error_t init_input_task();
         vmc_error_t init_storage();
         vmc_error_t init_settings();
         vmc_error_t init_sensors();
