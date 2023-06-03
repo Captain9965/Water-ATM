@@ -12,7 +12,6 @@ bootingPage::bootingPage(){
 int bootingPage::load(){
    screen_boot_timer = millis();
    net_check_timer = millis();
-   uiInput::get_default_instance()->enable_joystick_button(); 
     return 0;
 }
 
@@ -31,6 +30,40 @@ int bootingPage::update(){
     }
     if (uiInput::get_default_instance()->joystick_up()){
         DEBUG_INFO_LN("Joystick up!!");
+    }
+    if (uiInput::get_default_instance()->joystick_down()){
+        DEBUG_INFO_LN("Joystick down!!");
+    }
+    if (uiInput::get_default_instance()->joystick_left()){
+        DEBUG_INFO_LN("Joystick left!!");
+    }
+    if (uiInput::get_default_instance()->joystick_right()){
+        DEBUG_INFO_LN("Joystick right!!");
+    }
+    input_flags_t tap;
+    if(uiInput::get_default_instance()->tap_button_pressed(tap)){
+        get_display1()->clear();
+        get_display1()->setCursor(2, 2);
+        get_display1()->print("Tap ");
+        get_display1()->setCursor(2, 3);
+        get_display1()->print(tap);
+        DEBUG_INFO_LN("Button pressed");
+    }
+
+    input_flags_t quantity;
+    if(uiInput::get_default_instance()->quantity_button_pressed(quantity)){
+        get_display1()->clear();
+        get_display1()->setCursor(2, 2);
+        get_display1()->print("Quantity ");
+        get_display1()->setCursor(2, 3);
+        get_display1()->print(quantity);
+        DEBUG_INFO_LN("Button pressed");
+    }
+
+    if(!uiInput::get_default_instance()->door_closed()){
+        get_display1()->clear();
+        get_display1()->setCursor(2, 2);
+        get_display1()->print("Door Open");
     }
    
     return 0;

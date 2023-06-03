@@ -19,7 +19,7 @@
 #define SYSTEM_QUANTITY_5                   PB3
 #define SYSTEM_QUANTITY_6                   PB4
 #define SYSTEM_DOORSWITCH                   PB5
-#define SYSTEM_TAP_1                        PB7
+#define SYSTEM_TAP_1                        PC7
 #define SYSTEM_TAP_2                        PC9
 #define SYSTEM_TAP_3                        PA11
 #define SYSTEM_TAP_4                        PA13

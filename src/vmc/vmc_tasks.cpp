@@ -39,6 +39,7 @@ void input_task(void * pvParameters){
   uiInput * input_instance = uiInput::get_default_instance();
   while (1){
     input_instance->update_joystick_state();
+    input_instance->update_push_button_states();
     wait_ms(100);
   }
 }
