@@ -2,6 +2,7 @@
 #include "vmc/vmc_errors.h"
 #include "sensors/rfid/rfid.h"
 #include "sensors/rtc/rtc.h"
+#include "storage/storage.h"
 
 vmc_idle::vmc_idle(){
     id = "IDLE";
@@ -34,7 +35,7 @@ int vmc_idle::run(){
       DEBUG_INFO(_time.hour);
       DEBUG_INFO(":");
       DEBUG_INFO_LN(_time.minutes);
-
+      storage::get_default_instance()->printStorageContent();
       #ifdef MEM_DEBUG
       stack_debug();
       #endif

@@ -48,7 +48,7 @@ int vmc_booting::run(){
    if (_error != VMC_OK){
         DEBUG_INFO_LN("Storage failed to initialize");
         /*change state to error state*/
-        return VMC_ERROR_STORAGE_INIT;
+        // return VMC_ERROR_STORAGE_INIT;
    }
 
    _error = init_settings();
