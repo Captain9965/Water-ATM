@@ -43,6 +43,15 @@ int vmc_booting::run(){
     if(!started){
         start();
     }
+    /* Note that RFID must be initialized before storage.
+        Otherwise RFID will not work!!
+    */
+   _error = init_sensors();
+   if (_error != VMC_OK){
+        DEBUG_INFO_LN("Sensors init fail");
+        /*change state to error state*/
+        return VMC_ERROR_SENSORS_INIT;
+   }
 
    _error = init_storage();
    if (_error != VMC_OK){
@@ -56,13 +65,6 @@ int vmc_booting::run(){
         DEBUG_INFO_LN("Settings init fail");
         /*change state to error state*/
         return VMC_ERROR_SETTINGS_INIT;
-   }
-
-   _error = init_sensors();
-   if (_error != VMC_OK){
-        DEBUG_INFO_LN("Sensors init fail");
-        /*change state to error state*/
-        return VMC_ERROR_SENSORS_INIT;
    }
 
    _error = init_actuators();
