@@ -47,7 +47,7 @@ bool joystick::is_left(){
 }
 
 bool joystick::is_up(){
-    if ( x_reading >= 250 && y_reading >= 800 ){
+    if ( x_reading >= 0 && y_reading >= 800 ){
         return true;
     }
     return false;

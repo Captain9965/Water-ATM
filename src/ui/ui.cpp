@@ -100,6 +100,6 @@ void display_net_notConnected(){
 void display_net_connected(){
     get_display1()->clear();
     get_display1()->setCursor(2, 2);
-    get_display1()->print("Machine ready!!");
+    get_display1()->print("Select Tap");
 }
 

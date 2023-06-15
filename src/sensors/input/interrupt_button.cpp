@@ -1,9 +1,10 @@
 #include "interrupt_button.h"
 
 
-buttonInterrupt::buttonInterrupt(uint32_t pin, callback_function_t callback): _callback(callback){
+buttonInterrupt::buttonInterrupt(uint32_t pin, callback_function_t callback, uint8_t mode, uint8_t interrupt): _callback(callback){
     _pin = pin;
-    pinMode(_pin, INPUT_PULLUP);
+    _interrupt = interrupt;
+    pinMode(_pin, mode);
     return;
 }
 
@@ -12,7 +13,7 @@ buttonInterrupt::~buttonInterrupt(){
 }
 
 void buttonInterrupt::enable(){
-    attachInterrupt(digitalPinToInterrupt(_pin), _callback, FALLING);
+    attachInterrupt(digitalPinToInterrupt(_pin), _callback, _interrupt);
     return;
 }
 
