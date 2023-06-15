@@ -80,8 +80,8 @@ void Comms::comms_loop(){
         }
         set_vmc_flag(VMC_NET_CONNECTED);
         _mqtt_client->loop();
-        DEBUG_INFO("Signal strength: ");
-        DEBUG_INFO_LN(_network_client->get_signal_strength());
+        // DEBUG_INFO("Signal strength: ");
+        // DEBUG_INFO_LN(_network_client->get_signal_strength());
 
         
 
