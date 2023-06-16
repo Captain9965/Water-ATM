@@ -15,7 +15,7 @@ storage * storage::get_default_instance(){
     return & SD_store;
 }
 
-void storage::printStorageContent(){
+void storage::printSDCardContent(){
     assert(settingsTable);
     settingsTable->printTable();
 }
@@ -63,4 +63,21 @@ bool storage::init(){
     }
     return true;
     
+}
+
+bool storage::setAdminCash(uint32_t amount){
+    if (!settingsTable){
+        return false;
+    }
+    String str_amount = String(amount);
+    return settingsTable->writeCell(1, 1, str_amount);
+}
+
+bool storage::getAdminCash(uint32_t * amount){
+    if (!settingsTable){
+        return false;
+    }
+    String str_amount = settingsTable->readCell(1,1);
+    * amount = atoi(str_amount.c_str());
+    return amount;
 }
