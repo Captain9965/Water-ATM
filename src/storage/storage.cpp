@@ -15,7 +15,7 @@ storage * storage::get_default_instance(){
     return & SD_store;
 }
 
-void storage::printStorageContent(){
+void storage::printSDCardContent(){
     assert(settingsTable);
     settingsTable->printTable();
 }
@@ -63,4 +63,28 @@ bool storage::init(){
     }
     return true;
     
+}
+
+bool storage::readValue(int row , int column, String * str){
+    if (!settingsTable){
+        return false;
+    }
+    if (!settingsTable->begun()){
+        return false;
+    }
+    *str = settingsTable->readCell(row,column);
+    if (str->length() < 1){
+        return false;
+    }
+    return true;
+}
+
+bool storage::writeValue(int row, int column , String str){
+    if (!settingsTable){
+        return false;
+    }
+    if (!settingsTable->begun()){
+        return false;
+    }
+    return settingsTable->writeCell(row, column, str);
 }
