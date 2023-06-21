@@ -3,6 +3,7 @@
 #include "sensors/rfid/rfid.h"
 #include "sensors/rtc/rtc.h"
 #include "storage/storage.h"
+#include "vmc/vmc_data.h"
 
 vmc_idle::vmc_idle(){
     id = "IDLE";
@@ -36,10 +37,10 @@ int vmc_idle::run(){
       DEBUG_INFO(":");
       DEBUG_INFO_LN(_time.minutes);
       storage::get_default_instance()->printSDCardContent();
-      double tap1_quantity_1 = 0.0;
-      EEPROM.get(TAP1_QUANTITY_1_ADDRESS, tap1_quantity_1);
+      double CalibrationVal = 0.0;
+      Calibration::get_default_instance()->get(&CalibrationVal);
       
-      DEBUG_INFO("Tap 1 quantity 1 is "); DEBUG_INFO_LN(String(tap1_quantity_1));
+      DEBUG_INFO("Calibration is "); DEBUG_INFO_LN(String(CalibrationVal));
       #ifdef MEM_DEBUG
       stack_debug();
       #endif
@@ -65,11 +66,11 @@ void vmc_idle::run_sensors(){
 
         DEBUG_INFO_LN("Incrementing Admin Cash..");
         uint32_t adminCash = 0;
-        storage::get_default_instance()->getAdminCash(&adminCash);
-        storage::get_default_instance()->setAdminCash(++adminCash);
-        double tap1_quantity_1 = 0.0;
-        EEPROM.get(TAP1_QUANTITY_1_ADDRESS, tap1_quantity_1);
-        EEPROM.put(TAP1_QUANTITY_1_ADDRESS, ++tap1_quantity_1);
+        AdminCash::get_default_instance()->get(&adminCash);
+        AdminCash::get_default_instance()->set(++adminCash);
+        double CalibrationVal = 0.0;
+        Calibration::get_default_instance()->get(&CalibrationVal);
+        Calibration::get_default_instance()->set(++CalibrationVal);
     }
 
     /* time: */

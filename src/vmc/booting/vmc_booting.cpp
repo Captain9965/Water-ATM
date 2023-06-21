@@ -4,6 +4,7 @@
 #include "sensors/rfid/rfid.h"
 #include "sensors/rtc/rtc.h"
 #include "storage/storage.h"
+#include "vmc/vmc_data.h"
 
 
 vmc_booting::vmc_booting(){
@@ -64,7 +65,7 @@ int vmc_booting::run(){
    if (_error != VMC_OK){
         DEBUG_INFO_LN("Settings init fail");
         /*change state to error state*/
-        return VMC_ERROR_SETTINGS_INIT;
+        // return VMC_ERROR_SETTINGS_INIT;
    }
 
    _error = init_actuators();
@@ -116,9 +117,25 @@ vmc_error_t vmc_booting::init_storage(){
 vmc_error_t vmc_booting::init_settings(){
     DEBUG_INFO_LN("init_settings");
     /* settings depend on storage*/
+    vmc_error_t return_val = VMC_OK;
+    if (!AdminCash::get_default_instance()->load()){
+        DEBUG_INFO_LN("Admin Cash failed to load");
+        return_val = VMC_ERROR_SETTINGS_INIT;
+    }
+
+    if(!tariff::get_default_instance()->load()){
+        DEBUG_INFO_LN("Tariff failed to load");
+        return_val = VMC_ERROR_SETTINGS_INIT;
+    }
+
+    if(!Calibration::get_default_instance()->load()){
+        DEBUG_INFO_LN("Calibration failed to load");
+        return_val = VMC_ERROR_SETTINGS_INIT;
+    }
+
 
    /* create all setting instances here: */
-    return VMC_OK;
+    return return_val;
 }
 
 vmc_error_t vmc_booting::init_sensors(){
