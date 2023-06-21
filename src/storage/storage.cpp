@@ -65,19 +65,26 @@ bool storage::init(){
     
 }
 
-bool storage::setAdminCash(uint32_t amount){
+bool storage::readValue(int row , int column, String * str){
     if (!settingsTable){
         return false;
     }
-    String str_amount = String(amount);
-    return settingsTable->writeCell(1, 1, str_amount);
+    if (!settingsTable->begun()){
+        return false;
+    }
+    *str = settingsTable->readCell(row,column);
+    if (str->length() < 1){
+        return false;
+    }
+    return true;
 }
 
-bool storage::getAdminCash(uint32_t * amount){
+bool storage::writeValue(int row, int column , String str){
     if (!settingsTable){
         return false;
     }
-    String str_amount = settingsTable->readCell(1,1);
-    * amount = atoi(str_amount.c_str());
-    return amount;
+    if (!settingsTable->begun()){
+        return false;
+    }
+    return settingsTable->writeCell(row, column, str);
 }

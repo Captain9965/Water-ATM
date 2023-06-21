@@ -23,8 +23,8 @@ class storage{
         ~storage();
         bool init();
         void printSDCardContent();
-        bool setAdminCash(uint32_t amount);
-        bool getAdminCash(uint32_t *amount);
+        bool readValue(int row, int column, String * str);
+        bool writeValue(int row, int column, String str);
         static storage * get_default_instance();
     private:
         MyTable *settingsTable = nullptr; 
