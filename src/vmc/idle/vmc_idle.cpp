@@ -3,6 +3,7 @@
 #include "sensors/rfid/rfid.h"
 #include "sensors/rtc/rtc.h"
 #include "storage/storage.h"
+#include "vmc/vmc_data.h"
 
 vmc_idle::vmc_idle(){
     id = "IDLE";
@@ -35,7 +36,11 @@ int vmc_idle::run(){
       DEBUG_INFO(_time.hour);
       DEBUG_INFO(":");
       DEBUG_INFO_LN(_time.minutes);
-      storage::get_default_instance()->printStorageContent();
+      storage::get_default_instance()->printSDCardContent();
+      double CalibrationVal = 0.0;
+      Calibration::get_default_instance()->get(&CalibrationVal);
+      
+      DEBUG_INFO("Calibration is "); DEBUG_INFO_LN(String(CalibrationVal));
       #ifdef MEM_DEBUG
       stack_debug();
       #endif
@@ -59,8 +64,13 @@ void vmc_idle::run_sensors(){
     String read_string = RFID::get_default_instance()->read_uid();
     if(isServiceTag(read_string)){
 
-        DEBUG_INFO_LN("Service Tag detected");
-
+        DEBUG_INFO_LN("Incrementing Admin Cash..");
+        uint32_t adminCash = 0;
+        AdminCash::get_default_instance()->get(&adminCash);
+        AdminCash::get_default_instance()->set(++adminCash);
+        double CalibrationVal = 0.0;
+        Calibration::get_default_instance()->get(&CalibrationVal);
+        Calibration::get_default_instance()->set(++CalibrationVal);
     }
 
     /* time: */
