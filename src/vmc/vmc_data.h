@@ -69,3 +69,39 @@ class Calibration: public vmcData<double> {
         virtual bool load();
         static double DEFAULT_CALIBRATION;
 };
+
+/* Flow calculation stored in EEPROM: */
+
+class FlowCalculation: public vmcData<double> {
+    public:
+        static FlowCalculation * get_default_instance();
+        virtual vmc_data_error_t set(double value);
+        virtual bool load();
+        static double DEFAULT_FLOW_CALCULATION;
+};
+
+/* Quantities struct: */
+typedef struct quantities
+{
+    double quantity1;
+    double quantity2;
+    double quantity3;
+    double quantity4;
+    double quantity5;
+    double quantity6;
+
+}quantities_t;
+
+
+class Quantities: public vmcData<quantities_t> {
+    public:
+        static Quantities * get_default_instance();
+        virtual vmc_data_error_t set(quantities_t value);
+        virtual bool load();
+        static double DEFAULT_QUANTITTY_1;
+        static double DEFAULT_QUANTITTY_2;
+        static double DEFAULT_QUANTITTY_3;
+        static double DEFAULT_QUANTITTY_4;
+        static double DEFAULT_QUANTITTY_5;
+        static double DEFAULT_QUANTITTY_6;
+};
