@@ -88,3 +88,9 @@ bool storage::writeValue(int row, int column , String str){
     }
     return settingsTable->writeCell(row, column, str);
 }
+
+void storage::eeprom_wipe(){
+    for (int i = 0; i < EEPROM.length(); i++){
+        EEPROM.write(i, 0);
+    }
+}
