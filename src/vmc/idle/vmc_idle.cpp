@@ -37,7 +37,7 @@ int vmc_idle::run(){
       DEBUG_INFO(":");
       DEBUG_INFO_LN(_time.minutes);
       storage::get_default_instance()->printSDCardContent();
-      double CalibrationVal = 0.0;
+      float CalibrationVal = 0.0;
       Calibration::get_default_instance()->get(&CalibrationVal);
       
       DEBUG_INFO("Calibration is "); DEBUG_INFO_LN(String(CalibrationVal));
@@ -79,7 +79,7 @@ void vmc_idle::run_sensors(){
         uint32_t adminCash = 0;
         AdminCash::get_default_instance()->get(&adminCash);
         AdminCash::get_default_instance()->set(++adminCash);
-        double CalibrationVal = 0.0;
+        float CalibrationVal = 0.0;
         Calibration::get_default_instance()->get(&CalibrationVal);
         Calibration::get_default_instance()->set(++CalibrationVal);
         quantities_t quantities = {};

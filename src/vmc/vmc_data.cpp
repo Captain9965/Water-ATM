@@ -36,14 +36,14 @@ bool AdminCash::load(){
 
 
 
-double tariff::DEFAULT_TARIFF = 10.0;
+float tariff::DEFAULT_TARIFF = 10.0;
 
 tariff * tariff::get_default_instance(){
     static tariff _instance = tariff();
     return &_instance;
 }
 
-vmc_data_error_t tariff::set(double value){
+vmc_data_error_t tariff::set(float value){
  /* data validation: */
     EEPROM.put(TARIFF_ADDRESS, value);
     _value = value;
@@ -52,10 +52,10 @@ vmc_data_error_t tariff::set(double value){
 }
 
 bool tariff::load(){
-    double value = 0.00;
+    float value = 0.00;
     EEPROM.get(TARIFF_ADDRESS, value);
     /* data validation: */
-    if (value <= 0.00){
+    if (!(value > 0.00) || isnan(value)){
         _value = DEFAULT_TARIFF;
         _data_error = VMC_DATA_UNSET;
         EEPROM.put(TARIFF_ADDRESS, DEFAULT_TARIFF);
@@ -68,14 +68,14 @@ bool tariff::load(){
 }
 
 
-double Calibration::DEFAULT_CALIBRATION = 10.0;
+float Calibration::DEFAULT_CALIBRATION = 10.0;
 
 Calibration * Calibration::get_default_instance(){
     static Calibration _instance = Calibration();
     return &_instance;
 }
 
-vmc_data_error_t Calibration::set(double value){
+vmc_data_error_t Calibration::set(float value){
  /* data validation: */
     EEPROM.put(CALIBRATION_ADDRESS, value);
     _value = value;
@@ -84,10 +84,10 @@ vmc_data_error_t Calibration::set(double value){
 }
 
 bool Calibration::load(){
-    double value = 0.00;
+    float value = 0.00;
     EEPROM.get(CALIBRATION_ADDRESS, value);
     /* data validation: */
-    if (value <= 0.00){
+    if (!(value > 0.00) || isnan(value)){
         _value = DEFAULT_CALIBRATION;
         _data_error = VMC_DATA_UNSET;
         EEPROM.put(CALIBRATION_ADDRESS, DEFAULT_CALIBRATION);
@@ -100,14 +100,14 @@ bool Calibration::load(){
 }
 
 
-double FlowCalculation::DEFAULT_FLOW_CALCULATION = 10.0;
+float FlowCalculation::DEFAULT_FLOW_CALCULATION = 10.0;
 
 FlowCalculation * FlowCalculation::get_default_instance(){
     static FlowCalculation _instance = FlowCalculation();
     return &_instance;
 }
 
-vmc_data_error_t FlowCalculation::set(double value){
+vmc_data_error_t FlowCalculation::set(float value){
  /* data validation: */
     EEPROM.put(FLOW_CALCULATION_ADDRESS, value);
     _value = value;
@@ -116,10 +116,10 @@ vmc_data_error_t FlowCalculation::set(double value){
 }
 
 bool FlowCalculation::load(){
-    double value = 0.00;
+    float value = 0.00;
     EEPROM.get(FLOW_CALCULATION_ADDRESS, value);
     /* data validation: */
-    if (value <= 0.00){
+    if (!(value > 0.00) || isnan(value)){
         _value = DEFAULT_FLOW_CALCULATION;
         _data_error = VMC_DATA_UNSET;
         EEPROM.put(FLOW_CALCULATION_ADDRESS, DEFAULT_FLOW_CALCULATION);
@@ -131,12 +131,12 @@ bool FlowCalculation::load(){
     return true;
 }
 
-double Quantities::DEFAULT_QUANTITTY_1 = 10.0;
-double Quantities::DEFAULT_QUANTITTY_2 = 10.0;
-double Quantities::DEFAULT_QUANTITTY_3 = 10.0;
-double Quantities::DEFAULT_QUANTITTY_4 = 10.0;
-double Quantities::DEFAULT_QUANTITTY_5 = 10.0;
-double Quantities::DEFAULT_QUANTITTY_6 = 10.0;
+float Quantities::DEFAULT_QUANTITTY_1 = 10.0;
+float Quantities::DEFAULT_QUANTITTY_2 = 20.0;
+float Quantities::DEFAULT_QUANTITTY_3 = 30.0;
+float Quantities::DEFAULT_QUANTITTY_4 = 40.0;
+float Quantities::DEFAULT_QUANTITTY_5 = 50.0;
+float Quantities::DEFAULT_QUANTITTY_6 = 60.0;
 
 Quantities * Quantities::get_default_instance(){
     static Quantities _instance = Quantities();
@@ -196,16 +196,16 @@ vmc_data_error_t Quantities::set(quantities_t value){
 
 bool Quantities::load(){
     bool ret = true;
-    double value1 = 0.00;
-    double value2 = 0.00;
-    double value3 = 0.00;
-    double value4 = 0.00;
-    double value5 = 0.00;
-    double value6 = 0.00;
+    float value1 = 0.00;
+    float value2 = 0.00;
+    float value3 = 0.00;
+    float value4 = 0.00;
+    float value5 = 0.00;
+    float value6 = 0.00;
 
     EEPROM.get(QUANTITY_1_ADDRESS, value1);
     /* data validation: */
-    if (value1 <= 0.00){
+    if (!(value1 > 0.00) || isnan(value1)){
         _value.quantity1 = DEFAULT_QUANTITTY_1;
         _data_error = VMC_DATA_UNSET;
         EEPROM.write(QUANTITY_1_ADDRESS, 0);
@@ -218,7 +218,7 @@ bool Quantities::load(){
 
     EEPROM.get(QUANTITY_2_ADDRESS, value2);
     /* data validation: */
-    if (!(value2 > 0.00)){
+    if (!(value2 > 0.00) || isnan(value2)){
         _value.quantity2 = DEFAULT_QUANTITTY_2;
         _data_error = VMC_DATA_UNSET;
         DEBUG_INFO_LN("Resetting quantitiy 2");
@@ -232,7 +232,7 @@ bool Quantities::load(){
 
     EEPROM.get(QUANTITY_3_ADDRESS, value3);
     /* data validation: */
-    if (value3 <= 0.00){
+    if (!(value3 > 0.00) || isnan(value3)){
         _value.quantity3 = DEFAULT_QUANTITTY_3;
         _data_error = VMC_DATA_UNSET;
         EEPROM.write(QUANTITY_3_ADDRESS, 0);
@@ -245,7 +245,7 @@ bool Quantities::load(){
 
     EEPROM.get(QUANTITY_4_ADDRESS, value4);
     /* data validation: */
-    if (!(value4 > 0.00)){
+    if (!(value4 > 0.00) || isnan(value4)){
         _value.quantity4 = DEFAULT_QUANTITTY_4;
         _data_error = VMC_DATA_UNSET;
         DEBUG_INFO_LN("Resetting quantity 4");
@@ -259,7 +259,7 @@ bool Quantities::load(){
 
     EEPROM.get(QUANTITY_5_ADDRESS, value5);
     /* data validation: */
-    if (value5 <= 0.00){
+    if (!(value5 > 0.00) || isnan(value5)){
         _value.quantity5 = DEFAULT_QUANTITTY_5;
         _data_error = VMC_DATA_UNSET;
         EEPROM.write(QUANTITY_5_ADDRESS, 0);
@@ -272,7 +272,7 @@ bool Quantities::load(){
 
     EEPROM.get(QUANTITY_6_ADDRESS, value6);
     /* data validation: */
-    if (value1 <= 0.00){
+    if (!(value6 > 0.00) || isnan(value6)){
         _value.quantity6 = DEFAULT_QUANTITTY_6;
         _data_error = VMC_DATA_UNSET;
         EEPROM.write(QUANTITY_6_ADDRESS, 0);
