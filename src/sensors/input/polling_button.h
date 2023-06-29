@@ -1,5 +1,6 @@
 #pragma once
 #include "common/common.h"
+#define DEBOUNCE_DELAY  50
 
 class pollingButton{
     public:
@@ -8,5 +9,7 @@ class pollingButton{
     private:
         uint32_t _pin;
         uint8_t _mode;
-        long long previous_press;
+        long long last_debounce_time;
+        int last_button_state;
+        int button_state;
 };

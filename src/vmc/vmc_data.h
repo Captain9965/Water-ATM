@@ -51,21 +51,57 @@ class AdminCash: public vmcData<uint32_t> {
 
 /* Tariff stored in EEPROM: */
 
-class tariff: public vmcData<double> {
+class tariff: public vmcData<float> {
     public:
         static tariff * get_default_instance();
-        virtual vmc_data_error_t set(double value);
+        virtual vmc_data_error_t set(float value);
         virtual bool load();
-        static double DEFAULT_TARIFF;
+        static float DEFAULT_TARIFF;
 };
 
 
 /* Calibration stored in EEPROM: */
 
-class Calibration: public vmcData<double> {
+class Calibration: public vmcData<float> {
     public:
         static Calibration * get_default_instance();
-        virtual vmc_data_error_t set(double value);
+        virtual vmc_data_error_t set(float value);
         virtual bool load();
-        static double DEFAULT_CALIBRATION;
+        static float DEFAULT_CALIBRATION;
+};
+
+/* Flow calculation stored in EEPROM: */
+
+class FlowCalculation: public vmcData<float> {
+    public:
+        static FlowCalculation * get_default_instance();
+        virtual vmc_data_error_t set(float value);
+        virtual bool load();
+        static float DEFAULT_FLOW_CALCULATION;
+};
+
+/* Quantities struct: */
+typedef struct quantities
+{
+    float quantity1;
+    float quantity2;
+    float quantity3;
+    float quantity4;
+    float quantity5;
+    float quantity6;
+
+}quantities_t;
+
+
+class Quantities: public vmcData<quantities_t> {
+    public:
+        static Quantities * get_default_instance();
+        virtual vmc_data_error_t set(quantities_t value);
+        virtual bool load();
+        static float DEFAULT_QUANTITTY_1;
+        static float DEFAULT_QUANTITTY_2;
+        static float DEFAULT_QUANTITTY_3;
+        static float DEFAULT_QUANTITTY_4;
+        static float DEFAULT_QUANTITTY_5;
+        static float DEFAULT_QUANTITTY_6;
 };

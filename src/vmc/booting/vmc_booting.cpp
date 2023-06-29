@@ -133,6 +133,11 @@ vmc_error_t vmc_booting::init_settings(){
         return_val = VMC_ERROR_SETTINGS_INIT;
     }
 
+    if(!Quantities::get_default_instance()->load()){
+        DEBUG_INFO_LN("Quantities failed to load");
+        return_val = VMC_ERROR_SETTINGS_INIT;
+    }
+
 
    /* create all setting instances here: */
     return return_val;

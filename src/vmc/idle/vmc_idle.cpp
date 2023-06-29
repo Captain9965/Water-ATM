@@ -37,10 +37,21 @@ int vmc_idle::run(){
       DEBUG_INFO(":");
       DEBUG_INFO_LN(_time.minutes);
       storage::get_default_instance()->printSDCardContent();
-      double CalibrationVal = 0.0;
+      float CalibrationVal = 0.0;
       Calibration::get_default_instance()->get(&CalibrationVal);
       
       DEBUG_INFO("Calibration is "); DEBUG_INFO_LN(String(CalibrationVal));
+
+      quantities_t quantities;
+
+      Quantities::get_default_instance()->get(&quantities);
+      DEBUG_INFO("Quantity 1 -> "); DEBUG_INFO_LN(String(quantities.quantity1));
+      DEBUG_INFO("Quantity 2 -> "); DEBUG_INFO_LN(String(quantities.quantity2));
+      DEBUG_INFO("Quantity 3 -> "); DEBUG_INFO_LN(String(quantities.quantity3));
+      DEBUG_INFO("Quantity 4 -> "); DEBUG_INFO_LN(String(quantities.quantity4));
+      DEBUG_INFO("Quantity 5 -> "); DEBUG_INFO_LN(String(quantities.quantity5));
+      DEBUG_INFO("Quantity 6 -> "); DEBUG_INFO_LN(String(quantities.quantity6));
+
       #ifdef MEM_DEBUG
       stack_debug();
       #endif
@@ -68,9 +79,14 @@ void vmc_idle::run_sensors(){
         uint32_t adminCash = 0;
         AdminCash::get_default_instance()->get(&adminCash);
         AdminCash::get_default_instance()->set(++adminCash);
-        double CalibrationVal = 0.0;
+        float CalibrationVal = 0.0;
         Calibration::get_default_instance()->get(&CalibrationVal);
         Calibration::get_default_instance()->set(++CalibrationVal);
+        quantities_t quantities = {};
+        Quantities::get_default_instance()->get(&quantities);
+        ++ quantities.quantity1;
+        ++ quantities.quantity2;
+        Quantities::get_default_instance()->set(quantities);
     }
 
     /* time: */
