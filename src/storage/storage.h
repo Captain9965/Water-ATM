@@ -8,14 +8,14 @@
 
 /* EEPROM flash emulation addresses : */
 #define TARIFF_ADDRESS                      0
-#define CALIBRATION_ADDRESS                 3
-#define FLOW_CALCULATION_ADDRESS            7
-#define QUANTITY_1_ADDRESS                  11
-#define QUANTITY_2_ADDRESS                  15
-#define QUANTITY_3_ADDRESS                  19
-#define QUANTITY_4_ADDRESS                  23
-#define QUANTITY_5_ADDRESS                  27
-#define QUANTITY_6_ADDRESS                  31
+#define CALIBRATION_ADDRESS                 4
+#define FLOW_CALCULATION_ADDRESS            8
+#define QUANTITY_1_ADDRESS                  12
+#define QUANTITY_2_ADDRESS                  16
+#define QUANTITY_3_ADDRESS                  20
+#define QUANTITY_4_ADDRESS                  24
+#define QUANTITY_5_ADDRESS                  28
+#define QUANTITY_6_ADDRESS                  32
 
 class storage{
     public:
