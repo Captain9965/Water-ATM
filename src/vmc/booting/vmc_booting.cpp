@@ -15,17 +15,20 @@ int vmc_booting::start(){
     started = true;
     DEBUG_INFO_LN("booting state starting..");
 
+     /* clear both system flags */
+    vmc_flags_init();
+
     _error = init_maintask();
    if (_error != VMC_OK){
     DEBUG_INFO_LN(" Main task failed to initialize");
-    /* change state to error state*/
+    set_vmc_flag(VMC_MEMORY_ERROR);
     return VMC_ERROR_MAINTASK_INIT;
    }
 
    _error = init_comms();
    if (_error != VMC_OK){
     DEBUG_INFO_LN(" Comms failed to initialize");
-    /* change state to error state*/
+    set_vmc_flag(VMC_MEMORY_ERROR);
     return VMC_ERROR_COMMS_INIT;
    }
 
@@ -51,40 +54,41 @@ int vmc_booting::run(){
    if (_error != VMC_OK){
         DEBUG_INFO_LN("Sensors init fail");
         /*change state to error state*/
-        return VMC_ERROR_SENSORS_INIT;
    }
 
    _error = init_storage();
    if (_error != VMC_OK){
         DEBUG_INFO_LN("Storage failed to initialize");
         /*change state to error state*/
-        // return VMC_ERROR_STORAGE_INIT;
+        set_vmc_flag(VMC_STORAGE_ERROR);
    }
 
    _error = init_settings();
    if (_error != VMC_OK){
         DEBUG_INFO_LN("Settings init fail");
         /*change state to error state*/
-        // return VMC_ERROR_SETTINGS_INIT;
+        
    }
 
    _error = init_actuators();
    if (_error != VMC_OK){
     DEBUG_INFO_LN("Actuators init fail");
     /* change state to error state */
-    return VMC_ERROR_ACTUATORS_INIT;
    }
 
    _error = init_services();
    if (_error != VMC_OK){
     DEBUG_INFO_LN("Actuators init fail");
     /* change state to error state*/
-    return VMC_ERROR_SERVICES_INIT;
    }
-
-    /* clear both system flags */
-    vmc_flags_init();
-
+//    system_time_t time;
+//    time.day = 30;
+//    time.hour = 16;
+//    time.seconds = 00;
+//    time.year = 23;
+//    time.minutes = 24;
+//    time.month = 6;
+//     systemTime::get_default_instance()->setTime(time);
     stop();
     return 0;
 }
@@ -92,6 +96,7 @@ int vmc_booting::run(){
 int vmc_booting::stop(){
     DEBUG_INFO_LN("booting state stopping...");
     /* send info to ui*/
+    set_vmc_flag(VMC_BOOTING_DONE);
     this->vmc->set_state(vmc_idle::get_default_instance());
     return 0;
 }
