@@ -131,12 +131,12 @@ bool FlowCalculation::load(){
     return true;
 }
 
-float Quantities::DEFAULT_QUANTITTY_1 = 10.0;
-float Quantities::DEFAULT_QUANTITTY_2 = 20.0;
-float Quantities::DEFAULT_QUANTITTY_3 = 30.0;
-float Quantities::DEFAULT_QUANTITTY_4 = 40.0;
-float Quantities::DEFAULT_QUANTITTY_5 = 50.0;
-float Quantities::DEFAULT_QUANTITTY_6 = 60.0;
+float Quantities::DEFAULT_QUANTITTY_1 = 0.1;
+float Quantities::DEFAULT_QUANTITTY_2 = 0.2;
+float Quantities::DEFAULT_QUANTITTY_3 = 0.3;
+float Quantities::DEFAULT_QUANTITTY_4 = 0.4;
+float Quantities::DEFAULT_QUANTITTY_5 = 0.5;
+float Quantities::DEFAULT_QUANTITTY_6 = 0.6;
 
 Quantities * Quantities::get_default_instance(){
     static Quantities _instance = Quantities();
