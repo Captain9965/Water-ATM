@@ -108,7 +108,9 @@ void display_net_notConnected(){
 
 void display_net_connected(){
     get_display1()->clear();
-    get_display1()->setCursor(2, 3);
+    get_display1()->setCursor(2, 1);
+    get_display1()->print("Machine Ready");
+    get_display1()->setCursor(2, 2);
     get_display1()->print("Select Tap");
 }
 
@@ -157,5 +159,12 @@ void display_time(){
     
     get_display2()->setCursor(2, 1); get_display2()->print(date_buff);
     get_display2()->setCursor(2, 2); get_display2()->print(time_buff);
+}
+
+void display_select_quantity(const char * tap){
+    get_display1()->setCursor(4, 1);
+    get_display1()->print(tap);
+    get_display1()->setCursor(1, 2);
+    get_display1()->print("Select Quantity");
 }
 
