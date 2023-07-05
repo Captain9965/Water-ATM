@@ -2,6 +2,7 @@
 #include "vmc/vmc_flags.h"
 #include "ui/ui_input.h"
 #include "storage/storage.h"
+#include "../dispensing_page/dispensing_page.h"
 
 
 
@@ -41,9 +42,10 @@ int idlePage::update(){
             display_net_connected();
 
         } else{
-
-            display_net_notConnected();
-            // ordinarily should return , since machine should not operate without internet
+            /* for now we can bypass this condition, ideally, we should return and not even check for button presses altogether*/
+               display_net_connected();
+            // display_net_notConnected();
+            // return -1;
         }
         net_check_timer = millis();
         
@@ -53,10 +55,35 @@ int idlePage::update(){
     
     input_flags_t tap;
     if(uiInput::get_default_instance()->tap_button_pressed(tap)){
-        get_buzzer()->beep(20);
+        // get_buzzer()->beep(20);
+        switch (tap){
+            case TAP_1_BUTTON:
+                set_vmc_flag(VMC_DISPENSE_TAP1);
+                stop();
+                break;
+            case TAP_2_BUTTON:
+                set_vmc_flag(VMC_DISPENSE_TAP2);
+                stop();
+                break;
+            case TAP_3_BUTTON:
+                set_vmc_flag(VMC_DISPENSE_TAP3);
+                stop();
+                break;
+            case TAP_4_BUTTON:
+                set_vmc_flag(VMC_DISPENSE_TAP4);
+                stop();
+                break;
+            default:
+                break;
+        }
     }
 
    
+    return 0;
+}
+
+int idlePage::stop(){
+    this->ui->set_page(dispensingPage::get_default_instance());
     return 0;
 }
 
