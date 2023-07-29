@@ -1,6 +1,8 @@
 #pragma once
 #include "vmc/vmc.h"
 #include "vmc/vmc_errors.h"
+#include "vmc/vmc_flags.h"
+#include "services/dispense_system.h"
 
 /* state dispensing */
 class vmc_dispensing: public State{
@@ -9,25 +11,15 @@ class vmc_dispensing: public State{
         int start() override;
         int stop() override;
         int run() override;
+        void set_initial_tap(tap_selection_t tap);
+        DispenseSystem * get_dispense_instance();
         static vmc_dispensing* get_default_instance();
     private:
-        // service_state_t dispensing_state;
+        tap_selection_t _initialTap = (tap_selection_t)0;
         void run_sensors();
-        // dehumidifier_state_t run_dehumidifier();
-        // rtos::Kernel::Clock::time_point debug_timer = rtos::Kernel::Clock::now();
-        
-        /* sensors */
-        // HeatSinkSensor* _heat_sink_temp_sensor = nullptr;
-        // vmc_sensor_state_t _heat_sink_temp_sensor_state = VMC_SENSOR_UNINITIALIZED;
 
-        // AmbientSensor* _ambient_sensor = nullptr;
-        // TankDHTSensor* _tank_dht22_sensor = nullptr;
-        // vmc_sensor_state_t _ambient_temp_sensor_state = VMC_SENSOR_UNINITIALIZED;
-
-        // /* services*/
-
-        // DispenseSystem* _dispense_service = nullptr;
-        // PidDehumidifierSystem* _dehumidifier = nullptr;
+        /* services*/
+        DispenseSystem* _dispense_service = nullptr;
 
 
 };

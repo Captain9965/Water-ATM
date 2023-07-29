@@ -3,6 +3,8 @@
 #include "Wire.h"
 #include "LiquidCrystal_I2C.h"
 #include "sensors/input/joystick.h"
+#include "ezBuzzer.h"
+#include "sensors/rtc/rtc.h"
 
 
 /* This is the UI state Machine (WIP) */
@@ -42,6 +44,14 @@ class Page{
 LiquidCrystal_I2C * get_display1();
 LiquidCrystal_I2C * get_display2();
 
+ezBuzzer * get_buzzer();
+
 /* common functions */
 void display_net_connected();
 void display_net_notConnected();
+void display_info(const char * info);
+void display_secondary_info(const char* info);
+void display_dispenses(float amount1, float amount2, float amount3, float amount4);
+void clear_displays();
+void display_time();
+void display_select_quantity(const char * tap);

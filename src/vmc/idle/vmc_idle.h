@@ -13,6 +13,7 @@ class vmc_idle: public State{
         int run() override;
         static vmc_idle* get_default_instance();
     private:
+        void check_idle_page_flags();
         void run_sensors();
         bool isServiceTag(String &uid);
         long long tick_time = 0;
