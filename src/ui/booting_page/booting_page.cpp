@@ -47,6 +47,7 @@ int bootingPage::update(){
 }
 
 int bootingPage::stop(){
+    clear_displays();
     this->ui->set_page(idlePage::get_default_instance());
     return 0;
 }
