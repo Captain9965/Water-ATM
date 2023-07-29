@@ -50,6 +50,7 @@ ezBuzzer * get_buzzer();
 void display_net_connected();
 void display_net_notConnected();
 void display_info(const char * info);
+void display_secondary_info(const char* info);
 void display_dispenses(float amount1, float amount2, float amount3, float amount4);
 void clear_displays();
 void display_time();

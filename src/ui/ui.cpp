@@ -117,8 +117,11 @@ void display_net_connected(){
 void display_info(const char * info){
     get_display1()->clear();
     get_display1()->setCursor(2, 1);
-    get_display1()->print("INFO: ");
-    get_display1()->setCursor(2, 2);
+    get_display1()->print(info);
+}
+
+void display_secondary_info(const char* info){
+    get_display1()->setCursor(4, 2);
     get_display1()->print(info);
 }
 
@@ -151,7 +154,7 @@ void display_time(){
     system_time_t time;
     systemTime::get_default_instance()->getTime(time);
     const char *date_fmt = "%02d/%02d/%02d";
-    const char * time_fmt = "%02d:%0d";
+    const char * time_fmt = "%02d:%02d";
     char date_buff[12];
     char time_buff[7];
     sprintf(date_buff, date_fmt,time.day, time.month, time.year);
