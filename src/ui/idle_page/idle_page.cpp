@@ -13,8 +13,7 @@ idlePage::idlePage(){
 
 int idlePage::load(){
    net_check_timer = millis();
-   clear_displays();
-
+   get_display2()->clear();
    return 0;
 }
 
@@ -59,19 +58,19 @@ int idlePage::update(){
         switch (tap){
             case TAP_1_BUTTON:
                 set_vmc_flag(VMC_DISPENSE_TAP1);
-                stop();
+                stop(VMC_DISPENSE_TAP1);
                 break;
             case TAP_2_BUTTON:
                 set_vmc_flag(VMC_DISPENSE_TAP2);
-                stop();
+                stop(VMC_DISPENSE_TAP2);
                 break;
             case TAP_3_BUTTON:
                 set_vmc_flag(VMC_DISPENSE_TAP3);
-                stop();
+                stop(VMC_DISPENSE_TAP3);
                 break;
             case TAP_4_BUTTON:
                 set_vmc_flag(VMC_DISPENSE_TAP4);
-                stop();
+                stop(VMC_DISPENSE_TAP4);
                 break;
             default:
                 break;
@@ -82,8 +81,8 @@ int idlePage::update(){
     return 0;
 }
 
-int idlePage::stop(){
-    this->ui->set_page(dispensingPage::get_default_instance());
+int idlePage::stop(vmc_flags_t tap){
+    this->ui->set_page(dispensingPage::get_default_instance(tap));
     return 0;
 }
 
