@@ -1,11 +1,12 @@
+#pragma once
 #include "common/common.h"
 
 typedef enum tap_selection{
+    TAP_UNSELECTED,
     DISPENSE_TAP_1,
     DISPENSE_TAP_2,
     DISPENSE_TAP_3,
     DISPENSE_TAP_4,
-    TAP_UNSELECTED
 }tap_selection_t;
 
 typedef enum dispensing_states {
@@ -44,12 +45,19 @@ class DispenseSystem{
         void clear_to_event(uint32_t ev);
         void clear_from_event(uint32_t ev);
         dispensing_state_t get_dispensing_system_ev();
+        void set_dispense_quantity(float quantity);
+        tap_selection_t get_tap();
     private:
+        void calculate_dispense_time();
+        void _set_state(dispensing_state_t state);
         dispensing_state_t _state = DISPENSING_IDLE;
         tap_selection_t _tap = TAP_UNSELECTED;
+        float _quantity;
+        long long _dispense_time = 0;
         uint32_t _dispense_system_from_ev_flag = 0, _dispense_system_to_ev_flag = 0;
         long long _select_quantity_timer = millis();
         long long _payment_timer = millis();
+        long long _dispense_timer = millis();
 
 
 };
