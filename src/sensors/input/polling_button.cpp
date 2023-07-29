@@ -25,6 +25,15 @@ bool pollingButton::is_pressed(){
 
     last_button_state = reading;
 
+    /* This condition check for whether the button is enabled or not had better be here
+        because when the button is disable and later reenabled, it causes
+        the button to default to the last button state which will cause false press detection
+    
+    */
+    if(!enabled){
+        return false;
+    }
+
     if (_mode == INPUT_PULLUP){
         return !button_state;
     }
