@@ -24,26 +24,8 @@ int dispensingPage::update(){
         loaded = true;
     }
 
-    input_flags_t tap;
-    if(uiInput::get_default_instance()->tap_button_pressed(tap)){
-        // get_buzzer()->beep(20);
-        switch (tap){
-            case TAP_1_BUTTON:
-                // check whether running to cancel: 
-                break;
-            case TAP_2_BUTTON:
-                // check whether running to cancel:
-                break;
-            case TAP_3_BUTTON:
-                // check whether running to cancel:
-                break;
-            case TAP_4_BUTTON:
-                // check whether running to cancel:
-                break;
-            default:
-                break;
-        }
-    }
+    check_for_tap_selection();
+    
 
     //which button has been pressed for cancel?. In this case, we have to check for the running flag for dispense activity in each of the taps
 
@@ -71,7 +53,10 @@ int dispensingPage::update(){
         }  else if (_dispense_instance->check_from_event(DISPENSING_RUNNING)){
             display_net_connected();
             update_dispense_quantities();
-        }    
+        }   else if (_dispense_instance->check_from_event(DISPENSING_SHOW_DUE_AMOUNT)){
+            _dispense_instance->clear_from_event(DISPENSING_SHOW_DUE_AMOUNT);
+            display_info("TAP CARD");
+        }
     }
 
     
@@ -126,32 +111,32 @@ void dispensingPage::check_for_quantity_selection(){
         // get_buzzer()->beep(20);
         switch (quantity_tap){
             case QUANTITY_1_BUTTON:
-                _dispense_instance->set_to_event(DISPENSING_STARTING);
+                _dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _dispense_instance->clear_from_event(DISPENSING_IDLE);
                 uiInput::get_default_instance()->disable_quantity_buttons();
                 break;
             case QUANTITY_2_BUTTON:
-                _dispense_instance->set_to_event(DISPENSING_STARTING);
+                _dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _dispense_instance->clear_from_event(DISPENSING_IDLE);
                 uiInput::get_default_instance()->disable_quantity_buttons();
                 break;
             case QUANTITY_3_BUTTON:
-                _dispense_instance->set_to_event(DISPENSING_STARTING);
+                _dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _dispense_instance->clear_from_event(DISPENSING_IDLE);
                 uiInput::get_default_instance()->disable_quantity_buttons();
                 break;
             case QUANTITY_4_BUTTON:
-                _dispense_instance->set_to_event(DISPENSING_STARTING);
+                _dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _dispense_instance->clear_from_event(DISPENSING_IDLE);
                 uiInput::get_default_instance()->disable_quantity_buttons();
                 break;
             case QUANTITY_5_BUTTON:
-                _dispense_instance->set_to_event(DISPENSING_STARTING);
+                _dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _dispense_instance->clear_from_event(DISPENSING_IDLE);
                 uiInput::get_default_instance()->disable_quantity_buttons();
                 break;
             case QUANTITY_6_BUTTON:
-                _dispense_instance->set_to_event(DISPENSING_STARTING);
+                _dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _dispense_instance->clear_from_event(DISPENSING_IDLE);
                 uiInput::get_default_instance()->disable_quantity_buttons();
                 break;
@@ -192,4 +177,56 @@ void dispensingPage::update_dispense_quantities(){
 
 void dispensingPage::clear_amount(){
     amount1 = amount2 = amount3 = amount4 = 0;
+}
+
+/* check for tap selection to determine whether to cancel or launch a new dispense instance*/
+void dispensingPage::check_for_tap_selection(){
+    input_flags_t tap;
+    if(uiInput::get_default_instance()->tap_button_pressed(tap)){
+        // get_buzzer()->beep(20);
+        switch (tap){
+            case TAP_1_BUTTON:
+                {
+                    if(_dispense_instance){
+                        if(_dispense_instance->get_tap() == DISPENSE_TAP_1){
+                            _dispense_instance->set_to_event(DISPENSING_CANCELLED);
+                            _dispense_instance->clear_from_event(DISPENSING_IDLE);
+                        }
+                    }
+                } 
+                break;
+            case TAP_2_BUTTON:
+                {
+                    if(_dispense_instance){
+                        if(_dispense_instance->get_tap() == DISPENSE_TAP_2){
+                            _dispense_instance->set_to_event(DISPENSING_CANCELLED);
+                            _dispense_instance->clear_from_event(DISPENSING_IDLE);
+                        }
+                    }
+                }
+                break;
+            case TAP_3_BUTTON:
+                {
+                    if(_dispense_instance){
+                        if(_dispense_instance->get_tap() == DISPENSE_TAP_3){
+                            _dispense_instance->set_to_event(DISPENSING_CANCELLED);
+                            _dispense_instance->clear_from_event(DISPENSING_IDLE);
+                        }
+                    }
+                }
+                break;
+            case TAP_4_BUTTON:
+                {
+                    if(_dispense_instance){
+                        if(_dispense_instance->get_tap() == DISPENSE_TAP_4){
+                            _dispense_instance->set_to_event(DISPENSING_CANCELLED);
+                            _dispense_instance->clear_from_event(DISPENSING_IDLE);
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }

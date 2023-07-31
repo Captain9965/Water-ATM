@@ -1,4 +1,5 @@
 #include "dispense_system.h"
+#include "sensors/rfid/rfid.h"
 
 DispenseSystem::DispenseSystem(tap_selection_t tap): _tap(tap){
 
@@ -97,6 +98,18 @@ dispensing_state_t DispenseSystem::run(){
             /* wait for quantity selection: */
             break;
         }
+        case DISPENSING_PAY_WAIT:
+        {
+            /* rfid payment:
+            */
+           String uid = RFID::get_default_instance()->read_uid();
+           if (is_dispense_tag(uid)){
+            _set_state(DISPENSING_STARTING);
+           } else{
+            set_from_event(DISPENSING_SHOW_DUE_AMOUNT);
+           }
+           break;
+        }
         case DISPENSING_STARTING:
         {
             calculate_dispense_time();
@@ -111,6 +124,12 @@ dispensing_state_t DispenseSystem::run(){
             if (millis() - _dispense_timer >= _dispense_time){
                 _set_state(DISPENSING_DONE);
             }
+            break;
+        }
+        case DISPENSING_CANCELLED:
+        {   
+            DEBUG_INFO_LN("Dispensing cancelled !!");
+            _set_state(DISPENSING_DONE);
             break;
         }
         case DISPENSING_DONE:
@@ -130,4 +149,12 @@ dispensing_state_t DispenseSystem::run(){
         
     }
     return dispense_state;
+}
+
+bool DispenseSystem::is_dispense_tag(String &uid){
+    if (uid.substring(1) == VENDING_CARD)
+    {
+        return true;
+    }
+    return false;
 }
