@@ -13,6 +13,7 @@ class dispensingPage: public Page{
     private:
         void clear_amount();
         void check_for_quantity_selection();
+        void check_for_tap_selection();
         void update_dispense_quantities();
         void display_button_pressed_for_dispense(vmc_flags_t & tap);
         vmc_flags_t  _initialTap;

@@ -58,6 +58,7 @@ class DispenseSystem{
         long long _select_quantity_timer = millis();
         long long _payment_timer = millis();
         long long _dispense_timer = millis();
+        bool is_dispense_tag(String &uid); // to be moved to payment service
 
 
 };
