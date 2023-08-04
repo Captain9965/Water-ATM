@@ -30,7 +30,7 @@ typedef enum dispensing_states {
     DISPENSING_CANCELLED = (1 << 17)
 } dispensing_state_t;
 
-
+/* Dispense node: */
 class DispenseSystem{
     public:
         DispenseSystem(tap_selection_t tap);
@@ -47,6 +47,7 @@ class DispenseSystem{
         dispensing_state_t get_dispensing_system_ev();
         void set_dispense_quantity(float quantity);
         tap_selection_t get_tap();
+        DispenseSystem * next = nullptr;
     private:
         void calculate_dispense_time();
         void _set_state(dispensing_state_t state);
@@ -62,3 +63,23 @@ class DispenseSystem{
 
 
 };
+
+/* Dispense array:
+    Used due to 0(1) access times
+*/
+
+class dispenseGroup{
+    public:
+        dispenseGroup();
+        ~dispenseGroup();
+        bool is_running(tap_selection_t tap);
+        bool remove(tap_selection_t tap);
+        bool add(tap_selection_t tap);
+        void run();
+        bool instances_dispensing();
+        static dispenseGroup * get_default_instance();
+    private:
+        /* max of 4 taps will run at the same time */
+        DispenseSystem * dispenseArray[DISPENSE_TAP_4];
+        bool is_empty();
+}
