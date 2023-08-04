@@ -64,8 +64,8 @@ class DispenseSystem{
 
 };
 
-/* Dispense array:
-    Used due to 0(1) access times
+/* Dispense linked list:
+    Used due to 0(n) worst case in traversal 
 */
 
 class dispenseGroup{
@@ -79,7 +79,6 @@ class dispenseGroup{
         bool instances_dispensing();
         static dispenseGroup * get_default_instance();
     private:
-        /* max of 4 taps will run at the same time */
-        DispenseSystem * dispenseArray[DISPENSE_TAP_4];
+        DispenseSystem * dispenseHead = nullptr;
         bool is_empty();
 }
