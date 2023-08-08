@@ -81,6 +81,9 @@ void DispenseSystem::calculate_dispense_time(){
 tap_selection_t DispenseSystem::get_tap(){
     return _tap;
 }
+dispensing_state_t DispenseSystem::get_state(){
+    return _state;
+}
 
 dispensing_state_t DispenseSystem::run(){
 

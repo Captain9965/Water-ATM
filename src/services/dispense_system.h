@@ -47,6 +47,7 @@ class DispenseSystem{
         dispensing_state_t get_dispensing_system_ev();
         void set_dispense_quantity(float quantity);
         tap_selection_t get_tap();
+        dispensing_state_t get_state();
         DispenseSystem * next = nullptr;
     private:
         void calculate_dispense_time();
@@ -78,7 +79,7 @@ class dispenseGroup{
         void run();
         bool instances_dispensing();
         static dispenseGroup * get_default_instance();
+        bool is_empty();
     private:
         DispenseSystem * dispenseHead = nullptr;
-        bool is_empty();
 }

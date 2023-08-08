@@ -12,14 +12,14 @@ class vmc_dispensing: public State{
         int stop() override;
         int run() override;
         void set_initial_tap(tap_selection_t tap);
-        DispenseSystem * get_dispense_instance();
+        dispenseGroup * get_dispense_group();
         static vmc_dispensing* get_default_instance();
     private:
         tap_selection_t _initialTap = (tap_selection_t)0;
         void run_sensors();
 
-        /* services*/
-        DispenseSystem* _dispense_service = nullptr;
+        /* services and service groups*/
+        dispenseGroup * _dispense_group = nullptr;
 
 
 };

@@ -29,15 +29,14 @@ int vmc_dispensing::run(){
     
     
     /* check whether all dispensing systems are done and go back to idle state: */
-    if(!_dispense_service){
+    if(!_dispense_group){
         // create instance then start
-        _dispense_service = new DispenseSystem(_initialTap);
-        _dispense_service->start();
+        _dispense_group = dispenseGroup::get_default_instance();
+        _dispense_group->add(_initialTap);
     }
-    dispensing_state_t state = _dispense_service->run();
-    if (state == DISPENSING_EXIT){
-        delete _dispense_service;
-        _dispense_service = nullptr;
+    _dispense_group->run();
+    if (_dispense_group->is_empty()){
+        _dispense_group = nullptr;
         stop();
     }
     return 0;
@@ -55,8 +54,8 @@ vmc_dispensing* vmc_dispensing::get_default_instance(){
     return &vmc_state;
 }
 
-DispenseSystem * vmc_dispensing::get_dispense_instance(){
-    return _dispense_service;
+dispenseGroup * vmc_dispensing::get_dispense_group(){
+    return _dispense_group;
 }
 
 void vmc_dispensing::run_sensors(){
