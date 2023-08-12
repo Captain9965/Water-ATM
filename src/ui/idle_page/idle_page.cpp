@@ -14,6 +14,7 @@ idlePage::idlePage(){
 int idlePage::load(){
    net_check_timer = millis();
    get_display2()->clear();
+   uiInput::get_default_instance()->disable_quantity_buttons();
    return 0;
 }
 
