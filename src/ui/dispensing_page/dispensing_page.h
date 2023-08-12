@@ -17,6 +17,7 @@ class dispensingPage: public Page{
         void update_dispense_quantities();
         void display_button_pressed_for_dispense(vmc_flags_t & tap);
         vmc_flags_t  _initialTap;
-        DispenseSystem * _dispense_instance = nullptr;
+        dispenseGroup * _dispense_group = nullptr;
+        DispenseSystem * _current_dispense_instance = nullptr;
         float amount1, amount2, amount3, amount4;
 };
