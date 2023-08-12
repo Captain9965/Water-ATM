@@ -11,7 +11,8 @@ typedef enum vmc_flags{
     VMC_DISPENSE_TAP1 = 1 << 5, 
     VMC_DISPENSE_TAP2 = 1 << 6,
     VMC_DISPENSE_TAP3 = 1 << 7,
-    VMC_DISPENSE_TAP4 = 1 << 8
+    VMC_DISPENSE_TAP4 = 1 << 8,
+    VMC_DISPENSE_DONE = 1 << 9
 
 
 }vmc_flags_t;
