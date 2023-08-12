@@ -47,19 +47,21 @@ class DispenseSystem{
         dispensing_state_t get_dispensing_system_ev();
         void set_dispense_quantity(float quantity);
         tap_selection_t get_tap();
+        float get_dispensed_quantity();
         dispensing_state_t get_state();
+        bool stopped();
         DispenseSystem * next = nullptr;
     private:
         void calculate_dispense_time();
         void _set_state(dispensing_state_t state);
         dispensing_state_t _state = DISPENSING_IDLE;
         tap_selection_t _tap = TAP_UNSELECTED;
-        float _quantity;
+        float _quantity, _dispensed_quantity = 0;
         long long _dispense_time = 0;
         uint32_t _dispense_system_from_ev_flag = 0, _dispense_system_to_ev_flag = 0;
         long long _select_quantity_timer = millis();
         long long _payment_timer = millis();
-        long long _dispense_timer = millis();
+        long long _dispense_timer = millis(), _quantity_timer = millis();
         bool is_dispense_tag(String &uid); // to be moved to payment service
 
 
@@ -76,10 +78,10 @@ class dispenseGroup{
         bool is_running(tap_selection_t tap);
         bool remove(tap_selection_t tap);
         bool add(tap_selection_t tap);
-        void run();
+        DispenseSystem * run();
         bool instances_dispensing();
         static dispenseGroup * get_default_instance();
         bool is_empty();
     private:
         DispenseSystem * dispenseHead = nullptr;
-}
+};

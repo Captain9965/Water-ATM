@@ -16,6 +16,7 @@ dispenseGroup::~dispenseGroup(){
 }
 
 bool dispenseGroup::add(tap_selection_t tap){
+    DEBUG_INFO_LN("Creating new node");
     /* initialize the new node: */
     DispenseSystem *  new_dispenseSystem = new DispenseSystem(tap);
     if (!new_dispenseSystem){
@@ -81,16 +82,23 @@ bool dispenseGroup::is_empty(){
     return false;
 }
 
-void dispenseGroup::run(){
-    DispenseSystem * current = dispenseHead, * temp;
-    while(current){
+DispenseSystem * dispenseGroup::run(){
+    static DispenseSystem * current = dispenseHead;
+    DispenseSystem *temp = nullptr;
+    if(current){
         dispensing_state_t state = current->run();
         temp = current->next;
         if(state == DISPENSING_EXIT){
+            DEBUG_INFO_LN("Removing instance");
             remove(current->get_tap());
         }
-        current = temp;
+        if(temp){
+            current = temp;
+            return current;
+        } 
     }
+    current = dispenseHead;
+    return current;
 }
 
 bool dispenseGroup::instances_dispensing(){

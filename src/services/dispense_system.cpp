@@ -75,11 +75,15 @@ void DispenseSystem::set_dispense_quantity(float quantity){
 
 void DispenseSystem::calculate_dispense_time(){
     /* for test: */
-    _dispense_time = 10000;
+    _dispense_time = 20000;
 }
 
 tap_selection_t DispenseSystem::get_tap(){
     return _tap;
+}
+
+float DispenseSystem::get_dispensed_quantity(){
+    return _dispensed_quantity;
 }
 dispensing_state_t DispenseSystem::get_state(){
     return _state;
@@ -117,6 +121,8 @@ dispensing_state_t DispenseSystem::run(){
         {
             calculate_dispense_time();
             _dispense_timer = millis();
+            _quantity_timer = millis();
+            _dispensed_quantity = 0.0;
             _set_state(DISPENSING_RUNNING);
             clear_to_event(DISPENSING_STARTING);
             set_from_event(DISPENSING_RUNNING);
@@ -127,23 +133,31 @@ dispensing_state_t DispenseSystem::run(){
             if (millis() - _dispense_timer >= _dispense_time){
                 _set_state(DISPENSING_DONE);
             }
+
+            if (millis() - _quantity_timer >= 500){
+                 _dispensed_quantity += 0.1;
+                 _quantity_timer = millis();
+            }
+           
             break;
         }
         case DISPENSING_CANCELLED:
         {   
             DEBUG_INFO_LN("Dispensing cancelled !!");
-            _set_state(DISPENSING_DONE);
+            clear_to_event(DISPENSING_CANCELLED);
+            _set_state(DISPENSING_EXIT);
             break;
         }
         case DISPENSING_DONE:
         {
-            set_from_event(DISPENSING_DONE);
+            DEBUG_INFO("Dispensed quantity is : ");DEBUG_INFO_LN(_dispensed_quantity);
+            _set_state(DISPENSING_EXIT);
             break;
         }
         case DISPENSING_EXIT:
         {
             /* gracefully exit: */
-            clear_from_event(DISPENSING_EXIT);
+            DEBUG_INFO_LN("Dispensing exiting!");
             break;
         }
         
@@ -160,4 +174,9 @@ bool DispenseSystem::is_dispense_tag(String &uid){
         return true;
     }
     return false;
+}
+
+bool DispenseSystem::stopped(){
+    return(_state == DISPENSING_CANCELLED || _state == DISPENSING_EXIT);
+ 
 }
