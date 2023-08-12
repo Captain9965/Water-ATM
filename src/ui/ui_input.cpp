@@ -242,7 +242,7 @@ void uiInput::update_push_button_states(){
     if(quantity_6_button.is_pressed()){
         set_input_flag(QUANTITY_6_BUTTON);
     }
-    if(door_switch.is_pressed()){
+    if(door_switch.get_button_state()){
         set_input_flag(DOOR_CLOSED);
     }
 }
