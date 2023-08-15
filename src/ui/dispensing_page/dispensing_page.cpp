@@ -161,8 +161,6 @@ void dispensingPage::update_dispense_quantities(){
     if (!_current_dispense_instance || !_dispense_group){
         return;
     }
-    static long long update_time = 0;
-    if (millis() - update_time >= 500){
         tap_selection_t tap = _current_dispense_instance->get_tap();
         switch (tap){
             case DISPENSE_TAP_1:
@@ -172,17 +170,15 @@ void dispensingPage::update_dispense_quantities(){
                 amount2 = _current_dispense_instance->get_dispensed_quantity();
                 break;
             case DISPENSE_TAP_3:
-                amount3 += _current_dispense_instance->get_dispensed_quantity();
+                amount3 = _current_dispense_instance->get_dispensed_quantity();
                 break;
             case DISPENSE_TAP_4:
-                amount4 += _current_dispense_instance->get_dispensed_quantity();
+                amount4 = _current_dispense_instance->get_dispensed_quantity();
                 break;
             default:
                 break;
         }
-        display_dispenses(amount1, amount2, amount3, amount4);
-        update_time = millis();
-    }
+        update_quantities(amount1, amount2, amount3, amount4);
    
 }
 
