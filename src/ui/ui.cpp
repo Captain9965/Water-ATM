@@ -144,6 +144,12 @@ void display_dispenses(float amount1, float amount2, float amount3, float amount
     get_display2()->setCursor(14, 3); get_display2()->print("L");
     
 }
+void update_quantities(float amount1, float amount2, float amount3, float amount4){
+    get_display2()->setCursor(9, 0); get_display2()->print(amount1);
+    get_display2()->setCursor(9, 1); get_display2()->print(amount2);
+    get_display2()->setCursor(9, 2); get_display2()->print(amount3);
+    get_display2()->setCursor(9, 3); get_display2()->print(amount4);
+}
 
 void clear_displays(){
     get_display1()->clear();
