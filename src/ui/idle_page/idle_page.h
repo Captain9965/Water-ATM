@@ -13,5 +13,5 @@ class idlePage: public Page{
         int stop(vmc_flags_t tap);
         static idlePage* get_default_instance();
     private:
-        long long net_check_timer = millis();
+        long long net_check_timer = 0;
 };
