@@ -31,35 +31,48 @@ int dispensingPage::update(){
     check_for_tap_selection();
     /* instance is running : */
     if (!_dispense_group->is_empty() && _current_dispense_instance){
-        if(_current_dispense_instance->check_from_event(DISPENSING_QUANTITY_SELECT)){
+        switch_ui_state();
+        switch (ui_state){
+            case UI_QUANTITY_SELECT:
+                {   
+                    tap_selection_t tap = _current_dispense_instance->get_tap();
+                    display_info("SELECT QUANTITY");
+                    char sec_info[15];
+                    sprintf(sec_info,"FOR TAP %d",tap);
+                    display_secondary_info(sec_info);
+                    uiInput::get_default_instance()->enable_quantity_buttons();
+                    break;
+                }
+            case UI_AWAIT_QUANTITY_SELECTION:
+                {   
+        
+                    check_for_quantity_selection();
+                    break;
 
-            _current_dispense_instance->clear_from_event(DISPENSING_QUANTITY_SELECT);
-            tap_selection_t tap = _current_dispense_instance->get_tap();
-            display_info("SELECT QUANTITY");
-            char sec_info[15];
-            sprintf(sec_info,"FOR TAP %d",tap);
-            display_secondary_info(sec_info);
-            uiInput::get_default_instance()->enable_quantity_buttons();
+                }
+            case UI_SHOW_PAYMENT_DUE:
+                {   
+                    display_info("TAP CARD", false);
+                    break;
+                }
+            case UI_IDLE:
+                {
+                    update_dispense_quantities();
+                    if(_dispense_group->instances_dispensing()){
 
-        }  else if(_current_dispense_instance->check_from_event(DISPENSING_IDLE)){
+                        display_machine_ready(false);
 
-            check_for_quantity_selection();
-
-        } else if (_current_dispense_instance->check_from_event(DISPENSING_RUNNING)){
-
-            if(_dispense_group->instances_dispensing()){
-
-                display_net_connected();
-            }   
-
-            update_dispense_quantities();
-
-        }   else if (_current_dispense_instance->check_from_event(DISPENSING_SHOW_DUE_AMOUNT)){
-
-            _current_dispense_instance->clear_from_event(DISPENSING_SHOW_DUE_AMOUNT);
-            display_info("TAP CARD");
-
+                    }
+                    break;
+                }
+            case UI_NOP:
+                {
+                    break;
+                }
+            default:
+                break;
         }
+
     } else if (check_vmc_flag(VMC_DISPENSE_DONE)){
 
         clear_vmc_flag(VMC_DISPENSE_DONE);
@@ -125,31 +138,37 @@ void dispensingPage::check_for_quantity_selection(){
                 _current_dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
                 uiInput::get_default_instance()->disable_quantity_buttons();
+                get_display1()->clear();
                 break;
             case QUANTITY_2_BUTTON:
                 _current_dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
                 uiInput::get_default_instance()->disable_quantity_buttons();
+                get_display1()->clear();
                 break;
             case QUANTITY_3_BUTTON:
                 _current_dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
                 uiInput::get_default_instance()->disable_quantity_buttons();
+                get_display1()->clear();
                 break;
             case QUANTITY_4_BUTTON:
                 _current_dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
                 uiInput::get_default_instance()->disable_quantity_buttons();
+                get_display1()->clear();
                 break;
             case QUANTITY_5_BUTTON:
                 _current_dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
                 uiInput::get_default_instance()->disable_quantity_buttons();
+                get_display1()->clear();
                 break;
             case QUANTITY_6_BUTTON:
                 _current_dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
                 uiInput::get_default_instance()->disable_quantity_buttons();
+                get_display1()->clear();
                 break;
             default:
                 break;
@@ -244,4 +263,33 @@ void dispensingPage::check_for_tap_selection(){
                 break;
         }
     }
+}
+
+/* switch internal ui state:*/
+
+ui_state_t dispensingPage::switch_ui_state(){
+    if(!_current_dispense_instance || !_dispense_group){
+        return UI_NOP;
+    }
+
+    if(_current_dispense_instance->check_from_event(DISPENSING_QUANTITY_SELECT)){
+         _current_dispense_instance->clear_from_event(DISPENSING_QUANTITY_SELECT);
+
+         ui_state = UI_QUANTITY_SELECT;
+    }
+    else if (_current_dispense_instance->check_from_event(DISPENSING_IDLE)){
+
+        ui_state = UI_AWAIT_QUANTITY_SELECTION;
+    }
+    else if (_current_dispense_instance->check_from_event(DISPENSING_SHOW_DUE_AMOUNT)){
+        _current_dispense_instance->clear_from_event(DISPENSING_SHOW_DUE_AMOUNT);
+
+        ui_state = UI_SHOW_PAYMENT_DUE;
+    }
+    else if(_current_dispense_instance->check_from_event(DISPENSING_RUNNING)){
+
+        ui_state = UI_IDLE;
+    }
+
+    return ui_state;    
 }

@@ -106,16 +106,16 @@ void display_net_notConnected(){
 
 };
 
-void display_net_connected(){
-    get_display1()->clear();
+void display_machine_ready(bool clear){
+    if(clear)get_display1()->clear();
     get_display1()->setCursor(2, 1);
     get_display1()->print("Machine Ready");
     get_display1()->setCursor(2, 2);
     get_display1()->print("Select Tap");
 }
 
-void display_info(const char * info){
-    get_display1()->clear();
+void display_info(const char * info, bool clear){
+    if(clear)get_display1()->clear();
     get_display1()->setCursor(2, 1);
     get_display1()->print(info);
 }

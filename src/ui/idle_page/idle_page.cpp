@@ -12,7 +12,6 @@ idlePage::idlePage(){
 }
 
 int idlePage::load(){
-   net_check_timer = millis();
    get_display2()->clear();
    uiInput::get_default_instance()->disable_quantity_buttons();
    return 0;
@@ -39,11 +38,11 @@ int idlePage::update(){
         
         if(check_vmc_flag(VMC_NET_CONNECTED)){
 
-            display_net_connected();
+            display_machine_ready(false);
 
         } else{
             /* for now we can bypass this condition, ideally, we should return and not even check for button presses altogether*/
-               display_net_connected();
+               display_machine_ready(false);
             // display_net_notConnected();
             // return -1;
         }
