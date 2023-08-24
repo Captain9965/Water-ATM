@@ -1,0 +1,6 @@
+[submodule "lib/attachInterruptEx"]
+	path = lib/attachInterruptEx
+	url = https://github.com/luni64/attachInterruptEx.git
+[submodule "lib/CallbackHelper"]
+	path = lib/CallbackHelper
+	url = https://github.com/luni64/CallbackHelper.git
