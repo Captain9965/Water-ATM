@@ -4,6 +4,8 @@
 #include "sensors/rtc/rtc.h"
 #include "storage/storage.h"
 #include "vmc/vmc_data.h"
+#include "vmc/vmc_flags.h"
+#include "vmc/dispensing/vmc_dispensing.h"
 
 vmc_idle::vmc_idle(){
     id = "IDLE";
@@ -20,14 +22,12 @@ int vmc_idle::run(){
     if(!started){
         start();
     }
-  
-
+    check_idle_page_flags();
     /* run sensors */
     run_sensors();
 
     /* process funds */
     
-    /* check whether the dispensing flag has been set: */
 
     /* send check_messages, to be removed later: */
     if (millis() - tick_time > TICK_INTERVAL){
@@ -36,21 +36,6 @@ int vmc_idle::run(){
       DEBUG_INFO(_time.hour);
       DEBUG_INFO(":");
       DEBUG_INFO_LN(_time.minutes);
-      storage::get_default_instance()->printSDCardContent();
-      float CalibrationVal = 0.0;
-      Calibration::get_default_instance()->get(&CalibrationVal);
-      
-      DEBUG_INFO("Calibration is "); DEBUG_INFO_LN(String(CalibrationVal));
-
-      quantities_t quantities;
-
-      Quantities::get_default_instance()->get(&quantities);
-      DEBUG_INFO("Quantity 1 -> "); DEBUG_INFO_LN(String(quantities.quantity1));
-      DEBUG_INFO("Quantity 2 -> "); DEBUG_INFO_LN(String(quantities.quantity2));
-      DEBUG_INFO("Quantity 3 -> "); DEBUG_INFO_LN(String(quantities.quantity3));
-      DEBUG_INFO("Quantity 4 -> "); DEBUG_INFO_LN(String(quantities.quantity4));
-      DEBUG_INFO("Quantity 5 -> "); DEBUG_INFO_LN(String(quantities.quantity5));
-      DEBUG_INFO("Quantity 6 -> "); DEBUG_INFO_LN(String(quantities.quantity6));
 
       #ifdef MEM_DEBUG
       stack_debug();
@@ -76,17 +61,6 @@ void vmc_idle::run_sensors(){
     if(isServiceTag(read_string)){
 
         DEBUG_INFO_LN("Incrementing Admin Cash..");
-        uint32_t adminCash = 0;
-        AdminCash::get_default_instance()->get(&adminCash);
-        AdminCash::get_default_instance()->set(++adminCash);
-        float CalibrationVal = 0.0;
-        Calibration::get_default_instance()->get(&CalibrationVal);
-        Calibration::get_default_instance()->set(++CalibrationVal);
-        quantities_t quantities = {};
-        Quantities::get_default_instance()->get(&quantities);
-        ++ quantities.quantity1;
-        ++ quantities.quantity2;
-        Quantities::get_default_instance()->set(quantities);
     }
 
     /* time: */
@@ -100,4 +74,25 @@ bool vmc_idle::isServiceTag(String &uid){
     }
     return false;
    
+}
+
+void vmc_idle::check_idle_page_flags(){
+    // check and clear flags from the idle page in order to clear flags and to transition to the dispense state:
+    if (check_vmc_flag(VMC_DISPENSE_TAP1)){
+        clear_vmc_flag(VMC_DISPENSE_TAP1);
+        this->vmc->set_state(vmc_dispensing::get_default_instance());
+        vmc_dispensing::get_default_instance()->set_initial_tap(DISPENSE_TAP_1);
+    } else if (check_vmc_flag(VMC_DISPENSE_TAP2)){
+        clear_vmc_flag(VMC_DISPENSE_TAP2);
+        this->vmc->set_state(vmc_dispensing::get_default_instance());
+        vmc_dispensing::get_default_instance()->set_initial_tap(DISPENSE_TAP_2);
+    } else if (check_vmc_flag(VMC_DISPENSE_TAP3)){
+        clear_vmc_flag(VMC_DISPENSE_TAP3);
+        this->vmc->set_state(vmc_dispensing::get_default_instance());
+        vmc_dispensing::get_default_instance()->set_initial_tap(DISPENSE_TAP_3);
+    } else if (check_vmc_flag(VMC_DISPENSE_TAP4)){
+        clear_vmc_flag(VMC_DISPENSE_TAP4);
+        this->vmc->set_state(vmc_dispensing::get_default_instance());
+        vmc_dispensing::get_default_instance()->set_initial_tap(DISPENSE_TAP_4);
+    }
 }

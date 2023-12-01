@@ -69,7 +69,9 @@ void quantity_6_ISR(){
 
 uiInput::uiInput(){};
 
-void uiInput::init(){};
+void uiInput::init(){
+    disable_quantity_buttons();
+};
 
 uiInput * uiInput::get_default_instance(){
     static uiInput instance;
@@ -77,43 +79,44 @@ uiInput * uiInput::get_default_instance(){
 }
 
 void uiInput::enable_joystick_button(){
-    // joystick_button.enable();
+    joystick_button.enable();
 }
 
 void uiInput::disable_joystick_button(){
-    // joystick_button.disable();
+    joystick_button.disable();
 }
 
 void uiInput::enable_quantity_buttons(){
-    // quantity_1_button.enable();
-    // quantity_2_button.enable();
-    // quantity_3_button.enable();
-    // quantity_4_button.enable();
-    // quantity_5_button.enable();
-    // quantity_6_button.enable();
+    quantity_1_button.enable();
+    quantity_2_button.enable();
+    quantity_3_button.enable();
+    quantity_4_button.enable();
+    quantity_5_button.enable();
+    quantity_6_button.enable();
 }
 
 void uiInput::disable_quantity_buttons(){
-    // quantity_1_button.disable();
-    // quantity_2_button.disable();
-    // quantity_3_button.disable();
-    // quantity_4_button.disable();
-    // quantity_5_button.disable();
-    // quantity_6_button.disable();
+    
+    quantity_1_button.disable();
+    quantity_2_button.disable();
+    quantity_3_button.disable();
+    quantity_4_button.disable();
+    quantity_5_button.disable();
+    quantity_6_button.disable();
 }
 
 void uiInput::enable_tap_buttons(){
-    // tap_1_button.enable();
-    // tap_2_button.enable();
-    // tap_3_button.enable();
-    // tap_4_button.enable();
+    tap_1_button.enable();
+    tap_2_button.enable();
+    tap_3_button.enable();
+    tap_4_button.enable();
 }
 
 void uiInput::disable_tap_buttons(){
-//     tap_1_button.disable();
-//     tap_2_button.disable();
-//     tap_3_button.disable();
-//     tap_4_button.disable();
+    tap_1_button.disable();
+    tap_2_button.disable();
+    tap_3_button.disable();
+    tap_4_button.disable();
 }
 
 bool uiInput::joystick_button_pressed(){
@@ -146,32 +149,33 @@ bool uiInput::tap_button_pressed(input_flags_t & tap){
 }
 
 bool uiInput::quantity_button_pressed(input_flags_t &quantity){
+    bool ret = false;
     if(check_input_flag(QUANTITY_1_BUTTON)){
         quantity = QUANTITY_1_BUTTON;
         clear_input_flag(QUANTITY_1_BUTTON);
-        return true;
+        ret = true;
     } else if (check_input_flag(QUANTITY_2_BUTTON)){
         quantity = QUANTITY_2_BUTTON;
         clear_input_flag(QUANTITY_2_BUTTON);
-        return true;
+        ret = true;
     } else if (check_input_flag(QUANTITY_3_BUTTON)){
         quantity = QUANTITY_3_BUTTON;
         clear_input_flag(QUANTITY_3_BUTTON);
-        return true;
+        ret = true;
     } else if (check_input_flag(QUANTITY_4_BUTTON)){
         quantity = QUANTITY_4_BUTTON;
         clear_input_flag(QUANTITY_4_BUTTON);
-        return true;
+        ret = true;
     } else if (check_input_flag(QUANTITY_5_BUTTON)){
         quantity = QUANTITY_5_BUTTON;
         clear_input_flag(QUANTITY_5_BUTTON);
-        return true;
+        ret = true;
     } else if (check_input_flag(QUANTITY_6_BUTTON)){
         quantity = QUANTITY_6_BUTTON;
         clear_input_flag(QUANTITY_6_BUTTON);
-        return true;
+        ret = true;
     }
-    return false;
+    return ret;
 }
 
 bool uiInput::door_closed(){
@@ -238,7 +242,7 @@ void uiInput::update_push_button_states(){
     if(quantity_6_button.is_pressed()){
         set_input_flag(QUANTITY_6_BUTTON);
     }
-    if(door_switch.is_pressed()){
+    if(door_switch.get_button_state()){
         set_input_flag(DOOR_CLOSED);
     }
 }

@@ -31,7 +31,7 @@ void main_task(void * pvParameters){
   while(1){
     VMC::get_default_instance()->run();
     UI::get_default_instance()->update();
-    wait_ms(200);
+    wait_ms(20);
   } 
 }
 
@@ -40,6 +40,6 @@ void input_task(void * pvParameters){
   while (1){
     input_instance->update_joystick_state();
     input_instance->update_push_button_states();
-    wait_ms(100);
+    wait_ms(10);
   }
 }
