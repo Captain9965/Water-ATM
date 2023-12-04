@@ -1,5 +1,6 @@
 #pragma once
 #include "common/common.h"
+#include "actuators/TStatesActuator.h"
 
 typedef enum tap_selection{
     TAP_UNSELECTED,
@@ -33,7 +34,7 @@ typedef enum dispensing_states {
 /* Dispense node: */
 class DispenseSystem{
     public:
-        DispenseSystem(tap_selection_t tap);
+        DispenseSystem(tap_selection_t tap, uint32_t relay_pin);
         ~DispenseSystem();
         dispensing_state_t start();
         dispensing_state_t run();
@@ -56,6 +57,7 @@ class DispenseSystem{
         void _set_state(dispensing_state_t state);
         dispensing_state_t _state = DISPENSING_IDLE;
         tap_selection_t _tap = TAP_UNSELECTED;
+        TStatesActuator * _relay = nullptr;
         float _quantity, _dispensed_quantity = 0;
         long long _dispense_time = 0;
         uint32_t _dispense_system_from_ev_flag = 0, _dispense_system_to_ev_flag = 0;

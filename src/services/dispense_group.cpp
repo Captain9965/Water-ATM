@@ -18,7 +18,25 @@ dispenseGroup::~dispenseGroup(){
 bool dispenseGroup::add(tap_selection_t tap){
     DEBUG_INFO_LN("Creating new node");
     /* initialize the new node: */
-    DispenseSystem *  new_dispenseSystem = new DispenseSystem(tap);
+    uint32_t relay_pin;
+    switch (tap){
+        case DISPENSE_TAP_1:
+            relay_pin = SYSTEM_SOLENOID_VALVE_1;
+            break;
+        case DISPENSE_TAP_2:
+            relay_pin = SYSTEM_SOLENOID_VALVE_2;
+            break;
+        case DISPENSE_TAP_3:
+            relay_pin = SYSTEM_SOLENOID_VALVE_3;
+            break;
+        case DISPENSE_TAP_4:
+            relay_pin = SYSTEM_SOLENOID_VALVE_4;
+            break;
+        default:
+            relay_pin = SYSTEM_SOLENOID_VALVE_1;
+            break;
+    }
+    DispenseSystem *  new_dispenseSystem = new DispenseSystem(tap, relay_pin);
     if (!new_dispenseSystem){
         return false;
     }

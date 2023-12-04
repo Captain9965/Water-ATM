@@ -1,13 +1,18 @@
 #include "dispense_system.h"
 #include "sensors/rfid/rfid.h"
 
-DispenseSystem::DispenseSystem(tap_selection_t tap): _tap(tap){
-
+DispenseSystem::DispenseSystem(tap_selection_t tap, uint32_t relay_pin): _tap(tap){
+    _relay = new TStatesActuator(relay_pin, TS_ACTUATOR_OFF);
 }
 
 DispenseSystem::~DispenseSystem(){
     _dispense_system_from_ev_flag = 0;
     _dispense_system_to_ev_flag = 0;
+
+    if(_relay){
+        delete _relay;
+        DEBUG_INFO_LN("Relay instance deallocated");
+    }
 }
 
 // set event from the dispense service: 
@@ -107,7 +112,8 @@ dispensing_state_t DispenseSystem::run(){
         }
         case DISPENSING_PAY_WAIT:
         {
-            /* rfid payment:
+            /** rfid payment
+            *@todo replace this with payment instance for MPESA....
             */
            String uid = RFID::get_default_instance()->read_uid();
            if (is_dispense_tag(uid)){
@@ -126,6 +132,7 @@ dispensing_state_t DispenseSystem::run(){
             _set_state(DISPENSING_RUNNING);
             clear_to_event(DISPENSING_STARTING);
             set_from_event(DISPENSING_RUNNING);
+            _relay->on();
             break;
         }
         case DISPENSING_RUNNING:
@@ -143,13 +150,15 @@ dispensing_state_t DispenseSystem::run(){
         }
         case DISPENSING_CANCELLED:
         {   
+            _relay->off();
             DEBUG_INFO_LN("Dispensing cancelled !!");
             clear_to_event(DISPENSING_CANCELLED);
             _set_state(DISPENSING_EXIT);
             break;
         }
         case DISPENSING_DONE:
-        {
+        {   
+            _relay->off();
             DEBUG_INFO("Dispensed quantity is : ");DEBUG_INFO_LN(_dispensed_quantity);
             _set_state(DISPENSING_EXIT);
             break;
