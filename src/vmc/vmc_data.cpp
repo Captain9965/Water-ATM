@@ -100,29 +100,29 @@ bool Calibration::load(){
 }
 
 
-float FlowCalculation::DEFAULT_FLOW_CALCULATION = 10.0;
+float FlowCalculationTime::DEFAULT_FLOW_CALCULATION = 1000.0;
 
-FlowCalculation * FlowCalculation::get_default_instance(){
-    static FlowCalculation _instance = FlowCalculation();
+FlowCalculationTime * FlowCalculationTime::get_default_instance(){
+    static FlowCalculationTime _instance = FlowCalculationTime();
     return &_instance;
 }
 
-vmc_data_error_t FlowCalculation::set(float value){
+vmc_data_error_t FlowCalculationTime::set(float value){
  /* data validation: */
-    EEPROM.put(FLOW_CALCULATION_ADDRESS, value);
+    EEPROM.put(FLOW_CALCULATION_TIME_ADDRESS, value);
     _value = value;
     _data_error = VMC_DATA_OK;
     return _data_error;
 }
 
-bool FlowCalculation::load(){
+bool FlowCalculationTime::load(){
     float value = 0.00;
-    EEPROM.get(FLOW_CALCULATION_ADDRESS, value);
+    EEPROM.get(FLOW_CALCULATION_TIME_ADDRESS, value);
     /* data validation: */
     if (!(value > 0.00) || isnan(value)){
         _value = DEFAULT_FLOW_CALCULATION;
         _data_error = VMC_DATA_UNSET;
-        EEPROM.put(FLOW_CALCULATION_ADDRESS, DEFAULT_FLOW_CALCULATION);
+        EEPROM.put(FLOW_CALCULATION_TIME_ADDRESS, DEFAULT_FLOW_CALCULATION);
         return false;
     }
 

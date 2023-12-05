@@ -72,9 +72,9 @@ class Calibration: public vmcData<float> {
 
 /* Flow calculation stored in EEPROM: */
 
-class FlowCalculation: public vmcData<float> {
+class FlowCalculationTime: public vmcData<float> {
     public:
-        static FlowCalculation * get_default_instance();
+        static FlowCalculationTime * get_default_instance();
         virtual vmc_data_error_t set(float value);
         virtual bool load();
         static float DEFAULT_FLOW_CALCULATION;

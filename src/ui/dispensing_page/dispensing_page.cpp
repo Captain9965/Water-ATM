@@ -135,40 +135,70 @@ void dispensingPage::check_for_quantity_selection(){
         // get_buzzer()->beep(20);
         switch (quantity_tap){
             case QUANTITY_1_BUTTON:
+            {
                 _current_dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
+                quantities_t quantities;
+                Quantities::get_default_instance()->get(&quantities);
+                _current_dispense_instance->set_dispense_quantity(quantities.quantity1);
                 uiInput::get_default_instance()->disable_quantity_buttons();
                 get_display1()->clear();
+            }
                 break;
             case QUANTITY_2_BUTTON:
+            {
                 _current_dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
+                quantities_t quantities;
+                Quantities::get_default_instance()->get(&quantities);
+                _current_dispense_instance->set_dispense_quantity(quantities.quantity2);
                 uiInput::get_default_instance()->disable_quantity_buttons();
                 get_display1()->clear();
+            }
                 break;
             case QUANTITY_3_BUTTON:
+            {
                 _current_dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
+                quantities_t quantities;
+                Quantities::get_default_instance()->get(&quantities);
+                _current_dispense_instance->set_dispense_quantity(quantities.quantity3);
                 uiInput::get_default_instance()->disable_quantity_buttons();
                 get_display1()->clear();
+            }
                 break;
             case QUANTITY_4_BUTTON:
+            {
                 _current_dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
+                quantities_t quantities;
+                Quantities::get_default_instance()->get(&quantities);
+                _current_dispense_instance->set_dispense_quantity(quantities.quantity4);
                 uiInput::get_default_instance()->disable_quantity_buttons();
                 get_display1()->clear();
+            }
                 break;
             case QUANTITY_5_BUTTON:
+            {
                 _current_dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
+                quantities_t quantities;
+                Quantities::get_default_instance()->get(&quantities);
+                _current_dispense_instance->set_dispense_quantity(quantities.quantity5);
                 uiInput::get_default_instance()->disable_quantity_buttons();
                 get_display1()->clear();
+            }
                 break;
             case QUANTITY_6_BUTTON:
+            {
                 _current_dispense_instance->set_to_event(DISPENSING_PAY_WAIT);
                 _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
+                quantities_t quantities;
+                Quantities::get_default_instance()->get(&quantities);
+                _current_dispense_instance->set_dispense_quantity(quantities.quantity6);
                 uiInput::get_default_instance()->disable_quantity_buttons();
                 get_display1()->clear();
+            }
                 break;
             default:
                 break;
