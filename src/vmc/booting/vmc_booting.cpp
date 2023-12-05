@@ -143,6 +143,11 @@ vmc_error_t vmc_booting::init_settings(){
         return_val = VMC_ERROR_SETTINGS_INIT;
     }
 
+    if(!FlowCalculationTime::get_default_instance()->load()){
+        DEBUG_INFO_LN("Flow calculation time failed to load");
+        return_val = VMC_ERROR_SETTINGS_INIT;
+    }
+
 
    /* create all setting instances here: */
     return return_val;

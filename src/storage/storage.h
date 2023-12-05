@@ -9,7 +9,7 @@
 /* EEPROM flash emulation addresses : */
 #define TARIFF_ADDRESS                      0
 #define CALIBRATION_ADDRESS                 4
-#define FLOW_CALCULATION_ADDRESS            8
+#define FLOW_CALCULATION_TIME_ADDRESS            8
 #define QUANTITY_1_ADDRESS                  12
 #define QUANTITY_2_ADDRESS                  16
 #define QUANTITY_3_ADDRESS                  20

@@ -1,6 +1,8 @@
 #pragma once
 #include "common/common.h"
 #include "actuators/TStatesActuator.h"
+#include "attachInterruptEx.h"
+#include "vmc/vmc_data.h"
 
 typedef enum tap_selection{
     TAP_UNSELECTED,
@@ -34,7 +36,7 @@ typedef enum dispensing_states {
 /* Dispense node: */
 class DispenseSystem{
     public:
-        DispenseSystem(tap_selection_t tap, uint32_t relay_pin);
+        DispenseSystem(tap_selection_t tap, uint32_t relay_pin, uint32_t flowmeter_interrupt_pin, float calibration);
         ~DispenseSystem();
         dispensing_state_t start();
         dispensing_state_t run();
@@ -53,7 +55,7 @@ class DispenseSystem{
         bool stopped();
         DispenseSystem * next = nullptr;
     private:
-        void calculate_dispense_time();
+        void update_dispensed_quantity(uint32_t time_elapsed);
         void _set_state(dispensing_state_t state);
         dispensing_state_t _state = DISPENSING_IDLE;
         tap_selection_t _tap = TAP_UNSELECTED;
@@ -63,8 +65,14 @@ class DispenseSystem{
         uint32_t _dispense_system_from_ev_flag = 0, _dispense_system_to_ev_flag = 0;
         long long _select_quantity_timer = millis();
         long long _payment_timer = millis();
-        long long _dispense_timer = millis(), _quantity_timer = millis();
+        long long _dispense_timer = millis(), _quantity_timer = millis(), _flow_calculation_timer = millis();
         bool is_dispense_tag(String &uid); // to be moved to payment service
+        volatile byte pulse_count = 0;
+        uint32_t _flowmeter_interrupt_pin;
+        float _calibration = 10.0; // This represents _pulses per litre
+        float _tariff = 10.0; // This is the price per unit
+        float _flow_calculation_interval = 1000.0;
+        float _litres_per_min = 0.0;
 
 
 };
