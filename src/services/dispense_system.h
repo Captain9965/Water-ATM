@@ -78,14 +78,15 @@ class DispenseSystem{
 };
 
 /* Dispense linked list:
-    Used due to 0(n) worst case in traversal 
+    Used due to 0(n) worst case in traversal, efficient insertion and deletion
+  
 */
 
 class dispenseGroup{
     public:
         dispenseGroup();
         ~dispenseGroup();
-        bool is_running(tap_selection_t tap);
+        DispenseSystem * is_running(tap_selection_t tap);
         bool remove(tap_selection_t tap);
         bool add(tap_selection_t tap);
         DispenseSystem * run();
