@@ -132,7 +132,7 @@ void dispensingPage::check_for_quantity_selection(){
     }
     input_flags_t quantity_tap;
     if(uiInput::get_default_instance()->quantity_button_pressed(quantity_tap)){
-        // get_buzzer()->beep(20);
+        get_buzzer()->beep(20);
         switch (quantity_tap){
             case QUANTITY_1_BUTTON:
             {
@@ -239,15 +239,18 @@ void dispensingPage::clear_amount(){
 void dispensingPage::check_for_tap_selection(){
     input_flags_t tap;
     if(uiInput::get_default_instance()->tap_button_pressed(tap)){
-        // get_buzzer()->beep(20);
+        get_buzzer()->beep(20);
         switch (tap){
             case TAP_1_BUTTON:
                 {
-                    if(_current_dispense_instance && _current_dispense_instance->get_tap() == DISPENSE_TAP_1 && !_current_dispense_instance->stopped()){
-                        _current_dispense_instance->set_to_event(DISPENSING_CANCELLED);
-                        _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
+                    DispenseSystem * running_instance = _dispense_group->is_running(DISPENSE_TAP_1);
+                    
+                    if(running_instance && !running_instance->stopped()){
+                        running_instance->set_to_event(DISPENSING_CANCELLED);
+                        running_instance->clear_from_event(DISPENSING_IDLE);
+                        get_display1()->clear();
                     }
-                     else if(_current_dispense_instance && _dispense_group->instances_dispensing()){
+                     else if(_dispense_group->instances_dispensing()){
                         /* If all instances are running fine, then instantiate another instance*/
                         _dispense_group->add(DISPENSE_TAP_1);
                     }
@@ -255,11 +258,14 @@ void dispensingPage::check_for_tap_selection(){
                 break;
             case TAP_2_BUTTON:
                 {
-                    if(_current_dispense_instance && _current_dispense_instance->get_tap() == DISPENSE_TAP_2 && !_current_dispense_instance->stopped()){
-                        _current_dispense_instance->set_to_event(DISPENSING_CANCELLED);
-                        _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
+                     DispenseSystem * running_instance = _dispense_group->is_running(DISPENSE_TAP_2);
+                    
+                    if(running_instance && !running_instance->stopped()){
+                        running_instance->set_to_event(DISPENSING_CANCELLED);
+                        running_instance->clear_from_event(DISPENSING_IDLE);
+                        get_display1()->clear();
                     }
-                     else if(_current_dispense_instance && _dispense_group->instances_dispensing()){
+                     else if(_dispense_group->instances_dispensing()){
                         /* If all instances are running fine, then instantiate another instance*/
                         _dispense_group->add(DISPENSE_TAP_2);
                     }
@@ -267,11 +273,14 @@ void dispensingPage::check_for_tap_selection(){
                 break;
             case TAP_3_BUTTON:
                 {
-                    if(_current_dispense_instance && _current_dispense_instance->get_tap() == DISPENSE_TAP_3 && !_current_dispense_instance->stopped()){
-                        _current_dispense_instance->set_to_event(DISPENSING_CANCELLED);
-                        _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
+                     DispenseSystem * running_instance = _dispense_group->is_running(DISPENSE_TAP_3);
+                    
+                    if(running_instance && !running_instance->stopped()){
+                        running_instance->set_to_event(DISPENSING_CANCELLED);
+                        running_instance->clear_from_event(DISPENSING_IDLE);
+                        get_display1()->clear();
                     }
-                     else if(_current_dispense_instance && _dispense_group->instances_dispensing()){
+                     else if(_dispense_group->instances_dispensing()){
                         /* If all instances are running fine, then instantiate another instance*/
                         _dispense_group->add(DISPENSE_TAP_3);
                     }
@@ -279,11 +288,14 @@ void dispensingPage::check_for_tap_selection(){
                 break;
             case TAP_4_BUTTON:
                 {
-                    if(_current_dispense_instance && _current_dispense_instance->get_tap() == DISPENSE_TAP_4 && !_current_dispense_instance->stopped()){
-                        _current_dispense_instance->set_to_event(DISPENSING_CANCELLED);
-                        _current_dispense_instance->clear_from_event(DISPENSING_IDLE);
+                     DispenseSystem * running_instance = _dispense_group->is_running(DISPENSE_TAP_4);
+                    
+                    if(running_instance && !running_instance->stopped()){
+                        running_instance->set_to_event(DISPENSING_CANCELLED);
+                        running_instance->clear_from_event(DISPENSING_IDLE);
+                        get_display1()->clear();
                     }
-                     else if(_current_dispense_instance && _dispense_group->instances_dispensing()){
+                     else if(_dispense_group->instances_dispensing()){
                         /* If all instances are running fine, then instantiate another instance*/
                         _dispense_group->add(DISPENSE_TAP_4);
                     }
