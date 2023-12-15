@@ -13,6 +13,7 @@ idlePage::idlePage(){
 
 int idlePage::load(){
    get_display2()->clear();
+   get_display1()->clear();
    uiInput::get_default_instance()->disable_quantity_buttons();
    return 0;
 }
@@ -54,7 +55,7 @@ int idlePage::update(){
     
     input_flags_t tap;
     if(uiInput::get_default_instance()->tap_button_pressed(tap)){
-        // get_buzzer()->beep(20);
+        get_buzzer()->beep(20);
         switch (tap){
             case TAP_1_BUTTON:
                 set_vmc_flag(VMC_DISPENSE_TAP1);

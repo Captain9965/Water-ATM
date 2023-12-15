@@ -94,14 +94,14 @@ bool dispenseGroup::remove(tap_selection_t tap){
     return true;
 }
 
-bool dispenseGroup::is_running(tap_selection_t tap){
+DispenseSystem * dispenseGroup::is_running(tap_selection_t tap){
     DispenseSystem * current = dispenseHead;
     while(current){
-        if(current->get_tap() == tap)return true;
+        if(current->get_tap() == tap)return current;
         current = current->next;
     }
 
-    return false;
+    return nullptr;
 }
 
 bool dispenseGroup::is_empty(){
