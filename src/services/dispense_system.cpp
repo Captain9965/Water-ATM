@@ -153,7 +153,7 @@ dispensing_state_t DispenseSystem::run(){
             _set_state(DISPENSING_RUNNING);
             clear_to_event(DISPENSING_STARTING);
             set_from_event(DISPENSING_RUNNING);
-            _relay->on();
+            // _relay->on();
             break;
         }
         case DISPENSING_RUNNING:
