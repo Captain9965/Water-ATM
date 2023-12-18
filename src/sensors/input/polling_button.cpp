@@ -18,6 +18,7 @@ bool pollingButton::is_pressed(){
     case BUTTON_READING:
         if(get_button_state() == HIGH){
             reading_state = BUTTON_WAITING_RELEASE;
+            press_time = millis();
         }
         break;
     case BUTTON_WAITING_RELEASE:
@@ -30,9 +31,32 @@ bool pollingButton::is_pressed(){
         break;
     }
     return false;
-
-   
 }
+
+bool pollingButton::is_long_pressed(){
+    switch (long_press_reading_state)
+    {
+    case BUTTON_READING:
+        if(get_button_state() == HIGH){
+            long_press_reading_state = BUTTON_WAITING_RELEASE;
+            press_time = millis();
+        }
+        break;
+    case BUTTON_WAITING_RELEASE:
+        if(get_button_state() == LOW){
+            long_press_reading_state = BUTTON_READING;
+            bool ret = ((millis() - press_time) >= LONG_PRESS_TIME);
+            DEBUG_INFO_LN(ret);
+            return ret;
+        }
+        break;
+    default:
+        break;
+    }
+    return false;
+
+}
+
 int pollingButton::get_button_state(){
     
     int reading = digitalRead(_pin);

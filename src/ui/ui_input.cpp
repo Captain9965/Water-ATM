@@ -127,6 +127,15 @@ bool uiInput::joystick_button_pressed(){
     return false;
 }
 
+bool uiInput::joystick_button_long_pressed(){
+    if(check_input_flag(JOYSTICK_LONG_PRESS)){
+        clear_input_flag(JOYSTICK_LONG_PRESS);
+        clear_input_flag(JOYSTICK_PRESS);
+        return true;
+    }
+    return false;
+}
+
 bool uiInput::tap_button_pressed(input_flags_t & tap){
     if(check_input_flag(TAP_1_BUTTON)){
         tap = TAP_1_BUTTON;
@@ -209,7 +218,10 @@ void uiInput::update_joystick_state(){
 }
 
 void uiInput::update_push_button_states(){
-    if (joystick_button.is_pressed()){
+   
+    if(joystick_button.is_long_pressed()){
+        set_input_flag(JOYSTICK_LONG_PRESS);
+    } else if (joystick_button.is_pressed()){
         set_input_flag(JOYSTICK_PRESS);
     }
     if(tap_1_button.is_pressed()){
