@@ -36,7 +36,7 @@ class Page{
         virtual int load();
         virtual int update();
         virtual int set_ui_context(UI* ui);
-        char* id = nullptr;
+        const char* id = nullptr;
         bool loaded = false;
 
 };
@@ -56,3 +56,9 @@ void update_quantities(float amount1, float amount2, float amount3, float amount
 void clear_displays();
 void display_time();
 void display_select_quantity(const char * tap);
+template <typename T>
+void display_value(T val, bool clear = true){
+    if(clear)get_display2()->clear();
+    get_display2()->setCursor(4, 1);
+    get_display2()->print(val);
+}
