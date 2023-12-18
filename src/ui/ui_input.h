@@ -18,7 +18,8 @@ typedef enum input_flags{
     QUANTITY_4_BUTTON = 1 << 12,
     QUANTITY_5_BUTTON = 1 << 13,
     QUANTITY_6_BUTTON = 1 << 14,
-    DOOR_CLOSED = 1 << 15
+    DOOR_CLOSED = 1 << 15,
+    JOYSTICK_LONG_PRESS = 1 << 16
 }input_flags_t;
 
 void set_input_flag(input_flags_t flag);
@@ -48,6 +49,7 @@ class uiInput{
         void disable_quantity_buttons();
         void disable_joystick_button();
         bool joystick_button_pressed();
+        bool joystick_button_long_pressed();
         bool tap_button_pressed(input_flags_t & tap);
         bool quantity_button_pressed(input_flags_t & quantity);
         bool door_closed();
