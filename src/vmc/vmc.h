@@ -14,7 +14,7 @@ class State{
         virtual int start();
         virtual int stop();
         virtual int run();
-        char* id = nullptr;
+        const char* id = nullptr;
         bool started = false;
 };
 /* vmc class */

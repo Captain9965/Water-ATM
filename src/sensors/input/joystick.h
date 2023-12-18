@@ -7,6 +7,7 @@ typedef enum joystick_state{
     JOYSTICK_LEFT, 
     JOYSTICK_RIGHT,
     JOYSTICK_NEUTRAL,
+    JOYSTICK_WAIT_RELEASE,
     JOYSTICK_ERROR
 }joystick_state_t;
 
@@ -27,4 +28,5 @@ class joystick{
     private:
         int x_reading = 0;
         int y_reading = 0;
+        joystick_state_t waiting_state = JOYSTICK_NEUTRAL;
 };

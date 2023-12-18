@@ -65,16 +65,31 @@ joystick_state_t joystick::get_state(){
         return JOYSTICK_ERROR;
     }
     if(is_right()){
-        return JOYSTICK_RIGHT;
-    } else if(is_left()){
-        return JOYSTICK_LEFT;
-    } else if(is_up()){
+        waiting_state = JOYSTICK_RIGHT;
+        return JOYSTICK_WAIT_RELEASE;
+    }
+    else if(is_left()){
+        waiting_state = JOYSTICK_LEFT;
+        return JOYSTICK_WAIT_RELEASE;
+    } 
+    else if(is_up()){
         return JOYSTICK_UP;
     } else if(is_down()){
         return JOYSTICK_DOWN;
-        /* should the button press override all other inputs??*/
     }
-    return JOYSTICK_ERROR;
+    else{
+        if(waiting_state != JOYSTICK_NEUTRAL){
+            joystick_state_t return_state = waiting_state;
+            waiting_state = JOYSTICK_NEUTRAL;
+            return return_state;
+        }
+        else{
+            waiting_state = JOYSTICK_NEUTRAL;
+            return JOYSTICK_NEUTRAL;
+        }
+        waiting_state = JOYSTICK_NEUTRAL;
+        return JOYSTICK_NEUTRAL;
+    }
 }
 
 joystick * joystick::get_default_instance(){
