@@ -1,5 +1,6 @@
 #include "dispense_system.h"
 #include "sensors/rfid/rfid.h"
+#include"ui/ui.h"
 
 DispenseSystem::DispenseSystem(tap_selection_t tap, uint32_t relay_pin, uint32_t flowmeter_interrupt_pin, float calibration): _tap(tap),\
 _flowmeter_interrupt_pin(flowmeter_interrupt_pin), _calibration(calibration){
@@ -138,6 +139,7 @@ dispensing_state_t DispenseSystem::run(){
             */
            String uid = RFID::get_default_instance()->read_uid();
            if (is_dispense_tag(uid)){
+            get_buzzer()->beep(20);
             _set_state(DISPENSING_STARTING);
            } else{
             set_from_event(DISPENSING_SHOW_DUE_AMOUNT);
