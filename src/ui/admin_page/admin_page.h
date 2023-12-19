@@ -31,6 +31,8 @@ class adminPage: public Page{
         bool move_right();
         void save_params();
         void reset_params();
+        template<typename T>
+        void adjust_params(T &value, T increment, T max_val,  T min_val);
         float _tariff = 0.0;
         uint32_t _admin_cash = 0;
         admin_page_state_t state_array[ADMIN_STATE_ARRAY_SIZE] = {ADMIN_PAGE_LOAD_SET_TARIFF, ADMIN_PAGE_LOAD_SET_ADMINCASH};

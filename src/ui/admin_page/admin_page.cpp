@@ -55,34 +55,26 @@ int adminPage::update(){
     {
         display_info("TARIFF ->");
         DEBUG_INFO_LN("Tariff state");
+        get_display2()->clear();
         admin_page_state = ADMIN_PAGE_SET_TARIFF;
         break;
     }
     case ADMIN_PAGE_SET_TARIFF:
         {
-            if(increase()){
-                _tariff += 0.1;
-            } else if(decrease()){
-                _tariff -= 0.1;
-            }
-            display_value<float>(_tariff);
+            adjust_params<float>(_tariff, 0.1, 100.0, 1.0);
             break;
         }
     case ADMIN_PAGE_LOAD_SET_ADMINCASH:
     {
         display_info("ADMIN CASH ->");
         DEBUG_INFO_LN("Admin page state");
+        get_display2()->clear();
         admin_page_state = ADMIN_PAGE_SET_ADMINCASH;
         break;
     }
     case ADMIN_PAGE_SET_ADMINCASH:
     {   
-        if(increase()){
-                _admin_cash += 1;
-            } else if(decrease()){
-                _admin_cash -= 1;
-            }
-            display_value<uint32_t>(_admin_cash);
+        adjust_params<uint32_t>(_admin_cash, 1, 10000, 10);
         break;
     }
     case ADMIN_PAGE_FACTORY_RESET:
@@ -149,4 +141,16 @@ void adminPage::reset_params(){
     /* factory reset*/
     AdminCash::get_default_instance()->set(AdminCash::DEFAULT_ADMIN_CASH);
     tariff::get_default_instance()->set(tariff::DEFAULT_TARIFF);   
+}
+
+template<typename T>
+void adminPage::adjust_params(T &value, T increment, T max_val,  T min_val){
+    if(increase() && value < max_val - increment){
+        value += increment;
+        get_display2()->clear();
+    } else if(decrease() && value > min_val){
+        value -= increment;
+        get_display2()->clear();
+    }
+    display_value<T>(value, false);
 }
