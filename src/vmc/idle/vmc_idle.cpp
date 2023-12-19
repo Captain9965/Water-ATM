@@ -56,13 +56,6 @@ vmc_idle* vmc_idle::get_default_instance(){
 }
 
 void vmc_idle::run_sensors(){
-    /* RFID : */
-    String read_string = RFID::get_default_instance()->read_uid();
-    if(isServiceTag(read_string)){
-
-        DEBUG_INFO_LN("Incrementing Admin Cash..");
-    }
-
     /* time: */
     systemTime::get_default_instance()->getTime(_time);
     
