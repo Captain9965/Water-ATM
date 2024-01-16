@@ -49,27 +49,6 @@ class AdminCash: public vmcData<uint32_t> {
         static uint32_t DEFAULT_ADMIN_CASH;
 };
 
-/* Tariff stored in EEPROM: */
-
-class tariff: public vmcData<float> {
-    public:
-        static tariff * get_default_instance();
-        virtual vmc_data_error_t set(float value);
-        virtual bool load();
-        static float DEFAULT_TARIFF;
-};
-
-
-/* Calibration stored in EEPROM: */
-
-class Calibration: public vmcData<float> {
-    public:
-        static Calibration * get_default_instance();
-        virtual vmc_data_error_t set(float value);
-        virtual bool load();
-        static float DEFAULT_CALIBRATION;
-};
-
 /* Flow calculation stored in EEPROM: */
 
 class FlowCalculationTime: public vmcData<float> {
@@ -104,4 +83,45 @@ class Quantities: public vmcData<quantities_t> {
         static float DEFAULT_QUANTITTY_4;
         static float DEFAULT_QUANTITTY_5;
         static float DEFAULT_QUANTITTY_6;
+};
+
+/* Calibration struct:*/
+typedef struct calibration{
+    float calibration1;
+    float calibration2;
+    float calibration3;
+    float calibration4;
+}calibration_t;
+
+/* Calibration stored in EEPROM: */
+
+class Calibration: public vmcData<calibration_t> {
+    public:
+        static Calibration * get_default_instance();
+        virtual vmc_data_error_t set(calibration_t value);
+        virtual bool load();
+        static float DEFAULT_CALIBRATION_1;
+        static float DEFAULT_CALIBRATION_2;
+        static float DEFAULT_CALIBRATION_3;
+        static float DEFAULT_CALIBRATION_4;
+};
+
+/* tariff struct: */
+typedef struct tariff{
+    float tariff1;
+    float tariff2;
+    float tariff3;
+    float tariff4;
+}tariff_t;
+
+/* Tariff stored in EEPROM: */
+class Tariff: public vmcData<tariff_t> {
+    public:
+        static Tariff * get_default_instance();
+        virtual vmc_data_error_t set(tariff_t value);
+        virtual bool load();
+        static float DEFAULT_TARIFF_1;
+        static float DEFAULT_TARIFF_2;
+        static float DEFAULT_TARIFF_3;
+        static float DEFAULT_TARIFF_4;
 };
