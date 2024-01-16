@@ -128,7 +128,7 @@ vmc_error_t vmc_booting::init_settings(){
         return_val = VMC_ERROR_SETTINGS_INIT;
     }
 
-    if(!tariff::get_default_instance()->load()){
+    if(!Tariff::get_default_instance()->load()){
         DEBUG_INFO_LN("Tariff failed to load");
         return_val = VMC_ERROR_SETTINGS_INIT;
     }

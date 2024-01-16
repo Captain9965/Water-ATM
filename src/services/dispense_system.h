@@ -36,7 +36,7 @@ typedef enum dispensing_states {
 /* Dispense node: */
 class DispenseSystem{
     public:
-        DispenseSystem(tap_selection_t tap, uint32_t relay_pin, uint32_t flowmeter_interrupt_pin, float calibration);
+        DispenseSystem(tap_selection_t tap, uint32_t relay_pin, uint32_t flowmeter_interrupt_pin, float calibration, float tariff);
         ~DispenseSystem();
         dispensing_state_t start();
         dispensing_state_t run();

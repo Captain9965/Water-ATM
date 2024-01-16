@@ -1,26 +1,22 @@
 #include "dispense_system.h"
 #include "sensors/rfid/rfid.h"
+#include"ui/ui.h"
 
-DispenseSystem::DispenseSystem(tap_selection_t tap, uint32_t relay_pin, uint32_t flowmeter_interrupt_pin, float calibration): _tap(tap),\
-_flowmeter_interrupt_pin(flowmeter_interrupt_pin), _calibration(calibration){
+DispenseSystem::DispenseSystem(tap_selection_t tap, uint32_t relay_pin, uint32_t flowmeter_interrupt_pin, float calibration, float tariff): _tap(tap),\
+_flowmeter_interrupt_pin(flowmeter_interrupt_pin), _calibration(calibration), _tariff(tariff){
+    /* instantiate relay: */
     _relay = new TStatesActuator(relay_pin, TS_ACTUATOR_OFF);
+
     // flowmeter interrupt pin setup:
     digitalWrite(_flowmeter_interrupt_pin, INPUT_PULLUP);
     DEBUG_INFO("Calibration set is: "); DEBUG_INFO_LN(_calibration);
     bool result = attachInterruptEx(digitalPinToInterrupt(_flowmeter_interrupt_pin), [this]{this->pulse_count++;}, RISING);
     result ? DEBUG_INFO_LN("Interrupt attached successfully") : DEBUG_INFO_LN("Interrupt failed to attach");
-    //load tariff:
-    float tariff = 10.0;
-    tariff::get_default_instance()->get(&tariff);
-    _tariff = tariff;
-    DEBUG_INFO("Tariff set is: "); DEBUG_INFO_LN(_tariff);
-
+    
     float flow_calculation_interval = 0.0;
     FlowCalculationTime::get_default_instance()->get(&flow_calculation_interval);
-    // _flow_calculation_interval = flow_calculation_interval;
-    DEBUG_INFO("Interval set is: "); DEBUG_INFO_LN(flow_calculation_interval);
-
-
+    _flow_calculation_interval = flow_calculation_interval;
+  
 }
 
 DispenseSystem::~DispenseSystem(){
@@ -138,6 +134,7 @@ dispensing_state_t DispenseSystem::run(){
             */
            String uid = RFID::get_default_instance()->read_uid();
            if (is_dispense_tag(uid)){
+            get_buzzer()->beep(20);
             _set_state(DISPENSING_STARTING);
            } else{
             set_from_event(DISPENSING_SHOW_DUE_AMOUNT);

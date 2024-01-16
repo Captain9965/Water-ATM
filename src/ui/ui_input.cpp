@@ -78,8 +78,14 @@ uiInput * uiInput::get_default_instance(){
     return &instance;
 }
 
-void uiInput::enable_joystick_button(){
+void uiInput::enable_joystick(){
     joystick_button.enable();
+    clear_input_flag(JOYSTICK_LONG_PRESS);
+    clear_input_flag(JOYSTICK_FLAG_UP);
+    clear_input_flag(JOYSTICK_FLAG_DOWN);
+    clear_input_flag(JOYSTICK_FLAG_LEFT);
+    clear_input_flag(JOYSTICK_PRESS);
+
 }
 
 void uiInput::disable_joystick_button(){
@@ -93,6 +99,12 @@ void uiInput::enable_quantity_buttons(){
     quantity_4_button.enable();
     quantity_5_button.enable();
     quantity_6_button.enable();
+    clear_input_flag(QUANTITY_1_BUTTON);
+    clear_input_flag(QUANTITY_2_BUTTON);
+    clear_input_flag(QUANTITY_3_BUTTON);
+    clear_input_flag(QUANTITY_4_BUTTON);
+    clear_input_flag(QUANTITY_5_BUTTON);
+    clear_input_flag(QUANTITY_6_BUTTON);
 }
 
 void uiInput::disable_quantity_buttons(){
@@ -110,6 +122,10 @@ void uiInput::enable_tap_buttons(){
     tap_2_button.enable();
     tap_3_button.enable();
     tap_4_button.enable();
+    clear_input_flag(TAP_1_BUTTON);
+    clear_input_flag(TAP_2_BUTTON);
+    clear_input_flag(TAP_3_BUTTON);
+    clear_input_flag(TAP_4_BUTTON);
 }
 
 void uiInput::disable_tap_buttons(){

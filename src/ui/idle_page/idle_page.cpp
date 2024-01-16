@@ -31,6 +31,7 @@ int idlePage::update(){
     
     display_time();
     
+    display_network_strength();
 
     if(!uiInput::get_default_instance()->door_closed()){
         display_info("DOOR OPEN");
