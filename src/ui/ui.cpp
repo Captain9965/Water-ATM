@@ -1,4 +1,5 @@
 #include "ui.h"
+#include "comms/comms.h"
 
 LiquidCrystal_I2C * get_display1(){
     static LiquidCrystal_I2C display1(0x25, 20, 4);
@@ -108,20 +109,24 @@ void display_net_notConnected(){
 
 void display_machine_ready(bool clear){
     if(clear)get_display1()->clear();
-    get_display1()->setCursor(2, 1);
-    get_display1()->print("Machine Ready");
-    get_display1()->setCursor(2, 2);
+    get_display1()->setCursor(4, 2);
     get_display1()->print("Select Tap");
 }
 
 void display_info(const char * info, bool clear){
     if(clear)get_display1()->clear();
-    get_display1()->setCursor(2, 1);
+    get_display1()->setCursor(4, 2);
     get_display1()->print(info);
 }
 
 void display_secondary_info(const char* info){
     get_display1()->setCursor(4, 2);
+    get_display1()->print(info);
+}
+
+void display_primary_info(const char* info, bool clear){
+    if(clear)get_display1()->clear();
+    get_display1()->setCursor(2, 1);
     get_display1()->print(info);
 }
 
@@ -175,5 +180,18 @@ void display_select_quantity(const char * tap){
     get_display1()->print(tap);
     get_display1()->setCursor(1, 2);
     get_display1()->print("Select Quantity");
+}
+
+void display_network_strength(){
+    
+    /* get rss: */
+    int16_t rss = Comms::get_instance()->get_rss();
+    if (rss < 0){
+        rss = 0;
+    }
+    get_display1()->setCursor(14,0);
+    get_display1()->print("rss:");
+    get_display1()->setCursor(18,0);
+    get_display1()->print(rss);
 }
 
