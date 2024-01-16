@@ -7,15 +7,21 @@
 #include "string.h"
 
 /* EEPROM flash emulation addresses : */
-#define TARIFF_ADDRESS                      0
-#define CALIBRATION_ADDRESS                 4
-#define FLOW_CALCULATION_TIME_ADDRESS            8
-#define QUANTITY_1_ADDRESS                  12
-#define QUANTITY_2_ADDRESS                  16
-#define QUANTITY_3_ADDRESS                  20
-#define QUANTITY_4_ADDRESS                  24
-#define QUANTITY_5_ADDRESS                  28
-#define QUANTITY_6_ADDRESS                  32
+#define QUANTITY_1_ADDRESS                  0
+#define QUANTITY_2_ADDRESS                  4
+#define QUANTITY_3_ADDRESS                  8
+#define QUANTITY_4_ADDRESS                  12
+#define QUANTITY_5_ADDRESS                  16
+#define QUANTITY_6_ADDRESS                  20
+#define CALIBRATION_1_ADDRESS               24
+#define CALIBRATION_2_ADDRESS               28
+#define CALIBRATION_3_ADDRESS               32
+#define CALIBRATION_4_ADDRESS               36
+#define TARIFF_1_ADDRESS                    40
+#define TARIFF_2_ADDRESS                    44
+#define TARIFF_3_ADDRESS                    48
+#define TARIFF_4_ADDRESS                    52
+#define FLOW_CALCULATION_TIME_ADDRESS       56
 
 class storage{
     public:
