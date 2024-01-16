@@ -50,6 +50,7 @@ ezBuzzer * get_buzzer();
 void display_machine_ready(bool clear = true);
 void display_net_notConnected();
 void display_info(const char * info, bool clear = true);
+void display_primary_info(const char* info, bool clear = true);
 void display_secondary_info(const char* info);
 void display_dispenses(float amount1, float amount2, float amount3, float amount4);
 void update_quantities(float amount1, float amount2, float amount3, float amount4);
@@ -62,3 +63,4 @@ void display_value(T val, bool clear = true){
     get_display2()->setCursor(4, 1);
     get_display2()->print(val);
 }
+void display_network_strength();

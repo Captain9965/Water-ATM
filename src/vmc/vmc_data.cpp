@@ -34,72 +34,6 @@ bool AdminCash::load(){
     return true;
 }
 
-
-
-float tariff::DEFAULT_TARIFF = 10.0;
-
-tariff * tariff::get_default_instance(){
-    static tariff _instance = tariff();
-    return &_instance;
-}
-
-vmc_data_error_t tariff::set(float value){
- /* data validation: */
-    EEPROM.put(TARIFF_ADDRESS, value);
-    _value = value;
-    _data_error = VMC_DATA_OK;
-    return _data_error;
-}
-
-bool tariff::load(){
-    float value = 0.00;
-    EEPROM.get(TARIFF_ADDRESS, value);
-    /* data validation: */
-    if (!(value > 0.00) || isnan(value)){
-        _value = DEFAULT_TARIFF;
-        _data_error = VMC_DATA_UNSET;
-        EEPROM.put(TARIFF_ADDRESS, DEFAULT_TARIFF);
-        return false;
-    }
-
-    _value = value;
-    _data_error = VMC_DATA_OK;
-    return true;
-}
-
-
-float Calibration::DEFAULT_CALIBRATION = 10.0;
-
-Calibration * Calibration::get_default_instance(){
-    static Calibration _instance = Calibration();
-    return &_instance;
-}
-
-vmc_data_error_t Calibration::set(float value){
- /* data validation: */
-    EEPROM.put(CALIBRATION_ADDRESS, value);
-    _value = value;
-    _data_error = VMC_DATA_OK;
-    return _data_error;
-}
-
-bool Calibration::load(){
-    float value = 0.00;
-    EEPROM.get(CALIBRATION_ADDRESS, value);
-    /* data validation: */
-    if (!(value > 0.00) || isnan(value)){
-        _value = DEFAULT_CALIBRATION;
-        _data_error = VMC_DATA_UNSET;
-        EEPROM.put(CALIBRATION_ADDRESS, DEFAULT_CALIBRATION);
-        return false;
-    }
-
-    _value = value;
-    _data_error = VMC_DATA_OK;
-    return true;
-}
-
-
 float FlowCalculationTime::DEFAULT_FLOW_CALCULATION = 1000.0;
 
 FlowCalculationTime * FlowCalculationTime::get_default_instance(){
@@ -287,4 +221,225 @@ bool Quantities::load(){
 }
 
 
+float Calibration::DEFAULT_CALIBRATION_1 = 450.0;
+float Calibration::DEFAULT_CALIBRATION_2 = 450.0;
+float Calibration::DEFAULT_CALIBRATION_3 = 450.0;
+float Calibration::DEFAULT_CALIBRATION_4 = 450.0;
+
+Calibration * Calibration::get_default_instance(){
+    static Calibration _instance = Calibration();
+    return &_instance;
+}
+
+vmc_data_error_t Calibration::set(calibration_t value){
+ /* see whether value has changed and if so, change setting: */
+ if(value.calibration1 != _value.calibration1){
+    /* data validation: */
+    DEBUG_INFO_LN("Calibration1 has changed");
+    EEPROM.put(CALIBRATION_1_ADDRESS, value.calibration1);
+    _value.calibration1 = value.calibration1;
+    _data_error = VMC_DATA_OK;
+ }
+
+ if(value.calibration2 != _value.calibration2){
+    /* data validation: */
+    DEBUG_INFO_LN("Calibration2 has changed");
+    EEPROM.put(CALIBRATION_2_ADDRESS, value.calibration2);
+    _value.calibration2 = value.calibration2;
+    _data_error = VMC_DATA_OK;
+ }
+
+ if(value.calibration3 != _value.calibration3){
+    /* data validation: */
+    DEBUG_INFO_LN("Calibration3 has changed");
+    EEPROM.put(CALIBRATION_3_ADDRESS, value.calibration3);
+    _value.calibration3 = value.calibration3;
+    _data_error = VMC_DATA_OK;
+ }
+ if(value.calibration4 != _value.calibration4){
+    /* data validation: */
+    DEBUG_INFO_LN("Calibration4 has changed");
+    EEPROM.put(CALIBRATION_4_ADDRESS, value.calibration4);
+    _value.calibration4 = value.calibration4;
+    _data_error = VMC_DATA_OK;
+ }
+ return _data_error;
+    
+}
+
+bool Calibration::load(){
+    bool ret = true;
+    float value1 = 0.00;
+    float value2 = 0.00;
+    float value3 = 0.00;
+    float value4 = 0.00;
+ 
+
+    EEPROM.get(CALIBRATION_1_ADDRESS, value1);
+    /* data validation: */
+    if (!(value1 > 0.00) || isnan(value1)){
+        _value.calibration1 = DEFAULT_CALIBRATION_1;
+        _data_error = VMC_DATA_UNSET;
+        EEPROM.write(CALIBRATION_1_ADDRESS, 0);
+        EEPROM.put(CALIBRATION_1_ADDRESS, DEFAULT_CALIBRATION_1);
+        ret = false;
+    } else{
+        _value.calibration1 = value1;
+        _data_error = VMC_DATA_OK;
+    }
+
+    EEPROM.get(CALIBRATION_2_ADDRESS, value2);
+    /* data validation: */
+    if (!(value2 > 0.00) || isnan(value2)){
+        _value.calibration2 = DEFAULT_CALIBRATION_2;
+        _data_error = VMC_DATA_UNSET;
+        EEPROM.write(CALIBRATION_2_ADDRESS, 0);
+        EEPROM.put(CALIBRATION_2_ADDRESS, DEFAULT_CALIBRATION_2);
+        ret = false;
+    } else{
+        _value.calibration2 = value2;
+        _data_error = VMC_DATA_OK;
+    }
+
+    EEPROM.get(CALIBRATION_3_ADDRESS, value1);
+    /* data validation: */
+    if (!(value3 > 0.00) || isnan(value3)){
+        _value.calibration3 = DEFAULT_CALIBRATION_3;
+        _data_error = VMC_DATA_UNSET;
+        EEPROM.write(CALIBRATION_3_ADDRESS, 0);
+        EEPROM.put(CALIBRATION_3_ADDRESS, DEFAULT_CALIBRATION_3);
+        ret = false;
+    } else{
+        _value.calibration3 = value3;
+        _data_error = VMC_DATA_OK;
+    }
+
+    EEPROM.get(CALIBRATION_4_ADDRESS, value4);
+    /* data validation: */
+    if (!(value4 > 0.00) || isnan(value4)){
+        _value.calibration4 = DEFAULT_CALIBRATION_4;
+        _data_error = VMC_DATA_UNSET;
+        EEPROM.write(CALIBRATION_4_ADDRESS, 0);
+        EEPROM.put(CALIBRATION_4_ADDRESS, DEFAULT_CALIBRATION_4);
+        ret = false;
+    } else{
+        _value.calibration4 = value4;
+        _data_error = VMC_DATA_OK;
+    }
+   return ret;
+}
+
+/* Tariffs:*/
+float Tariff::DEFAULT_TARIFF_1 = 10.0;
+float Tariff::DEFAULT_TARIFF_2 = 10.0;
+float Tariff::DEFAULT_TARIFF_3 = 10.0;
+float Tariff::DEFAULT_TARIFF_4 = 10.0;
+
+Tariff * Tariff::get_default_instance(){
+    static Tariff _instance = Tariff();
+    return &_instance;
+}
+
+vmc_data_error_t Tariff::set(tariff_t value){
+ /* see whether value has changed and if so, change setting: */
+ if(value.tariff1 != _value.tariff1){
+    /* data validation: */
+    DEBUG_INFO_LN("Tariff1 has changed");
+    EEPROM.put(TARIFF_1_ADDRESS, value.tariff1);
+    _value.tariff1 = value.tariff1;
+    _data_error = VMC_DATA_OK;
+ }
+
+ if(value.tariff2 != _value.tariff2){
+    /* data validation: */
+    DEBUG_INFO_LN("Tariff2 has changed");
+    EEPROM.put(TARIFF_2_ADDRESS, value.tariff2);
+    _value.tariff2 = value.tariff2;
+    _data_error = VMC_DATA_OK;
+ }
+
+ if(value.tariff3 != _value.tariff3){
+    /* data validation: */
+    DEBUG_INFO_LN("Tariff3 has changed");
+    EEPROM.put(TARIFF_3_ADDRESS, value.tariff3);
+    _value.tariff3 = value.tariff3;
+    _data_error = VMC_DATA_OK;
+ }
+
+ if(value.tariff4 != _value.tariff4){
+    /* data validation: */
+    DEBUG_INFO_LN("Tariff4 has changed");
+    EEPROM.put(TARIFF_4_ADDRESS, value.tariff4);
+    _value.tariff4 = value.tariff4;
+    _data_error = VMC_DATA_OK;
+ }
+
+ 
+ return _data_error;
+    
+}
+
+bool Tariff::load(){
+    bool ret = true;
+    float value1 = 0.00;
+    float value2 = 0.00;
+    float value3 = 0.00;
+    float value4 = 0.00;
+ 
+
+    EEPROM.get(TARIFF_1_ADDRESS, value1);
+    /* data validation: */
+    if (!(value1 > 0.00) || isnan(value1)){
+        _value.tariff1 = DEFAULT_TARIFF_1;
+        _data_error = VMC_DATA_UNSET;
+        EEPROM.write(TARIFF_1_ADDRESS, 0);
+        EEPROM.put(TARIFF_1_ADDRESS, DEFAULT_TARIFF_1);
+        ret = false;
+    } else{
+        _value.tariff1 = value1;
+        _data_error = VMC_DATA_OK;
+    }
+
+    EEPROM.get(TARIFF_2_ADDRESS, value2);
+    /* data validation: */
+    if (!(value2 > 0.00) || isnan(value2)){
+        _value.tariff2 = DEFAULT_TARIFF_2;
+        _data_error = VMC_DATA_UNSET;
+        EEPROM.write(TARIFF_2_ADDRESS, 0);
+        EEPROM.put(TARIFF_2_ADDRESS, DEFAULT_TARIFF_2);
+        ret = false;
+    } else{
+        _value.tariff2 = value2;
+        _data_error = VMC_DATA_OK;
+    }
+
+    EEPROM.get(TARIFF_3_ADDRESS, value3);
+    /* data validation: */
+    if (!(value3 > 0.00) || isnan(value3)){
+        _value.tariff3 = DEFAULT_TARIFF_3;
+        _data_error = VMC_DATA_UNSET;
+        EEPROM.write(TARIFF_3_ADDRESS, 0);
+        EEPROM.put(TARIFF_3_ADDRESS, DEFAULT_TARIFF_3);
+        ret = false;
+    } else{
+        _value.tariff3 = value3;
+        _data_error = VMC_DATA_OK;
+    }
+
+    EEPROM.get(TARIFF_4_ADDRESS, value4);
+    /* data validation: */
+    if (!(value4 > 0.00) || isnan(value4)){
+        _value.tariff4 = DEFAULT_TARIFF_4;
+        _data_error = VMC_DATA_UNSET;
+        EEPROM.write(TARIFF_4_ADDRESS, 0);
+        EEPROM.put(TARIFF_4_ADDRESS, DEFAULT_TARIFF_4);
+        ret = false;
+    } else{
+        _value.tariff4 = value4;
+        _data_error = VMC_DATA_OK;
+    }
+
+    
+   return ret;
+}
 

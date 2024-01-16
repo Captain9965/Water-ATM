@@ -19,33 +19,48 @@ bool dispenseGroup::add(tap_selection_t tap){
     DEBUG_INFO_LN("Creating new node");
     
     uint32_t relay_pin, flow_meter_pin;
-    float calibration = 10.0;
-    Calibration::get_default_instance()->get(&calibration);
+    calibration_t calibration_instance;
+    tariff_t tariff_instance;
+    float tariff = Tariff::DEFAULT_TARIFF_1;
+    float calibration = Calibration::DEFAULT_CALIBRATION_1;
+    Calibration::get_default_instance()->get(&calibration_instance);
+    Tariff::get_default_instance()->get(&tariff_instance);
+
     switch (tap){
         case DISPENSE_TAP_1:
             relay_pin = SYSTEM_SOLENOID_VALVE_1;
             flow_meter_pin = SYSTEM_SOLENOID_INTERRUPT_1;
+            calibration = calibration_instance.calibration1;
+            tariff = tariff_instance.tariff1;
             break;
         case DISPENSE_TAP_2:
-            relay_pin = SYSTEM_SOLENOID_VALVE_2;
+            relay_pin = SYSTEM_SOLENOID_VALVE_2;        
             flow_meter_pin = SYSTEM_SOLENOID_INTERRUPT_2;
+            calibration = calibration_instance.calibration2;
+            tariff = tariff_instance.tariff2;
             break;
         case DISPENSE_TAP_3:
             relay_pin = SYSTEM_SOLENOID_VALVE_3;
             flow_meter_pin = SYSTEM_SOLENOID_INTERRUPT_3;
+            calibration = calibration_instance.calibration3;
+            tariff = tariff_instance.tariff3;
             break;
         case DISPENSE_TAP_4:
             relay_pin = SYSTEM_SOLENOID_VALVE_4;
             flow_meter_pin = SYSTEM_SOLENOID_INTERRUPT_4;
+            calibration = calibration_instance.calibration4;
+            tariff = tariff_instance.tariff4;
             break;
         default:
             relay_pin = SYSTEM_SOLENOID_VALVE_1;
             flow_meter_pin = SYSTEM_SOLENOID_INTERRUPT_1;
+            calibration = calibration_instance.calibration1;
+            tariff = tariff_instance.tariff1;
             break;
     }
     /* initialize the new node: */
     DEBUG_INFO("Calibration is : "); DEBUG_INFO_LN(calibration);
-    DispenseSystem *  new_dispenseSystem = new DispenseSystem(tap, relay_pin, flow_meter_pin, 450.0);
+    DispenseSystem *  new_dispenseSystem = new DispenseSystem(tap, relay_pin, flow_meter_pin, calibration, tariff);
     if (!new_dispenseSystem){
         return false;
     }

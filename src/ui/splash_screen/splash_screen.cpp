@@ -9,13 +9,13 @@ splashScreenPage::splashScreenPage(){
 
 int splashScreenPage::load(){
 
-    get_display1()->setCursor(1, 1);
+    get_display1()->setCursor(4, 1);
     get_display1()->print("Water ATM");
 
-    get_display2()->setCursor(1, 1);
+    get_display2()->setCursor(4, 1);
     get_display2()->print("Version: ");
 
-    get_display2()->setCursor(1, 2);
+    get_display2()->setCursor(4, 2);
     get_display2()->print("1.0.0 ");
 
   

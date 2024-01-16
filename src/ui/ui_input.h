@@ -42,7 +42,7 @@ class uiInput{
     public:
         uiInput();
         void init();
-        void enable_joystick_button();
+        void enable_joystick();
         void enable_tap_buttons();
         void disable_tap_buttons();
         void enable_quantity_buttons();
