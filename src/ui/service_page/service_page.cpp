@@ -9,9 +9,9 @@ servicePage::servicePage(){
 }
 
 int servicePage::load(){
-    uiInput::get_default_instance()->enable_joystick_button();
+    uiInput::get_default_instance()->enable_joystick();
     uiInput::get_default_instance()->enable_quantity_buttons();
-    clear_displays();
+    uiInput::get_default_instance()->disable_tap_buttons();
     _state_index = 0;
     service_page_state = state_array[_state_index];
     Quantities::get_default_instance()->get(&_quantities);
