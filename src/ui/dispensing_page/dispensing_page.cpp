@@ -32,20 +32,21 @@ int dispensingPage::update(){
     /* instance is running : */
     if (!_dispense_group->is_empty() && _current_dispense_instance){
         switch_ui_state();
+        DEBUG_INFO("UI state -> "); DEBUG_INFO_LN(ui_state);
         switch (ui_state){
             case UI_QUANTITY_SELECT:
                 {   
-                    tap_selection_t tap = _current_dispense_instance->get_tap();
-                    display_info("SELECT QUANTITY");
-                    char sec_info[15];
-                    sprintf(sec_info,"FOR TAP %d",tap);
-                    display_secondary_info(sec_info);
+                    get_display1()->clear();
                     uiInput::get_default_instance()->enable_quantity_buttons();
                     break;
                 }
             case UI_AWAIT_QUANTITY_SELECTION:
                 {   
-        
+                    tap_selection_t tap = _current_dispense_instance->get_tap();
+                    display_primary_info("SELECT QUANTITY", false);
+                    char sec_info[15];
+                    sprintf(sec_info,"FOR TAP %d",tap);
+                    display_secondary_info(sec_info);
                     check_for_quantity_selection();
                     break;
 
