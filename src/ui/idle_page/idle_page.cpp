@@ -112,7 +112,7 @@ idlePage* idlePage::get_default_instance(){
 }
 
 bool idlePage::is_admin_tag(String &uid){
-    if (uid.substring(1) == VENDING_CARD)
+    if (uid.substring(1) == ADMIN_CARD)
     {
         return true;
     }
