@@ -27,7 +27,7 @@
 #define MQTT_WILL_TOPIC                 MQTT_PUB_TOPIC_PREFIX "will"
 #define MQTT_BIRTH_MESSAGE              "CONNECTED"
 #define MQTT_WILL_MESSAGE               "DISCONNECTED";
-#define MQTT_SERVER                     "broker.hivemq.com"
+#define MQTT_SERVER                     "52.146.3.202"
 #define MQTT_PORT                       1883
 #define MQTT_MAX_PACKET_SIZE            256
 #define MQTT_MAX_MESSAGE_HANDLERS       3

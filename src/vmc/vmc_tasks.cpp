@@ -6,7 +6,7 @@
 
 /* task handles: */
 BaseType_t * get_comms_taskhandle(){
-    static BaseType_t comms_taskhandle = xTaskCreate(comms_task, "comms_task", configMINIMAL_STACK_SIZE * 2, nullptr, configMAX_PRIORITIES - 3, nullptr);
+    static BaseType_t comms_taskhandle = xTaskCreate(comms_task, "comms_task", configMINIMAL_STACK_SIZE * 2, nullptr, configMAX_PRIORITIES - 4, nullptr);
     return & comms_taskhandle;
 }
 
@@ -16,7 +16,7 @@ BaseType_t * get_main_taskhandle(){
 }
 
 BaseType_t * get_input_task(){
-  static BaseType_t input_taskhandle = xTaskCreate(input_task, "input_task", configMINIMAL_STACK_SIZE , nullptr, configMAX_PRIORITIES - 2, nullptr );
+  static BaseType_t input_taskhandle = xTaskCreate(input_task, "input_task", configMINIMAL_STACK_SIZE , nullptr, configMAX_PRIORITIES - 1, nullptr );
   return & input_taskhandle;
 }
 
@@ -31,7 +31,7 @@ void main_task(void * pvParameters){
   while(1){
     VMC::get_default_instance()->run();
     UI::get_default_instance()->update();
-    wait_ms(5);
+    wait_ms(1);
   } 
 }
 

@@ -221,10 +221,10 @@ bool Quantities::load(){
 }
 
 
-float Calibration::DEFAULT_CALIBRATION_1 = 450.0;
-float Calibration::DEFAULT_CALIBRATION_2 = 450.0;
-float Calibration::DEFAULT_CALIBRATION_3 = 450.0;
-float Calibration::DEFAULT_CALIBRATION_4 = 450.0;
+float Calibration::DEFAULT_CALIBRATION_1 = 45.0;
+float Calibration::DEFAULT_CALIBRATION_2 = 45.0;
+float Calibration::DEFAULT_CALIBRATION_3 = 45.0;
+float Calibration::DEFAULT_CALIBRATION_4 = 45.0;
 
 Calibration * Calibration::get_default_instance(){
     static Calibration _instance = Calibration();

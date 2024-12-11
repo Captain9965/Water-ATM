@@ -3,8 +3,9 @@
 #include "MFRC522.h"
 #include "common/common.h"
 
-#define SERVICE_TAG          "73 98 58 A3"
+#define SERVICE_TAG          "F3 79 B3 18"
 #define VENDING_CARD        "13 FC 7B A3"
+#define ADMIN_CARD         "80 D1 BD 2B"    
 
 /* will later have an interface for all sensors*/
 class RFID{

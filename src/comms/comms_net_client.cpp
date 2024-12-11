@@ -76,6 +76,7 @@ bool GsmClient::connect(){
     }
     modem.init();
     if (!connect_to_network() || !connect_to_gprs()){
+        modem_cycle_power();
         return false;
     }
     reset_reconnection_count();
