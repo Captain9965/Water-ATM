@@ -6,17 +6,17 @@
 
 /* task handles: */
 BaseType_t * get_comms_taskhandle(){
-    static BaseType_t comms_taskhandle = xTaskCreate(comms_task, "comms_task", configMINIMAL_STACK_SIZE * 2, nullptr, configMAX_PRIORITIES - 4, nullptr);
+    static BaseType_t comms_taskhandle = xTaskCreate(comms_task, "comms_task", 230, nullptr, configMAX_PRIORITIES - 1, nullptr);
     return & comms_taskhandle;
 }
 
 BaseType_t * get_main_taskhandle(){
-    static BaseType_t main_taskhandle = xTaskCreate(main_task, "main_task", configMINIMAL_STACK_SIZE * 4, nullptr, configMAX_PRIORITIES - 1, nullptr);
+    static BaseType_t main_taskhandle = xTaskCreate(main_task, "main_task", configMINIMAL_STACK_SIZE * 2.5, nullptr, configMAX_PRIORITIES - 2, nullptr);
     return & main_taskhandle;
 }
 
 BaseType_t * get_input_task(){
-  static BaseType_t input_taskhandle = xTaskCreate(input_task, "input_task", configMINIMAL_STACK_SIZE , nullptr, configMAX_PRIORITIES - 1, nullptr );
+  static BaseType_t input_taskhandle = xTaskCreate(input_task, "input_task", 72 , nullptr, configMAX_PRIORITIES - 2, nullptr );
   return & input_taskhandle;
 }
 
