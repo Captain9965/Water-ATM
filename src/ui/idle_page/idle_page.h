@@ -16,4 +16,5 @@ class idlePage: public Page{
         long long net_check_timer = 0;
         bool is_admin_tag(String &uid);
         bool is_service_tag(String &uid);
+        bool _clear_display = true;
 };

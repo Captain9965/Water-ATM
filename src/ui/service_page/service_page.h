@@ -20,7 +20,15 @@ typedef enum service_page_state{
     SERVICE_PAGE_LOAD_SET_QUANTITY6,
     SERVICE_PAGE_SET_QUANTITY6,
     SERVICE_PAGE_LOAD_FLOWCALCULATION,
-    SERVICE_PAGE_SET_FLOWCALCULATION
+    SERVICE_PAGE_SET_FLOWCALCULATION,
+    SERVICE_PAGE_LOAD_CALIBRATION1,
+    SERVICE_PAGE_SET_CALIBRATION1,
+    SERVICE_PAGE_LOAD_CALIBRATION2,
+    SERVICE_PAGE_SET_CALIBRATION2,
+    SERVICE_PAGE_LOAD_CALIBRATION3,
+    SERVICE_PAGE_SET_CALIBRATION3,
+    SERVICE_PAGE_LOAD_CALIBRATION4,
+    SERVICE_PAGE_SET_CALIBRATION4,
 }service_page_state_t;
 
 class servicePage: public Page{
@@ -43,6 +51,7 @@ class servicePage: public Page{
         template<typename T>
         void adjust_params(T &value, T increment, T max_val,  T min_val);
         quantities_t _quantities = {.quantity1 = 0.0, .quantity2 = 0.0, .quantity3 = 0.0, .quantity4 = 0.0, .quantity5 = 0.0, .quantity6 = 0.0};
+        calibration_t _calibration = {.calibration1 = 0.0, .calibration2 = 0.0, .calibration3 = 0.0, .calibration4 = 0.0};
         float _flow_calculation_time = 0.0;
         service_page_state_t state_array[SERVICE_STATE_ARRAY_SIZE] = {SERVICE_PAGE_LOAD_SET_QUANTITY1, SERVICE_PAGE_LOAD_FLOWCALCULATION};
         int8_t _state_index = 0;

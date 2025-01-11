@@ -39,7 +39,7 @@ void Comms::run(){
             break;
        };
   
-    wait_ms(150);
+    wait_ms(70);
     }
 
 }

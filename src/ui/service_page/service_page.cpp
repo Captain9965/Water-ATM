@@ -11,11 +11,12 @@ servicePage::servicePage(){
 int servicePage::load(){
     uiInput::get_default_instance()->enable_joystick();
     uiInput::get_default_instance()->enable_quantity_buttons();
-    uiInput::get_default_instance()->disable_tap_buttons();
+    uiInput::get_default_instance()->enable_tap_buttons();
     _state_index = 0;
     service_page_state = state_array[_state_index];
     Quantities::get_default_instance()->get(&_quantities);
     FlowCalculationTime::get_default_instance()->get(&_flow_calculation_time);
+    Calibration::get_default_instance()->get(&_calibration);
     return 0;
 }
 
@@ -138,6 +139,59 @@ int servicePage::update(){
             adjust_params<float>(_flow_calculation_time, 0.1, 3000.0, 100.0);
             break;
         }
+
+    case SERVICE_PAGE_LOAD_CALIBRATION1:
+    {
+        display_info("CALIBRATION 1 ->");
+        DEBUG_INFO_LN("Calibration1");
+        get_display2()->clear();
+        service_page_state = SERVICE_PAGE_SET_CALIBRATION1;
+        break;
+    }
+    case SERVICE_PAGE_SET_CALIBRATION1:
+    {
+        adjust_params<float>(_calibration.calibration1, 0.1, 1000.0, 0.1);
+        break;
+    }
+    case SERVICE_PAGE_LOAD_CALIBRATION2:
+    {
+        display_info("CALIBRATION 2 ->");
+        DEBUG_INFO_LN("Calibration2");
+        get_display2()->clear();
+        service_page_state = SERVICE_PAGE_SET_CALIBRATION2;
+        break;
+    }
+    case SERVICE_PAGE_SET_CALIBRATION2:
+    {
+        adjust_params<float>(_calibration.calibration2, 0.1, 1000.0, 0.1);
+        break;
+    }
+    case SERVICE_PAGE_LOAD_CALIBRATION3:
+    {
+        display_info("CALIBRATION 3 ->");
+        DEBUG_INFO_LN("Calibration3");
+        get_display2()->clear();
+        service_page_state = SERVICE_PAGE_SET_CALIBRATION3;
+        break;
+    }
+    case SERVICE_PAGE_SET_CALIBRATION3:
+    {
+        adjust_params<float>(_calibration.calibration3, 0.1, 1000.0, 0.1);
+        break;
+    }
+    case SERVICE_PAGE_LOAD_CALIBRATION4:
+    {
+        display_info("CALIBRATION 4 ->");
+        DEBUG_INFO_LN("Calibration4");
+        get_display2()->clear();
+        service_page_state = SERVICE_PAGE_SET_CALIBRATION4;
+        break;
+    }
+    case SERVICE_PAGE_SET_CALIBRATION4:
+    {
+        adjust_params<float>(_calibration.calibration4, 0.1, 1000.0, 0.1);
+        break;
+    }
     default:
         break;
     }
@@ -184,6 +238,7 @@ void servicePage::save_params(){
     display_info("Saving...");
     Quantities::get_default_instance()->set(_quantities);
     FlowCalculationTime::get_default_instance()->set(_flow_calculation_time);
+    Calibration::get_default_instance()->set(_calibration);
 }
 
 template<typename T>
@@ -219,6 +274,26 @@ service_page_state_t servicePage::switch_ui_state(){
                 break;
             case QUANTITY_6_BUTTON:
                 service_page_state = SERVICE_PAGE_LOAD_SET_QUANTITY6;
+                break;
+            default:
+                break;
+        }
+    }
+
+    input_flags_t tap_calibration;
+    if(uiInput::get_default_instance()->tap_button_pressed(tap_calibration)){
+        switch (tap_calibration){
+            case TAP_1_BUTTON:
+                service_page_state = SERVICE_PAGE_LOAD_CALIBRATION1;
+                break;
+            case TAP_2_BUTTON:
+                service_page_state = SERVICE_PAGE_LOAD_CALIBRATION2;
+                break;
+            case TAP_3_BUTTON:
+                service_page_state = SERVICE_PAGE_LOAD_CALIBRATION3;
+                break;
+            case TAP_4_BUTTON:
+                service_page_state = SERVICE_PAGE_LOAD_CALIBRATION4;
                 break;
             default:
                 break;
