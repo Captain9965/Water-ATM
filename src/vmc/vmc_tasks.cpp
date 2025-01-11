@@ -6,17 +6,17 @@
 
 /* task handles: */
 BaseType_t * get_comms_taskhandle(){
-    static BaseType_t comms_taskhandle = xTaskCreate(comms_task, "comms_task", 230, nullptr, configMAX_PRIORITIES - 1, nullptr);
+    static BaseType_t comms_taskhandle = xTaskCreate(comms_task, "comms_task", 230, nullptr, configMAX_PRIORITIES - 5, nullptr);
     return & comms_taskhandle;
 }
 
 BaseType_t * get_main_taskhandle(){
-    static BaseType_t main_taskhandle = xTaskCreate(main_task, "main_task", configMINIMAL_STACK_SIZE * 2.5, nullptr, configMAX_PRIORITIES - 2, nullptr);
+    static BaseType_t main_taskhandle = xTaskCreate(main_task, "main_task", configMINIMAL_STACK_SIZE * 2.5, nullptr, configMAX_PRIORITIES - 6, nullptr);
     return & main_taskhandle;
 }
 
 BaseType_t * get_input_task(){
-  static BaseType_t input_taskhandle = xTaskCreate(input_task, "input_task", 72 , nullptr, configMAX_PRIORITIES - 2, nullptr );
+  static BaseType_t input_taskhandle = xTaskCreate(input_task, "input_task", 64 , nullptr, configMAX_PRIORITIES - 6, nullptr );
   return & input_taskhandle;
 }
 
@@ -31,7 +31,7 @@ void main_task(void * pvParameters){
   while(1){
     VMC::get_default_instance()->run();
     UI::get_default_instance()->update();
-    wait_ms(1);
+    wait_ms(15);
   } 
 }
 
@@ -40,6 +40,6 @@ void input_task(void * pvParameters){
   while (1){
     input_instance->update_joystick_state();
     input_instance->update_push_button_states();
-    wait_ms(2);
+    wait_ms(20);
   }
 }

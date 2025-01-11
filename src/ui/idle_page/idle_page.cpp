@@ -17,6 +17,9 @@ idlePage::idlePage(){
 int idlePage::load(){
    get_display2()->clear();
    get_display1()->clear();
+   if(!check_vmc_flag(VMC_NET_CONNECTED)){
+        display_net_notConnected();
+    }
    uiInput::get_default_instance()->disable_quantity_buttons();
    uiInput::get_default_instance()->disable_joystick_button();
    uiInput::get_default_instance()->enable_tap_buttons();
@@ -41,20 +44,26 @@ int idlePage::update(){
     }
 
     if ((millis() - net_check_timer) >= IDLE_NET_CHECK_TIMER_INTERVAL){
-
-        
+        // DEBUG_INFO_LN("Checking network connection...");
         if(check_vmc_flag(VMC_NET_CONNECTED)){
 
-            display_machine_ready(false);
+            display_machine_ready(_clear_display);
+            _clear_display = false;
 
         } else{
             /* for now we can bypass this condition, ideally, we should return and not even check for button presses altogether*/
-               display_machine_ready(false);
-            // display_net_notConnected();
-            // return -1;
+            //    display_machine_ready(false);
+            get_display1()->clear();
+            display_net_notConnected();
+            _clear_display = true;
+
         }
         net_check_timer = millis();
         
+    }
+
+    if (!check_vmc_flag(VMC_NET_CONNECTED)){
+        return -1;
     }
 
 
