@@ -29,6 +29,7 @@ int adminPage::update(){
     }
 
     if(move_left()){
+        get_buzzer()->beep(20);
         DEBUG_INFO_LN("MOVING LEFT");
         _state_index -= 1;
         if(_state_index < 0){
@@ -38,6 +39,7 @@ int adminPage::update(){
     }
 
     if(move_right()){
+        get_buzzer()->beep(20);
         DEBUG_INFO_LN("MOVING RIGHT");
         _state_index += 1;
         if(_state_index > ADMIN_STATE_ARRAY_SIZE - 1){
@@ -204,9 +206,11 @@ void adminPage::reset_params(){
 template<typename T>
 void adminPage::adjust_params(T &value, T increment, T max_val,  T min_val){
     if(increase() && value < max_val - increment){
+        get_buzzer()->beep(2);
         value += increment;
         get_display2()->clear();
     } else if(decrease() && value > min_val){
+        get_buzzer()->beep(2);
         value -= increment;
         get_display2()->clear();
     }
@@ -216,6 +220,7 @@ void adminPage::adjust_params(T &value, T increment, T max_val,  T min_val){
 admin_page_state_t adminPage::switch_ui_state(){
     input_flags_t tap;
     if(uiInput::get_default_instance()->tap_button_pressed(tap)){
+        get_buzzer()->beep(20);
         switch (tap){
             case TAP_1_BUTTON:
                 admin_page_state = ADMIN_PAGE_LOAD_SET_TARIFF1;
