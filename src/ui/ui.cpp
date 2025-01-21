@@ -1,6 +1,18 @@
 #include "ui.h"
 #include "comms/comms.h"
 
+byte rssLogo[] = {
+  B11111,
+  B10101,
+  B11111,
+  B01110,
+  B00100,
+  B00100,
+  B00100,
+  B00100,
+};
+
+
 LiquidCrystal_I2C * get_display1(){
     static LiquidCrystal_I2C display1(0x25, 20, 4);
     return &display1;
@@ -38,7 +50,7 @@ int Page::update(){
 }
 
 UI::UI(){
-    
+    get_display1()->createChar(0, rssLogo);
 }
 
 UI::~UI(){
@@ -189,9 +201,14 @@ void display_network_strength(){
     if (rss < 0){
         rss = 0;
     }
-    get_display1()->setCursor(14,0);
+
+    /* convert rss to percentage given minimum is 0 and maximum is 30*/
+    rss = (rss * 100) / 30;
+    get_display1()->setCursor(7,0);
+    get_display1()->write(byte(0));
     get_display1()->print("rss:");
     get_display1()->setCursor(18,0);
     get_display1()->print(rss);
+    get_display1()->print("%");
 }
 
