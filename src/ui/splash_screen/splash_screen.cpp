@@ -9,8 +9,8 @@ splashScreenPage::splashScreenPage(){
 
 int splashScreenPage::load(){
 
-    get_display1()->setCursor(4, 1);
-    get_display1()->print("Water ATM");
+    get_display1()->setCursor(1, 1);
+    get_display1()->print("Augmented Taps");
 
     get_display2()->setCursor(4, 1);
     get_display2()->print("Version: ");
