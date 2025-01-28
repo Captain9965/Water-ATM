@@ -9,7 +9,7 @@ splashScreenPage::splashScreenPage(){
 
 int splashScreenPage::load(){
 
-    get_display1()->setCursor(1, 1);
+    get_display1()->setCursor(2, 1);
     get_display1()->print("Augmented Taps");
 
     get_display2()->setCursor(4, 1);

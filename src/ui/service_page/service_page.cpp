@@ -130,7 +130,7 @@ int servicePage::update(){
         }
     case SERVICE_PAGE_LOAD_FLOWCALCULATION:
     {
-        display_info("FlowCalculation ->");
+        display_info("FlowCalc ->");
         DEBUG_INFO_LN("FlowCalculation");
         get_display2()->clear();
         service_page_state = SERVICE_PAGE_SET_FLOWCALCULATION;
