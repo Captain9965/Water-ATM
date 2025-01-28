@@ -43,9 +43,9 @@ int dispensingPage::update(){
             case UI_AWAIT_QUANTITY_SELECTION:
                 {   
                     tap_selection_t tap = _current_dispense_instance->get_tap();
-                    display_primary_info("SELECT QUANTITY", false);
+                    display_primary_info("Select Quantity", false);
                     char sec_info[15];
-                    sprintf(sec_info,"FOR TAP %d",tap);
+                    sprintf(sec_info,"For Tap %d",tap);
                     display_secondary_info(sec_info);
                     check_for_quantity_selection();
                     break;
@@ -53,7 +53,7 @@ int dispensingPage::update(){
                 }
             case UI_SHOW_PAYMENT_DUE:
                 {   
-                    display_info("TAP CARD", false);
+                    display_info("Tap Card", false);
                     break;
                 }
             case UI_IDLE:

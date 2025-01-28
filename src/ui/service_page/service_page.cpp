@@ -27,6 +27,7 @@ int servicePage::update(){
     }
 
     if(move_left()){
+        get_buzzer()->beep(20);
         DEBUG_INFO_LN("MOVING LEFT");
         _state_index -= 1;
         if(_state_index < 0){
@@ -36,6 +37,7 @@ int servicePage::update(){
     }
 
     if(move_right()){
+        get_buzzer()->beep(20);
         DEBUG_INFO_LN("MOVING RIGHT");
         _state_index += 1;
         if(_state_index > SERVICE_STATE_ARRAY_SIZE - 1){
@@ -128,7 +130,7 @@ int servicePage::update(){
         }
     case SERVICE_PAGE_LOAD_FLOWCALCULATION:
     {
-        display_info("FlowCalculation ->");
+        display_info("FlowCalc ->");
         DEBUG_INFO_LN("FlowCalculation");
         get_display2()->clear();
         service_page_state = SERVICE_PAGE_SET_FLOWCALCULATION;
@@ -244,9 +246,11 @@ void servicePage::save_params(){
 template<typename T>
 void servicePage::adjust_params(T &value, T increment, T max_val,  T min_val){
     if(increase() && value < max_val - increment){
+        get_buzzer()->beep(2);
         value += increment;
         get_display2()->clear();
     } else if(decrease() && value > min_val){
+        get_buzzer()->beep(2);
         value -= increment;
         get_display2()->clear();
     }
@@ -256,6 +260,7 @@ void servicePage::adjust_params(T &value, T increment, T max_val,  T min_val){
 service_page_state_t servicePage::switch_ui_state(){
     input_flags_t quantity;
     if(uiInput::get_default_instance()->quantity_button_pressed(quantity)){
+        get_buzzer()->beep(20);
         switch (quantity){
             case QUANTITY_1_BUTTON:
                 service_page_state = SERVICE_PAGE_LOAD_SET_QUANTITY1;
@@ -282,6 +287,7 @@ service_page_state_t servicePage::switch_ui_state(){
 
     input_flags_t tap_calibration;
     if(uiInput::get_default_instance()->tap_button_pressed(tap_calibration)){
+        get_buzzer()->beep(20);
         switch (tap_calibration){
             case TAP_1_BUTTON:
                 service_page_state = SERVICE_PAGE_LOAD_CALIBRATION1;

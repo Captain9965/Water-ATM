@@ -3,7 +3,7 @@
 #include "comms/comms_events.h"
 #include "sensors/rtc/rtc.h"
 
-#define TICK_INTERVAL 10000
+#define TICK_INTERVAL 30000
 /* state idle */
 class vmc_idle: public State{
     public:
