@@ -32,24 +32,28 @@ bool dispenseGroup::add(tap_selection_t tap){
             flow_meter_pin = SYSTEM_SOLENOID_INTERRUPT_1;
             calibration = calibration_instance.calibration1;
             tariff = tariff_instance.tariff1;
+            set_tap_running_flag(TAP_1_RUNNING);
             break;
         case DISPENSE_TAP_2:
             relay_pin = SYSTEM_SOLENOID_VALVE_2;        
             flow_meter_pin = SYSTEM_SOLENOID_INTERRUPT_2;
             calibration = calibration_instance.calibration2;
             tariff = tariff_instance.tariff2;
+            set_tap_running_flag(TAP_2_RUNNING);
             break;
         case DISPENSE_TAP_3:
             relay_pin = SYSTEM_SOLENOID_VALVE_3;
             flow_meter_pin = SYSTEM_SOLENOID_INTERRUPT_3;
             calibration = calibration_instance.calibration3;
             tariff = tariff_instance.tariff3;
+            set_tap_running_flag(TAP_3_RUNNING);
             break;
         case DISPENSE_TAP_4:
             relay_pin = SYSTEM_SOLENOID_VALVE_4;
             flow_meter_pin = SYSTEM_SOLENOID_INTERRUPT_4;
             calibration = calibration_instance.calibration4;
             tariff = tariff_instance.tariff4;
+            set_tap_running_flag(TAP_4_RUNNING);
             break;
         default:
             relay_pin = SYSTEM_SOLENOID_VALVE_1;
@@ -85,7 +89,22 @@ bool dispenseGroup::add(tap_selection_t tap){
 
 bool dispenseGroup::remove(tap_selection_t tap){
     DispenseSystem * temp = dispenseHead, * prev;
-
+    switch(tap){
+        case DISPENSE_TAP_1:
+            clear_tap_running_flag(TAP_1_RUNNING);
+            break;
+        case DISPENSE_TAP_2:
+            clear_tap_running_flag(TAP_2_RUNNING);
+            break;
+        case DISPENSE_TAP_3:
+            clear_tap_running_flag(TAP_3_RUNNING);
+            break;
+        case DISPENSE_TAP_4:
+            clear_tap_running_flag(TAP_4_RUNNING);
+            break;
+        default:
+            break;
+    }
     /* The node is at the beginning: */
     if(temp && temp->get_tap() == tap){
         dispenseHead = temp->next;
@@ -158,4 +177,21 @@ bool dispenseGroup::instances_dispensing(){
 dispenseGroup * dispenseGroup::get_default_instance(){
     static dispenseGroup instance = dispenseGroup();
     return &instance;
+}
+
+
+void dispenseGroup::set_tap_running_flag(tap_running_flags_t flag){
+    TAP_RUNNING_FLAG |= flag;
+}
+
+void dispenseGroup::clear_tap_running_flag(tap_running_flags_t flag){
+    TAP_RUNNING_FLAG &= ~(flag);
+}
+
+void dispenseGroup::tap_running_flags_init(){
+    TAP_RUNNING_FLAG = 0;
+}
+
+bool dispenseGroup::check_tap_running_flag(tap_running_flags_t flag){
+    return (TAP_RUNNING_FLAG & flag);
 }

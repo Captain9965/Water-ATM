@@ -14,7 +14,6 @@ dispensingPage::dispensingPage(vmc_flags_t initialTap): _initialTap(initialTap){
 int dispensingPage::load(){
    clear_amount();
    clear_displays();
-   display_dispenses(amount1, amount2, amount3, amount4);
    return 0;
 }
 
@@ -59,6 +58,7 @@ int dispensingPage::update(){
             case UI_IDLE:
                 {
                     update_dispense_quantities();
+                    
                     if(_dispense_group->instances_dispensing()){
 
                         display_machine_ready(false);
@@ -78,6 +78,7 @@ int dispensingPage::update(){
 
         clear_vmc_flag(VMC_DISPENSE_DONE);
         DEBUG_INFO_LN("Dispense group done!");
+        ui_state = UI_NOP;
         stop();
 
     } 
@@ -211,25 +212,40 @@ void dispensingPage::update_dispense_quantities(){
     if (!_current_dispense_instance || !_dispense_group){
         return;
     }
+        if(!_dispense_group->check_tap_running_flag(TAP_1_RUNNING)){
+            display_dispenses(amount1, 1, true);
+        }
+        if(!_dispense_group->check_tap_running_flag(TAP_2_RUNNING)){
+            display_dispenses(amount2, 2, true);
+        }
+        if(!_dispense_group->check_tap_running_flag(TAP_3_RUNNING)){
+            display_dispenses(amount3, 3, true);
+        }
+        if(!_dispense_group->check_tap_running_flag(TAP_4_RUNNING)){
+            display_dispenses(amount4, 4, true);
+        }
+
         tap_selection_t tap = _current_dispense_instance->get_tap();
         switch (tap){
             case DISPENSE_TAP_1:
                 amount1 = _current_dispense_instance->get_dispensed_quantity();
+                display_dispenses(amount1, 1);
                 break;
             case DISPENSE_TAP_2:
                 amount2 = _current_dispense_instance->get_dispensed_quantity();
+                display_dispenses(amount2, 2);            
                 break;
             case DISPENSE_TAP_3:
                 amount3 = _current_dispense_instance->get_dispensed_quantity();
+                display_dispenses(amount3, 3);
                 break;
             case DISPENSE_TAP_4:
                 amount4 = _current_dispense_instance->get_dispensed_quantity();
+                display_dispenses(amount4, 4);
                 break;
             default:
                 break;
         }
-        update_quantities(amount1, amount2, amount3, amount4);
-   
 }
 
 void dispensingPage::clear_amount(){

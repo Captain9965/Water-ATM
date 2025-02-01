@@ -142,30 +142,65 @@ void display_primary_info(const char* info, bool clear){
     get_display1()->print(info);
 }
 
-void display_dispenses(float amount1, float amount2, float amount3, float amount4){
-
-    get_display2()->setCursor(1, 0); get_display2()->print("Tap 1: ");
-    get_display2()->setCursor(9, 0); get_display2()->print(amount1);
-    get_display2()->setCursor(14, 0); get_display2()->print("L");
-
-    get_display2()->setCursor(1, 1); get_display2()->print("Tap 2: ");
-    get_display2()->setCursor(9, 1); get_display2()->print(amount2);
-    get_display2()->setCursor(14, 1); get_display2()->print("L");
-
-    get_display2()->setCursor(1, 2); get_display2()->print("Tap 3: ");
-    get_display2()->setCursor(9, 2); get_display2()->print(amount3);
-    get_display2()->setCursor(14, 2); get_display2()->print("L");
-
-    get_display2()->setCursor(1, 3); get_display2()->print("Tap 4: ");
-    get_display2()->setCursor(9, 3); get_display2()->print(amount4);
-    get_display2()->setCursor(14, 3); get_display2()->print("L");
-    
+void display_dispenses(float amount, int tap_index, bool shadow_string){
+    switch(tap_index){
+        case 1:
+            if(shadow_string){
+                get_display2()->setCursor(1, 0); get_display2()->print("              ");
+            } else {
+                get_display2()->setCursor(1, 0); get_display2()->print("Tap 1: ");
+                get_display2()->setCursor(9, 0); get_display2()->print(amount);
+                get_display2()->setCursor(14, 0); get_display2()->print("L");
+            }
+            break;
+        case 2:
+            if(shadow_string){
+                get_display2()->setCursor(1, 1); get_display2()->print("              ");
+            } else {
+                get_display2()->setCursor(1, 1); get_display2()->print("Tap 2: ");
+                get_display2()->setCursor(9, 1); get_display2()->print(amount);
+                get_display2()->setCursor(14, 1); get_display2()->print("L");
+            }
+            break;
+        case 3:
+            if(shadow_string){
+                get_display2()->setCursor(1, 2); get_display2()->print("              ");
+            } else {
+                get_display2()->setCursor(1, 2); get_display2()->print("Tap 3: ");
+                get_display2()->setCursor(9, 2); get_display2()->print(amount);
+                get_display2()->setCursor(14, 2); get_display2()->print("L");
+            }
+            break;
+        case 4:
+            if(shadow_string){
+                get_display2()->setCursor(1, 3); get_display2()->print("              ");
+            } else {
+                get_display2()->setCursor(1, 3); get_display2()->print("Tap 4: ");
+                get_display2()->setCursor(9, 3); get_display2()->print(amount);
+                get_display2()->setCursor(14, 3); get_display2()->print("L");
+            }
+            break;
+        default:
+            break;
+    }
 }
-void update_quantities(float amount1, float amount2, float amount3, float amount4){
-    get_display2()->setCursor(9, 0); get_display2()->print(amount1);
-    get_display2()->setCursor(9, 1); get_display2()->print(amount2);
-    get_display2()->setCursor(9, 2); get_display2()->print(amount3);
-    get_display2()->setCursor(9, 3); get_display2()->print(amount4);
+void update_quantities(float amount, int tap_index){
+    switch (tap_index){
+        case 1:
+            get_display2()->setCursor(9, 0); get_display2()->print(amount);
+            break;
+        case 2:
+            get_display2()->setCursor(9, 1); get_display2()->print(amount);
+            break;
+        case 3:
+            get_display2()->setCursor(9, 2); get_display2()->print(amount);
+            break;
+        case 4:
+            get_display2()->setCursor(9, 3); get_display2()->print(amount);
+            break;
+        default:
+            break;
+    }
 }
 
 void clear_displays(){
