@@ -4,6 +4,13 @@
 #include "attachInterruptEx.h"
 #include "vmc/vmc_data.h"
 
+typedef enum tap_runnig_flags{
+    TAP_1_RUNNING = 1 << 0,
+    TAP_2_RUNNING = 1 << 1,
+    TAP_3_RUNNING = 1 << 2,
+    TAP_4_RUNNING = 1 << 3
+}tap_running_flags_t;
+
 typedef enum tap_selection{
     TAP_UNSELECTED,
     DISPENSE_TAP_1,
@@ -93,6 +100,11 @@ class dispenseGroup{
         bool instances_dispensing();
         static dispenseGroup * get_default_instance();
         bool is_empty();
+        uint8_t TAP_RUNNING_FLAG = 0;
+        void set_tap_running_flag(tap_running_flags_t flag);
+        void clear_tap_running_flag(tap_running_flags_t flag);
+        void tap_running_flags_init();
+        bool check_tap_running_flag(tap_running_flags_t flag);
     private:
         DispenseSystem * dispenseHead = nullptr;
 };
