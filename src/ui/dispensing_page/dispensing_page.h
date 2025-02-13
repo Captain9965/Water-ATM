@@ -11,7 +11,9 @@ typedef enum ui_state{
     UI_SHOW_PAYMENT_DUE,
     UI_AWAIT_PAYMENT,
     UI_DISPENSING_RUNNING,
-    UI_NOP
+    UI_DISPENSING_STARTING,
+    UI_NOP,
+    UI_CANCELLED
 }ui_state_t;
 
 class dispensingPage: public Page{

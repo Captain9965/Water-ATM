@@ -36,7 +36,7 @@ typedef enum dispensing_states {
     DISPENSING_ERROR = (1 << 13),
     DISPENSING_INVALID_INPUT = (1 << 14),
     DISPENSING_HALTED = (1 << 15),
-    DISPENSING_WAIT_PAY_CANCEL = (1 << 16),
+    DISPENSING_CANCELLED_SUCCESS = (1 << 16),
     DISPENSING_CANCELLED = (1 << 17)
 } dispensing_state_t;
 
@@ -56,6 +56,7 @@ class DispenseSystem{
         void clear_from_event(uint32_t ev);
         dispensing_state_t get_dispensing_system_ev();
         void set_dispense_quantity(float quantity);
+        float calculate_dispense_quantity(uint32_t cash);
         tap_selection_t get_tap();
         float get_dispensed_quantity();
         dispensing_state_t get_state();

@@ -51,6 +51,7 @@ void display_machine_ready(bool clear = true);
 void display_net_notConnected();
 void display_info(const char * info, bool clear = true);
 void display_primary_info(const char* info, bool clear = true);
+void display_primary_info_next_line(const char* info, bool clear = true);
 void display_secondary_info(const char* info);
 void display_dispenses(float amount, int tap_index, bool shadow_string = false);
 void update_quantities(float amount, int tap_index);
