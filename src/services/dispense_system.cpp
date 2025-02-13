@@ -84,7 +84,7 @@ dispensing_state_t DispenseSystem::start(){
     _payment_timer = millis();
     _dispense_system_from_ev_flag = 0;
     _dispense_system_to_ev_flag = 0;
-    _set_state(DISPENSING_QUANTITY_SELECT);
+    _set_state(DISPENSING_PAY_WAIT);
     return DISPENSING_OK;
 }
 
@@ -115,31 +115,24 @@ dispensing_state_t DispenseSystem::run(){
 
     dispensing_state_t dispense_state = get_dispensing_system_ev();
     switch (dispense_state){
-        case DISPENSING_QUANTITY_SELECT:
-        {
-            set_from_event(DISPENSING_QUANTITY_SELECT);
-            _set_state(DISPENSING_IDLE);
-            set_from_event(DISPENSING_IDLE);         
-            break;
-        }
-        case DISPENSING_IDLE:
-        {
-            /* wait for quantity selection: */
-            break;
-        }
+
         case DISPENSING_PAY_WAIT:
         {
-            /** rfid payment
-            *@todo replace this with payment instance for MPESA....
-            */
-           String uid = RFID::get_default_instance()->read_uid();
-           if (is_dispense_tag(uid)){
-            get_buzzer()->beep(20);
+        //check whether AdmiCash is greater than zero and if so set state to DISPENSE_STARTING
+        uint32_t adminCash = 0;
+        AdminCash::get_default_instance()->get(&adminCash);
+        if(adminCash > 0){
+            set_dispense_quantity(calculate_dispense_quantity(adminCash));
+            //debug
+            DEBUG_INFO("Dispense quantity is: "); DEBUG_INFO_LN(_quantity);
+             //reset adminCash
+             AdminCash::get_default_instance()->set(0);
             _set_state(DISPENSING_STARTING);
-           } else{
-            set_from_event(DISPENSING_SHOW_DUE_AMOUNT);
-           }
-           break;
+            set_from_event(DISPENSING_STARTING);
+        } else {
+            set_from_event(DISPENSING_PAY_WAIT);
+        }
+        break;
         }
         case DISPENSING_STARTING:
         {
@@ -179,6 +172,7 @@ dispensing_state_t DispenseSystem::run(){
             _relay->off();
             DEBUG_INFO_LN("Dispensing cancelled !!");
             clear_to_event(DISPENSING_CANCELLED);
+            set_from_event(DISPENSING_CANCELLED_SUCCESS);
             _set_state(DISPENSING_EXIT);
             break;
         }
@@ -215,4 +209,12 @@ bool DispenseSystem::is_dispense_tag(String &uid){
 bool DispenseSystem::stopped(){
     return(_state == DISPENSING_CANCELLED || _state == DISPENSING_EXIT);
  
+}
+
+float DispenseSystem::calculate_dispense_quantity(uint32_t cash){
+
+    if(_tariff == 0){
+        return 0;
+    }
+    return (float)cash / _tariff;
 }

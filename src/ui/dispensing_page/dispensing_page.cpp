@@ -33,26 +33,22 @@ int dispensingPage::update(){
         switch_ui_state();
         DEBUG_INFO("UI state -> "); DEBUG_INFO_LN(ui_state);
         switch (ui_state){
-            case UI_QUANTITY_SELECT:
+            case UI_AWAIT_PAYMENT:
                 {   
-                    get_display1()->clear();
-                    uiInput::get_default_instance()->enable_quantity_buttons();
-                    break;
-                }
-            case UI_AWAIT_QUANTITY_SELECTION:
-                {   
-                    tap_selection_t tap = _current_dispense_instance->get_tap();
-                    display_primary_info("Select Quantity", false);
-                    char sec_info[15];
-                    sprintf(sec_info,"For Tap %d",tap);
-                    display_secondary_info(sec_info);
-                    check_for_quantity_selection();
+    
+                    display_primary_info("Paybill: 782344", false);
+                    display_primary_info_next_line("Account: 123456", false);
                     break;
 
                 }
-            case UI_SHOW_PAYMENT_DUE:
-                {   
-                    display_info("Tap Card", false);
+            case UI_DISPENSING_STARTING:
+                {
+                    get_display1()->clear();
+                    break;
+                }
+            case UI_CANCELLED:
+                {
+                    get_display1()->clear();
                     break;
                 }
             case UI_IDLE:
@@ -77,6 +73,7 @@ int dispensingPage::update(){
     } else if (check_vmc_flag(VMC_DISPENSE_DONE)){
 
         clear_vmc_flag(VMC_DISPENSE_DONE);
+        display_machine_ready(true);
         DEBUG_INFO_LN("Dispense group done!");
         ui_state = UI_NOP;
         stop();
@@ -331,19 +328,18 @@ ui_state_t dispensingPage::switch_ui_state(){
         return UI_NOP;
     }
 
-    if(_current_dispense_instance->check_from_event(DISPENSING_QUANTITY_SELECT)){
-         _current_dispense_instance->clear_from_event(DISPENSING_QUANTITY_SELECT);
+    if(_current_dispense_instance->check_from_event(DISPENSING_PAY_WAIT)){
+         _current_dispense_instance->clear_from_event(DISPENSING_PAY_WAIT);
 
-         ui_state = UI_QUANTITY_SELECT;
+         ui_state = UI_AWAIT_PAYMENT;
     }
-    else if (_current_dispense_instance->check_from_event(DISPENSING_IDLE)){
-
-        ui_state = UI_AWAIT_QUANTITY_SELECTION;
+    else if(_current_dispense_instance->check_from_event(DISPENSING_STARTING)){
+        _current_dispense_instance->clear_from_event(DISPENSING_STARTING);
+        ui_state = UI_DISPENSING_STARTING;
     }
-    else if (_current_dispense_instance->check_from_event(DISPENSING_SHOW_DUE_AMOUNT)){
-        _current_dispense_instance->clear_from_event(DISPENSING_SHOW_DUE_AMOUNT);
-
-        ui_state = UI_SHOW_PAYMENT_DUE;
+    else if (_current_dispense_instance->check_from_event(DISPENSING_CANCELLED_SUCCESS)){
+        _current_dispense_instance->clear_from_event(DISPENSING_CANCELLED_SUCCESS);
+        ui_state = UI_CANCELLED;
     }
     else if(_current_dispense_instance->check_from_event(DISPENSING_RUNNING)){
 

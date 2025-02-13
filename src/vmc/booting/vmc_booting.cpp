@@ -123,10 +123,6 @@ vmc_error_t vmc_booting::init_settings(){
     DEBUG_INFO_LN("init_settings");
     /* settings depend on storage*/
     vmc_error_t return_val = VMC_OK;
-    if (!AdminCash::get_default_instance()->load()){
-        DEBUG_INFO_LN("Admin Cash failed to load");
-        return_val = VMC_ERROR_SETTINGS_INIT;
-    }
 
     if(!Tariff::get_default_instance()->load()){
         DEBUG_INFO_LN("Tariff failed to load");

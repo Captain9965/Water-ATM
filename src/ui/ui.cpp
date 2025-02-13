@@ -98,9 +98,9 @@ void UI::tick(){
 int UI::init(){
     DEBUG_INFO_LN("***Initializing Display***");
     get_display1()->init();
-    get_display1()->backlight();
     get_display2()->init();
     get_display2()->backlight();
+    get_display1()->backlight();
     joystick::get_default_instance()->init();
     get_display1()->createChar(10,rssLogo);
     return 0;
@@ -139,6 +139,12 @@ void display_secondary_info(const char* info){
 void display_primary_info(const char* info, bool clear){
     if(clear)get_display1()->clear();
     get_display1()->setCursor(2, 1);
+    get_display1()->print(info);
+}
+
+void display_primary_info_next_line(const char* info, bool clear){
+    if(clear)get_display1()->clear();
+    get_display1()->setCursor(2, 2);
     get_display1()->print(info);
 }
 
