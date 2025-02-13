@@ -17,8 +17,6 @@ int adminPage::load(){
     _state_index = 0;
     admin_page_state = state_array[_state_index];
     Tariff::get_default_instance()->get(&_tariff);
-    AdminCash::get_default_instance()->get(&_admin_cash);
-    DEBUG_INFO("Current AdminCash -> "); DEBUG_INFO_LN(_admin_cash);
     return 0;
 }
 
@@ -28,27 +26,6 @@ int adminPage::update(){
         loaded = true;
     }
 
-    if(move_left()){
-        get_buzzer()->beep(20);
-        DEBUG_INFO_LN("MOVING LEFT");
-        _state_index -= 1;
-        if(_state_index < 0){
-            _state_index = ADMIN_STATE_ARRAY_SIZE - 1;
-        } 
-            admin_page_state = state_array[_state_index];
-    }
-
-    if(move_right()){
-        get_buzzer()->beep(20);
-        DEBUG_INFO_LN("MOVING RIGHT");
-        _state_index += 1;
-        if(_state_index > ADMIN_STATE_ARRAY_SIZE - 1){
-            _state_index = 0;
-        }
-        admin_page_state = state_array[_state_index]; 
-    }
-
-    
     switch_ui_state();
     
     switch (admin_page_state)
@@ -105,19 +82,6 @@ int adminPage::update(){
             adjust_params<float>(_tariff.tariff4, 0.1, 100.0, 1.0);
             break;
         }
-    case ADMIN_PAGE_LOAD_SET_ADMINCASH:
-    {
-        display_info("ADMIN CASH ->");
-        DEBUG_INFO_LN("Admin page state");
-        get_display2()->clear();
-        admin_page_state = ADMIN_PAGE_SET_ADMINCASH;
-        break;
-    }
-    case ADMIN_PAGE_SET_ADMINCASH:
-    {   
-        adjust_params<uint32_t>(_admin_cash, 1, 10000, 10);
-        break;
-    }
     case ADMIN_PAGE_FACTORY_RESET:
     {
         break;
@@ -172,7 +136,6 @@ void adminPage::save_params(){
     clear_displays();
     display_info("Saving...");
     Tariff::get_default_instance()->set(_tariff);
-    AdminCash::get_default_instance()->set(_admin_cash);
 }
 
 void adminPage::reset_params(){
@@ -180,11 +143,6 @@ void adminPage::reset_params(){
     clear_displays();
     display_info("resetting..");
     /* factory reset all params: */
-    AdminCash::get_default_instance()->set(AdminCash::DEFAULT_ADMIN_CASH);
-    _tariff.tariff1 = Tariff::DEFAULT_TARIFF_1;
-    _tariff.tariff2 = Tariff::DEFAULT_TARIFF_2;
-    _tariff.tariff3 = Tariff::DEFAULT_TARIFF_3;
-    _tariff.tariff4 = Tariff::DEFAULT_TARIFF_4;
     Tariff::get_default_instance()->set(_tariff);
     quantities_t quantities= {.quantity1 = Quantities::DEFAULT_QUANTITTY_1,
         .quantity2 = Quantities::DEFAULT_QUANTITTY_2,

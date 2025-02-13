@@ -3,7 +3,7 @@
 #include "vmc/vmc_flags.h"
 #include "vmc/vmc_data.h"
 
-#define ADMIN_STATE_ARRAY_SIZE 2
+#define ADMIN_STATE_ARRAY_SIZE 1
 
 typedef enum admin_page_state{
     ADMIN_PAGE_IDLE,
@@ -42,6 +42,6 @@ class adminPage: public Page{
         void adjust_params(T &value, T increment, T max_val,  T min_val);
         tariff_t _tariff = {.tariff1 = 0.0, .tariff2 = 0.0, .tariff3 = 0.0, .tariff4 = 0.0} ;
         uint32_t _admin_cash = 0;
-        admin_page_state_t state_array[ADMIN_STATE_ARRAY_SIZE] = {ADMIN_PAGE_LOAD_SET_TARIFF1, ADMIN_PAGE_LOAD_SET_ADMINCASH};
+        admin_page_state_t state_array[ADMIN_STATE_ARRAY_SIZE] = {ADMIN_PAGE_LOAD_SET_TARIFF1};
         int8_t _state_index = 0;
 };
