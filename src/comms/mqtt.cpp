@@ -1,4 +1,5 @@
 #include "mqtt.h"
+#include "server_event_handlers.h"
 
 CommsMQTTClient::CommsMQTTClient(Client * network_client):_network_client(network_client){
 
@@ -94,6 +95,7 @@ void CommsMQTTClient::message_callback(char* topic, byte* payload, unsigned int 
         char display_buffer[len + 1];
         snprintf(display_buffer, sizeof(display_buffer),"%s",payload);
         DEBUG_INFO_LN(display_buffer);
+        handle_server_side_event(display_buffer, len);
     }
     
     return;
