@@ -209,6 +209,25 @@ void update_quantities(float amount, int tap_index){
     }
 }
 
+void update_dispense_status(const char * status, int tap_index){
+    switch (tap_index){
+        case 1:
+            get_display2()->setCursor(1, 0); get_display2()->print(status);
+            break;
+        case 2:
+            get_display2()->setCursor(1, 1); get_display2()->print(status);
+            break;
+        case 3:
+            get_display2()->setCursor(1, 2); get_display2()->print(status);
+            break;
+        case 4:
+            get_display2()->setCursor(1, 3); get_display2()->print(status);
+            break;
+        default:
+            break;
+    }
+}
+
 void clear_displays(){
     get_display1()->clear();
     get_display2()->clear();
