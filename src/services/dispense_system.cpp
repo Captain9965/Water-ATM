@@ -143,13 +143,12 @@ dispensing_state_t DispenseSystem::run(){
             _set_state(DISPENSING_RUNNING);
             clear_to_event(DISPENSING_STARTING);
             set_from_event(DISPENSING_RUNNING);
-            _relay->on();
             break;
         }
         case DISPENSING_RUNNING:
         {   
             /* is dispensing done? */
-            
+            _relay->on();
             if(millis() - _flow_calculation_timer >= _flow_calculation_interval){
                 update_dispensed_quantity(_flow_calculation_interval);
                 pulse_count = 0;
@@ -174,6 +173,12 @@ dispensing_state_t DispenseSystem::run(){
             clear_to_event(DISPENSING_CANCELLED);
             set_from_event(DISPENSING_CANCELLED_SUCCESS);
             _set_state(DISPENSING_EXIT);
+            break;
+        }
+        case DISPENSING_PAUSED:
+        {
+            _relay->off();
+            DEBUG_INFO_LN("Dispensing paused!");
             break;
         }
         case DISPENSING_DONE:
@@ -211,6 +216,17 @@ bool DispenseSystem::stopped(){
  
 }
 
+bool DispenseSystem::dispensing(){
+    return(_state == DISPENSING_RUNNING);
+}
+
+bool DispenseSystem::paused(){
+    return(_state == DISPENSING_PAUSED);
+}
+
+bool DispenseSystem::waiting_for_payment(){
+    return(_state == DISPENSING_PAY_WAIT);
+}
 float DispenseSystem::calculate_dispense_quantity(uint32_t cash){
 
     if(_tariff == 0){
