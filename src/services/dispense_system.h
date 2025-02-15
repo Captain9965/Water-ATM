@@ -35,7 +35,7 @@ typedef enum dispensing_states {
     DISPENSING_AUTHENTICATING = (1 << 12),
     DISPENSING_ERROR = (1 << 13),
     DISPENSING_INVALID_INPUT = (1 << 14),
-    DISPENSING_HALTED = (1 << 15),
+    DISPENSING_PAUSED = (1 << 15),
     DISPENSING_CANCELLED_SUCCESS = (1 << 16),
     DISPENSING_CANCELLED = (1 << 17)
 } dispensing_state_t;
@@ -61,6 +61,9 @@ class DispenseSystem{
         float get_dispensed_quantity();
         dispensing_state_t get_state();
         bool stopped();
+        bool dispensing();
+        bool paused();
+        bool waiting_for_payment();
         DispenseSystem * next = nullptr;
     private:
         void update_dispensed_quantity(uint32_t time_elapsed);
