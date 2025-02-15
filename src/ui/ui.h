@@ -55,6 +55,7 @@ void display_primary_info_next_line(const char* info, bool clear = true);
 void display_secondary_info(const char* info);
 void display_dispenses(float amount, int tap_index, bool shadow_string = false);
 void update_quantities(float amount, int tap_index);
+void update_dispense_status(const char * status, int tap_index);
 void clear_displays();
 void display_time();
 void display_select_quantity(const char * tap);

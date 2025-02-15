@@ -208,36 +208,56 @@ void dispensingPage::update_dispense_quantities(){
     if (!_current_dispense_instance || !_dispense_group){
         return;
     }
-        if(!_dispense_group->check_tap_running_flag(TAP_1_RUNNING)){
-            display_dispenses(amount1, 1, true);
-        }
-        if(!_dispense_group->check_tap_running_flag(TAP_2_RUNNING)){
-            display_dispenses(amount2, 2, true);
-        }
-        if(!_dispense_group->check_tap_running_flag(TAP_3_RUNNING)){
-            display_dispenses(amount3, 3, true);
-        }
-        if(!_dispense_group->check_tap_running_flag(TAP_4_RUNNING)){
-            display_dispenses(amount4, 4, true);
-        }
-
+        
         tap_selection_t tap = _current_dispense_instance->get_tap();
         switch (tap){
             case DISPENSE_TAP_1:
-                amount1 = _current_dispense_instance->get_dispensed_quantity();
-                display_dispenses(amount1, 1);
+                if (_current_dispense_instance->dispensing()){
+                    amount1 = _current_dispense_instance->get_dispensed_quantity();
+                    display_dispenses(amount1, 1);
+                }
+                else if(_current_dispense_instance->paused()){
+                    update_dispense_status("Paused", 1);
+                }
+                else if(_current_dispense_instance->waiting_for_payment()){
+                    display_dispenses(amount1, 1, true);
+                }
                 break;
             case DISPENSE_TAP_2:
-                amount2 = _current_dispense_instance->get_dispensed_quantity();
-                display_dispenses(amount2, 2);            
+                if(_current_dispense_instance->dispensing()){
+                    amount2 = _current_dispense_instance->get_dispensed_quantity();
+                    display_dispenses(amount2, 2);
+                }
+                else if(_current_dispense_instance->paused()){
+                    update_dispense_status("Paused", 2);
+                }
+                else if(_current_dispense_instance->waiting_for_payment()){
+                    display_dispenses(amount2, 2, true);
+                }
                 break;
             case DISPENSE_TAP_3:
-                amount3 = _current_dispense_instance->get_dispensed_quantity();
-                display_dispenses(amount3, 3);
+                if(_current_dispense_instance->dispensing()){
+                    amount3 = _current_dispense_instance->get_dispensed_quantity();
+                    display_dispenses(amount3, 3);
+                }
+                else if(_current_dispense_instance->paused()){
+                    update_dispense_status("Paused", 3);
+                }
+                else if(_current_dispense_instance->waiting_for_payment()){
+                    display_dispenses(amount3, 3, true);
+                }
                 break;
             case DISPENSE_TAP_4:
-                amount4 = _current_dispense_instance->get_dispensed_quantity();
-                display_dispenses(amount4, 4);
+                if(_current_dispense_instance->dispensing()){
+                    amount4 = _current_dispense_instance->get_dispensed_quantity();
+                    display_dispenses(amount4, 4);
+                }
+                else if(_current_dispense_instance->paused()){
+                    update_dispense_status("Paused", 4);
+                }
+                else if(_current_dispense_instance->waiting_for_payment()){
+                    display_dispenses(amount4, 4, true);
+                }
                 break;
             default:
                 break;
