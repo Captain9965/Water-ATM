@@ -36,8 +36,7 @@ int dispensingPage::update(){
             case UI_AWAIT_PAYMENT:
                 {   
     
-                    display_primary_info("Paybill: 782344", false);
-                    display_primary_info_next_line("Account: 123456", false);
+                    display_primary_info("Pay via Mpesa", false);
                     break;
 
                 }
