@@ -13,7 +13,8 @@ typedef enum ui_state{
     UI_DISPENSING_RUNNING,
     UI_DISPENSING_STARTING,
     UI_NOP,
-    UI_CANCELLED
+    UI_CANCELLED,
+    UI_DISPENSING_LOW_FLOW_RATE
 }ui_state_t;
 
 class dispensingPage: public Page{
