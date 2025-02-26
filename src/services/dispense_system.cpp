@@ -164,6 +164,12 @@ dispensing_state_t DispenseSystem::run(){
                 DEBUG_INFO("L/min : "); DEBUG_INFO_LN(_litres_per_min);
                  _quantity_timer = millis();
             }
+
+            /* if we have dispensed for more than 30 seconds, and the dispense rate in L/min is less than 0.02, go into DISPENSE_ERROR state and exit*/
+            if (millis() - _dispense_timer >= 30000 && _litres_per_min < 0.02){
+                _set_state(DISPENSING_ERROR_LOW_FLOW_RATE);
+                _relay->off();
+            }
             break;
         }
         case DISPENSING_CANCELLED:
@@ -175,10 +181,17 @@ dispensing_state_t DispenseSystem::run(){
             _set_state(DISPENSING_EXIT);
             break;
         }
+        case DISPENSING_ERROR_LOW_FLOW_RATE:
+        {
+            
+            DEBUG_INFO_LN("Dispensing error: Low flow rate!");
+            break;
+        }
         case DISPENSING_PAUSED:
         {
             _relay->off();
             DEBUG_INFO_LN("Dispensing paused!");
+            _dispense_timer = millis();
             break;
         }
         case DISPENSING_DONE:
@@ -222,6 +235,10 @@ bool DispenseSystem::dispensing(){
 
 bool DispenseSystem::paused(){
     return(_state == DISPENSING_PAUSED);
+}
+
+bool DispenseSystem::error(){
+    return(_state == DISPENSING_ERROR_LOW_FLOW_RATE);
 }
 
 bool DispenseSystem::waiting_for_payment(){

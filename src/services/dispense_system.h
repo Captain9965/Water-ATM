@@ -32,8 +32,8 @@ typedef enum dispensing_states {
     DISPENSING_PAY_WAIT_TIMEOUT = (1 << 9),
     DISPENSING_PAY_UPDATE = (1 << 10),
     DISPENSING_EXIT = (1 << 11),
-    DISPENSING_AUTHENTICATING = (1 << 12),
-    DISPENSING_ERROR = (1 << 13),
+    DISPENSING_ERROR_HIGH_FLOW_RATE = (1 << 12),
+    DISPENSING_ERROR_LOW_FLOW_RATE = (1 << 13),
     DISPENSING_INVALID_INPUT = (1 << 14),
     DISPENSING_PAUSED = (1 << 15),
     DISPENSING_CANCELLED_SUCCESS = (1 << 16),
@@ -63,6 +63,7 @@ class DispenseSystem{
         bool stopped();
         bool dispensing();
         bool paused();
+        bool error();
         bool waiting_for_payment();
         DispenseSystem * next = nullptr;
     private:

@@ -222,6 +222,10 @@ void dispensingPage::update_dispense_quantities(){
                 else if(_current_dispense_instance->waiting_for_payment()){
                     display_dispenses(amount1, 1, true);
                 }
+                else if(_current_dispense_instance->error()){
+                    update_dispense_status("Low flow error", 1);
+                    _current_dispense_instance->set_to_event(DISPENSING_EXIT);
+                }
                 break;
             case DISPENSE_TAP_2:
                 if(_current_dispense_instance->dispensing()){
@@ -233,6 +237,10 @@ void dispensingPage::update_dispense_quantities(){
                 }
                 else if(_current_dispense_instance->waiting_for_payment()){
                     display_dispenses(amount2, 2, true);
+                }
+                else if(_current_dispense_instance->error()){
+                    update_dispense_status("Low flow error", 2);
+                    _current_dispense_instance->set_to_event(DISPENSING_EXIT);
                 }
                 break;
             case DISPENSE_TAP_3:
@@ -246,6 +254,10 @@ void dispensingPage::update_dispense_quantities(){
                 else if(_current_dispense_instance->waiting_for_payment()){
                     display_dispenses(amount3, 3, true);
                 }
+                else if(_current_dispense_instance->error()){
+                    update_dispense_status("Low flow error", 3);
+                    _current_dispense_instance->set_to_event(DISPENSING_EXIT);
+                }
                 break;
             case DISPENSE_TAP_4:
                 if(_current_dispense_instance->dispensing()){
@@ -257,6 +269,10 @@ void dispensingPage::update_dispense_quantities(){
                 }
                 else if(_current_dispense_instance->waiting_for_payment()){
                     display_dispenses(amount4, 4, true);
+                }
+                else if(_current_dispense_instance->error()){
+                    update_dispense_status("Low flow error", 4);
+                    _current_dispense_instance->set_to_event(DISPENSING_EXIT);
                 }
                 break;
             default:
