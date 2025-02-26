@@ -77,7 +77,7 @@ class DispenseSystem{
         uint32_t _dispense_system_from_ev_flag = 0, _dispense_system_to_ev_flag = 0;
         long long _select_quantity_timer = millis();
         long long _payment_timer = millis();
-        long long _dispense_timer = millis(), _quantity_timer = millis(), _flow_calculation_timer = millis();
+        long long _dispense_timer = millis(), _quantity_timer = millis(), _flow_calculation_timer = millis(),_dispense_wait_exit_timer = millis(), _state_timer = millis();
         bool is_dispense_tag(String &uid); // to be moved to payment service
         volatile byte pulse_count = 0;
         uint32_t _flowmeter_interrupt_pin;
