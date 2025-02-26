@@ -8,12 +8,20 @@
 //event handlers
 static void handle_pay_event(JsonDocument* doc){
     const char* amount = (*doc)["a"];
+    std::string uid = (*doc)["u"];
+
     DEBUG_INFO("Amount: ");
     DEBUG_INFO(amount);
     //convert amount to uint32_t
     uint32_t amount_int = atoi(amount);
     //set AdminCash to amount
     AdminCash::get_default_instance()->set(amount_int);
+
+    // send prec event to server to acknowledge receipt of funds:
+    prec_event_t prec_event;
+
+    prec_event.uid = uid;
+    publish_prec_event(&prec_event);
 }
 
 
