@@ -189,6 +189,7 @@ dispensing_state_t DispenseSystem::run(){
             DEBUG_INFO_LN("Dispensing cancelled !!");
             clear_to_event(DISPENSING_CANCELLED);
             set_from_event(DISPENSING_CANCELLED_SUCCESS);
+            _dispense_status = DISPENSE_CANCELLED;
             _set_state(DISPENSING_EXIT);
             break;
         }
@@ -197,6 +198,9 @@ dispensing_state_t DispenseSystem::run(){
             
             DEBUG_INFO_LN("Dispensing error: Low flow rate!");
             if(millis() - _dispense_wait_exit_timer >= 5000){
+                _dispense_status = DISPENSE_LOW_FLOW_RATE;
+
+                send_dispense_event();
                 _set_state(DISPENSING_EXIT);
             }
             break;
@@ -207,6 +211,9 @@ dispensing_state_t DispenseSystem::run(){
             DEBUG_INFO_LN("Dispensing paused!");
             _dispense_timer = millis();
             if(millis() - _state_timer >= 30000){
+
+                _dispense_status = DISPENSE_PAUSED;
+                send_dispense_event();
                 _set_state(DISPENSING_EXIT);
             }
             break;
@@ -215,6 +222,8 @@ dispensing_state_t DispenseSystem::run(){
         {   
             _relay->off();
             DEBUG_INFO("Dispensed quantity is : ");DEBUG_INFO_LN(_dispensed_quantity);
+            _dispense_status = DISPENSE_OK;
+            send_dispense_event();
             _set_state(DISPENSING_EXIT);
             break;
         }
@@ -267,4 +276,13 @@ float DispenseSystem::calculate_dispense_quantity(uint32_t cash){
         return 0;
     }
     return (float)cash / _tariff;
+}
+
+void DispenseSystem::send_dispense_event(){
+
+    dispense_event_t dispense_event;
+    dispense_event.tap = _tap;
+    dispense_event.amount = _dispensed_quantity;
+    dispense_event.status = _dispense_status;
+    publish_dispense_event(&dispense_event);
 }

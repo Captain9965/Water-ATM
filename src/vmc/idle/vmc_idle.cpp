@@ -32,6 +32,7 @@ int vmc_idle::run(){
     /* send check_messages, to be removed later: */
     if (millis() - tick_time > TICK_INTERVAL){
       check_event_t ev;
+      ev.rss = Comms::get_instance()->get_rss();
       publish_check_event(&ev);
       DEBUG_INFO(_time.hour);
       DEBUG_INFO(":");

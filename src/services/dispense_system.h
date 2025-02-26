@@ -3,6 +3,7 @@
 #include "actuators/TStatesActuator.h"
 #include "attachInterruptEx.h"
 #include "vmc/vmc_data.h"
+#include "comms/comms_events.h"
 
 typedef enum tap_runnig_flags{
     TAP_1_RUNNING = 1 << 0,
@@ -18,6 +19,16 @@ typedef enum tap_selection{
     DISPENSE_TAP_3,
     DISPENSE_TAP_4,
 }tap_selection_t;
+
+typedef enum dispense_status{
+    DISPENSE_OK,
+    DISPENSE_LOW_FLOW_RATE = -1,
+    DISPENSE_HIGH_FLOW_RATE = -2,
+    DISPENSE_PAUSED = -3,
+    DISPENSE_CANCELLED = -4,
+    DISPENSE_CANCELLED_SUCCESS = -5,
+    DISPENSE_ERROR = -6
+}dispense_status_t;
 
 typedef enum dispensing_states {
     DISPENSING_OK = (1 << 0),
@@ -79,12 +90,14 @@ class DispenseSystem{
         long long _payment_timer = millis();
         long long _dispense_timer = millis(), _quantity_timer = millis(), _flow_calculation_timer = millis(),_dispense_wait_exit_timer = millis(), _state_timer = millis();
         bool is_dispense_tag(String &uid); // to be moved to payment service
+        void send_dispense_event();
         volatile byte pulse_count = 0;
         uint32_t _flowmeter_interrupt_pin;
         float _calibration = 10.0; // This represents _pulses per litre
         float _tariff = 10.0; // This is the price per unit
         float _flow_calculation_interval = 1000.0;
         float _litres_per_min = 0.0;
+        dispense_status_t _dispense_status = DISPENSE_OK;
 
 
 };
