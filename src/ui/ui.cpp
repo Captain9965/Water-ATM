@@ -269,6 +269,7 @@ void display_network_strength(){
     // get_display1()->print("rss:");
     // get_display1()->setCursor(18,0);
     get_display1()->print(rss);
+    get_display1()->setCursor(19,0);
     get_display1()->print("%");
 }
 

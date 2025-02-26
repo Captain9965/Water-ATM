@@ -224,7 +224,6 @@ void dispensingPage::update_dispense_quantities(){
                 }
                 else if(_current_dispense_instance->error()){
                     update_dispense_status("Low flow error", 1);
-                    _current_dispense_instance->set_to_event(DISPENSING_EXIT);
                 }
                 break;
             case DISPENSE_TAP_2:
@@ -240,7 +239,6 @@ void dispensingPage::update_dispense_quantities(){
                 }
                 else if(_current_dispense_instance->error()){
                     update_dispense_status("Low flow error", 2);
-                    _current_dispense_instance->set_to_event(DISPENSING_EXIT);
                 }
                 break;
             case DISPENSE_TAP_3:
@@ -256,7 +254,6 @@ void dispensingPage::update_dispense_quantities(){
                 }
                 else if(_current_dispense_instance->error()){
                     update_dispense_status("Low flow error", 3);
-                    _current_dispense_instance->set_to_event(DISPENSING_EXIT);
                 }
                 break;
             case DISPENSE_TAP_4:
@@ -272,7 +269,6 @@ void dispensingPage::update_dispense_quantities(){
                 }
                 else if(_current_dispense_instance->error()){
                     update_dispense_status("Low flow error", 4);
-                    _current_dispense_instance->set_to_event(DISPENSING_EXIT);
                 }
                 break;
             default:
@@ -300,11 +296,11 @@ void dispensingPage::check_for_tap_selection(){
                     else if(running_instance && running_instance->dispensing()){
                         running_instance->set_to_event(DISPENSING_PAUSED);
                     }
-                    else if (running_instance && running_instance->waiting_for_payment()){
-                        running_instance->set_to_event(DISPENSING_CANCELLED);
-                        running_instance->clear_from_event(DISPENSING_IDLE);
-                        get_display1()->clear();
-                    }
+                    // else if (running_instance && running_instance->waiting_for_payment()){
+                    //     running_instance->set_to_event(DISPENSING_CANCELLED);
+                    //     running_instance->clear_from_event(DISPENSING_IDLE);
+                    //     get_display1()->clear();
+                    // }
                     else if(_dispense_group->instances_dispensing()){
                         /* If all instances are running fine, then instantiate another instance*/
                         _dispense_group->add(DISPENSE_TAP_1);
@@ -321,11 +317,11 @@ void dispensingPage::check_for_tap_selection(){
                     else if(running_instance && running_instance->dispensing()){
                         running_instance->set_to_event(DISPENSING_PAUSED);
                     }
-                    else if (running_instance && running_instance->waiting_for_payment()){
-                        running_instance->set_to_event(DISPENSING_CANCELLED);
-                        running_instance->clear_from_event(DISPENSING_IDLE);
-                        get_display1()->clear();
-                    }
+                    // else if (running_instance && running_instance->waiting_for_payment()){
+                    //     running_instance->set_to_event(DISPENSING_CANCELLED);
+                    //     running_instance->clear_from_event(DISPENSING_IDLE);
+                    //     get_display1()->clear();
+                    // }
                     else if(_dispense_group->instances_dispensing()){
                         /* If all instances are running fine, then instantiate another instance*/
                         _dispense_group->add(DISPENSE_TAP_2);
@@ -342,11 +338,11 @@ void dispensingPage::check_for_tap_selection(){
                     else if(running_instance && running_instance->dispensing()){
                         running_instance->set_to_event(DISPENSING_PAUSED);
                     }
-                    else if (running_instance && running_instance->waiting_for_payment()){
-                        running_instance->set_to_event(DISPENSING_CANCELLED);
-                        running_instance->clear_from_event(DISPENSING_IDLE);
-                        get_display1()->clear();
-                    }
+                    // else if (running_instance && running_instance->waiting_for_payment()){
+                    //     running_instance->set_to_event(DISPENSING_CANCELLED);
+                    //     running_instance->clear_from_event(DISPENSING_IDLE);
+                    //     get_display1()->clear();
+                    // }
                     else if(_dispense_group->instances_dispensing()){
                         /* If all instances are running fine, then instantiate another instance*/
                         _dispense_group->add(DISPENSE_TAP_3);
@@ -363,11 +359,11 @@ void dispensingPage::check_for_tap_selection(){
                     else if(running_instance && running_instance->dispensing()){
                         running_instance->set_to_event(DISPENSING_PAUSED);
                     }
-                    else if (running_instance && running_instance->waiting_for_payment()){
-                        running_instance->set_to_event(DISPENSING_CANCELLED);
-                        running_instance->clear_from_event(DISPENSING_IDLE);
-                        get_display1()->clear();
-                    }
+                    // else if (running_instance && running_instance->waiting_for_payment()){
+                    //     running_instance->set_to_event(DISPENSING_CANCELLED);
+                    //     running_instance->clear_from_event(DISPENSING_IDLE);
+                    //     get_display1()->clear();
+                    // }
                     else if(_dispense_group->instances_dispensing()){
                         /* If all instances are running fine, then instantiate another instance*/
                         _dispense_group->add(DISPENSE_TAP_4);
