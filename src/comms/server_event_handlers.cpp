@@ -4,6 +4,7 @@
 
 //event strings
 #define PAY_EVENT_STR "pay"
+#define CARD_CONFIG_EVENT_STR "card_config"
 
 //event handlers
 static void handle_pay_event(JsonDocument* doc){
@@ -24,6 +25,21 @@ static void handle_pay_event(JsonDocument* doc){
     publish_prec_event(&prec_event);
 }
 
+/*handle admin card and service card config event*/
+static void handle_card_config_event(JsonDocument* doc){
+    
+    String admin_card_uid = (*doc)["admin"];
+    String service_card_uid = (*doc)["service"];
+    DEBUG_INFO("Admin card: ");
+    DEBUG_INFO(admin_card_uid);
+    DEBUG_INFO("Service card: ");
+    DEBUG_INFO(service_card_uid);
+
+    //set admin card and service card
+    AdminCard::get_default_instance()->set(admin_card_uid);
+    ServiceCard::get_default_instance()->set(service_card_uid);
+    return;   
+}
 
 void handle_server_side_event(char* event, size_t len)
 {
@@ -40,5 +56,7 @@ void handle_server_side_event(char* event, size_t len)
     const char* ev = doc["ev"];
     if(strcmp(ev, PAY_EVENT_STR) == 0){
         handle_pay_event(&doc);
+    } else if(strcmp(ev, CARD_CONFIG_EVENT_STR) == 0){
+        handle_card_config_event(&doc);
     }
 }

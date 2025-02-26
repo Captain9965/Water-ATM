@@ -62,7 +62,11 @@ void vmc_idle::run_sensors(){
     
 }
 bool vmc_idle::isServiceTag(String &uid){
-    if (uid.substring(1) == SERVICE_TAG)
+
+    //get service card uid:
+    String service_uid;
+    ServiceCard::get_default_instance()->get(&service_uid);
+    if (uid.substring(1) == service_uid)
     {
         return true;
     }
