@@ -46,6 +46,8 @@ bool storage::init(){
             0       1
         0   Key     value
         1   adminCash  00  
+        2   adminCard  80 D1 BD 2B
+        3   serviceCard F3 79 B3 18
         */
        
     }
@@ -56,6 +58,8 @@ bool storage::init(){
         DEBUG_INFO_LN("Writing Default values....");
         settingsTable->writeCell(0, 0, "KEY"); settingsTable->writeCell(0, 1, "VALUE");
         settingsTable->writeCell(1, 0, "adminCash"); settingsTable->writeCell(1, 1, "00");
+        settingsTable->writeCell(2, 0, "adminCard"); settingsTable->writeCell(2, 1, "80 D1 BD 2B");
+        settingsTable->writeCell(3, 0, "serviceCard"); settingsTable->writeCell(3, 1, "F3 79 B3 18");
     }
 
     if (settingsTable->countRows() == 0){

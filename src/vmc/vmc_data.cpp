@@ -450,7 +450,7 @@ AdminCard * AdminCard::get_default_instance(){
 
 vmc_data_error_t AdminCard::set(String value){
     /* data validation: */
-    if (!storage::get_default_instance()->writeValue(1, 2, value)){
+    if (!storage::get_default_instance()->writeValue(2, 1, value)){
         _value = value;
         _data_error = VMC_DATA_SET_ERROR;
         return _data_error;
@@ -465,7 +465,7 @@ String AdminCard::DEFAULT_ADMIN_CARD = "80 D1 BD 2B";
 
 bool AdminCard::load(){
     String value;
-    if (!storage::get_default_instance()->readValue(1, 2, &value)){
+    if (!storage::get_default_instance()->readValue(2, 1, &value)){
         _value = DEFAULT_ADMIN_CARD;
         _data_error = VMC_DATA_UNSET;
         return false;
@@ -484,7 +484,7 @@ ServiceCard * ServiceCard::get_default_instance(){
 
 vmc_data_error_t ServiceCard::set(String value){
     /* data validation: */
-    if (!storage::get_default_instance()->writeValue(1, 3, value)){
+    if (!storage::get_default_instance()->writeValue(3, 1, value)){
         _value = value;
         _data_error = VMC_DATA_SET_ERROR;
         return _data_error;
@@ -499,7 +499,7 @@ String ServiceCard::DEFAULT_SERVICE_CARD = "F3 79 B3 18";
 
 bool ServiceCard::load(){
     String value;
-    if (!storage::get_default_instance()->readValue(1, 3, &value)){
+    if (!storage::get_default_instance()->readValue(3, 1, &value)){
         _value = DEFAULT_SERVICE_CARD;
         _data_error = VMC_DATA_UNSET;
         return false;
