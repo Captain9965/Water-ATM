@@ -301,7 +301,7 @@ bool Calibration::load(){
         _data_error = VMC_DATA_OK;
     }
 
-    EEPROM.get(CALIBRATION_3_ADDRESS, value1);
+    EEPROM.get(CALIBRATION_3_ADDRESS, value3);
     /* data validation: */
     if (!(value3 > 0.00) || isnan(value3)){
         _value.calibration3 = DEFAULT_CALIBRATION_3;
