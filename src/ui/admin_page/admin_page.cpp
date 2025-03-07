@@ -144,6 +144,7 @@ void adminPage::reset_params(){
     display_info("resetting..");
     /* factory reset all params: */
     Tariff::get_default_instance()->set(_tariff);
+    FlowCalculationTime::get_default_instance()->set(FlowCalculationTime::DEFAULT_FLOW_CALCULATION);
     quantities_t quantities= {.quantity1 = Quantities::DEFAULT_QUANTITTY_1,
         .quantity2 = Quantities::DEFAULT_QUANTITTY_2,
         .quantity3 = Quantities::DEFAULT_QUANTITTY_3,

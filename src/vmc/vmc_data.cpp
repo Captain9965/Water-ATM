@@ -8,13 +8,13 @@ AdminCash * AdminCash::get_default_instance(){
 
 vmc_data_error_t AdminCash::set(uint32_t value){
     /* data validation: */
+    _value = value;
     if (!storage::get_default_instance()->writeValue(1, 1, String(value))){
         _value = value;
         _data_error = VMC_DATA_SET_ERROR;
         return _data_error;
     }
 
-    _value = value;
     _data_error = VMC_DATA_OK;
     return _data_error;
 }

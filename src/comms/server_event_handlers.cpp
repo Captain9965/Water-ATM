@@ -1,6 +1,7 @@
 #include "server_event_handlers.h"
 #include "ArduinoJson.h"
 #include "vmc/vmc_data.h"
+#include "vmc/vmc.h"
 
 //event strings
 #define PAY_EVENT_STR "pay"
@@ -18,14 +19,18 @@ static void handle_pay_event(JsonDocument* doc){
     DEBUG_INFO(amount);
     //convert amount to uint32_t
     uint32_t amount_int = atoi(amount);
-    //set AdminCash to amount
-    AdminCash::get_default_instance()->set(amount_int);
-
-    // send prec event to server to acknowledge receipt of funds:
-    prec_event_t prec_event;
-
-    prec_event.uid = uid;
-    publish_prec_event(&prec_event);
+    //check state id to see whether we are in dispensing state
+    if(VMC::get_default_instance()->get_state()->id == "DISPENSING"){
+        //if we are in dispensing state, we need to acknowledge receipt of funds and set admin cash
+        AdminCash::get_default_instance()->set(amount_int);
+        prec_event_t prec_event;
+        prec_event.uid = uid;
+        publish_prec_event(&prec_event);
+        return;
+    }
+    //debug
+    DEBUG_INFO("Not in dispensing state, ignoring pay event");
+    return;
 }
 
 /*handle admin card and service card config event*/
