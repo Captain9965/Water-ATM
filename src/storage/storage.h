@@ -5,6 +5,11 @@
 #include "DatabaseOnSD.h"
 #include "EEPROM.h"
 #include "string.h"
+#include "Wire.h"
+#include <ZEeprom.h>
+
+/* 12c eeprom device base address*/
+#define EEPROM_ADDRESS AT24Cxx_BASE_ADDR
 
 /* EEPROM flash emulation addresses : */
 #define QUANTITY_1_ADDRESS                  0
@@ -22,6 +27,8 @@
 #define TARIFF_3_ADDRESS                    48
 #define TARIFF_4_ADDRESS                    52
 #define FLOW_CALCULATION_TIME_ADDRESS       56
+#define ADMIN_CARD_ADDRESS                  60
+#define SERVICE_CARD_ADDRESS                72
 
 class storage{
     public:
@@ -32,9 +39,12 @@ class storage{
         bool readValue(int row, int column, String * str);
         bool writeValue(int row, int column, String str);
         void eeprom_wipe();
+        void write_eeprom(int device_address, unsigned int write_address, byte data);
+        byte read_eeprom(int device_address, unsigned int read_address);
         static storage * get_default_instance();
     private:
-        MyTable *settingsTable = nullptr; 
+        MyTable *settingsTable = nullptr;
+        ZEeprom *eeprom = nullptr;
         Sd2Card card;
         SdVolume volume;
         SdFile root;

@@ -27,10 +27,6 @@ class vmcData {
             _data_error = VMC_DATA_OK;
             return _data_error;
         }
-        virtual void reset(){
-            _value = {};
-            _data_error = VMC_DATA_UNSET;
-        }
         virtual bool load(){
             return true;
         };
@@ -47,6 +43,26 @@ class AdminCash: public vmcData<uint32_t> {
         virtual vmc_data_error_t set(uint32_t value);
         virtual bool load();
         static uint32_t DEFAULT_ADMIN_CASH;
+};
+
+/* Admin card uid string stored in SD card*/
+class AdminCard: public vmcData<String> {
+    public:
+        static AdminCard * get_default_instance();
+        virtual vmc_data_error_t set(String value);
+        virtual bool load();
+        void reset();
+        static String DEFAULT_ADMIN_CARD;
+};
+
+/*service card uid string stored in SD card*/
+class ServiceCard: public vmcData<String> {
+    public:
+        static ServiceCard * get_default_instance();
+        virtual vmc_data_error_t set(String value);
+        virtual bool load();
+        void reset();
+        static String DEFAULT_SERVICE_CARD;
 };
 
 /* Flow calculation stored in EEPROM: */

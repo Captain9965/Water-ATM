@@ -121,7 +121,10 @@ idlePage* idlePage::get_default_instance(){
 }
 
 bool idlePage::is_admin_tag(String &uid){
-    if (uid.substring(1) == ADMIN_CARD)
+    //get admin card uid:
+    String admin_uid;
+    AdminCard::get_default_instance()->get(&admin_uid);
+    if (uid.substring(1) == admin_uid)
     {
         return true;
     }
@@ -129,7 +132,10 @@ bool idlePage::is_admin_tag(String &uid){
 }
 
 bool idlePage::is_service_tag(String &uid){
-    if (uid.substring(1) == SERVICE_TAG)
+    //get service card uid:
+    String service_uid;
+    ServiceCard::get_default_instance()->get(&service_uid);
+    if (uid.substring(1) == service_uid)
     {
         return true;
     }
