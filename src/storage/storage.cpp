@@ -2,8 +2,6 @@
 
 
 storage::storage(){
-
-
 }
 
 storage::~storage(){
@@ -65,8 +63,40 @@ bool storage::init(){
     if (settingsTable->countRows() == 0){
         return false;
     }
-    return true;
+    // eeprom = new ZEeprom();
+    // // Wire.begin();
+    // eeprom->begin(Wire,AT24Cxx_BASE_ADDR,AT24C64);
+    // const byte address = 0;
+    // const byte count = 94;
+
+    // // Declare byte arrays.
+    // byte inputBytes[count] = { 0 };
+    // byte outputBytes[count] = { 0 };
+
+    // // Fill input array with printable characters. See ASCII table for more
+    // // details.
+    // for (byte i = 0; i < count; i++)
+    // {    
+    //     inputBytes[i] = i + 33;
+    // }
+
+    // // Write input array to EEPROM memory.
+    // DEBUG_INFO_LN("Write bytes to EEPROM memory...");
+    // eeprom->writeBytes(address, count, inputBytes);
+
+    // // Read array with bytes read from EEPROM memory.
+    // DEBUG_INFO_LN("Read bytes from EEPROM memory...");
+    // eeprom->readBytes(address, count, outputBytes);
     
+    // // Print read bytes.
+    // DEBUG_INFO_LN("Read bytes:");
+    // for (byte i = 0; i < count; i++)
+    // {
+    //     DEBUG_INFO_LN(outputBytes[i]);
+    //     DEBUG_INFO_LN(" ");
+    // }
+    // DEBUG_INFO_LN("");
+    return true;
 }
 
 bool storage::readValue(int row , int column, String * str){
@@ -97,4 +127,23 @@ void storage::eeprom_wipe(){
     for (int i = 0; i < EEPROM.length(); i++){
         EEPROM.write(i, 0);
     }
+}
+
+void storage::write_eeprom(int device_address, unsigned int write_address, byte data){
+    Wire.beginTransmission(device_address);
+    Wire.write((int)(write_address >> 8));   // MSB
+    Wire.write((int)(write_address & 0xFF)); // LSB
+    Wire.write(data);
+    Wire.endTransmission();
+}
+
+byte storage::read_eeprom(int device_address, unsigned int read_address){
+    byte rdata = 0xFF;
+    Wire.beginTransmission(device_address);
+    Wire.write((int)(read_address >> 8));   // MSB
+    Wire.write((int)(read_address & 0xFF)); // LSB
+    Wire.endTransmission();
+    Wire.requestFrom(device_address,1);
+    if (Wire.available()) rdata = Wire.read();
+    return rdata;
 }

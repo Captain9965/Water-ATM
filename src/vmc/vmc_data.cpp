@@ -449,13 +449,10 @@ AdminCard * AdminCard::get_default_instance(){
 }
 
 vmc_data_error_t AdminCard::set(String value){
-    /* data validation: */
-    if (!storage::get_default_instance()->writeValue(2, 1, value)){
-        _value = value;
-        _data_error = VMC_DATA_SET_ERROR;
-        return _data_error;
-    }
-
+    /* set value in EEPROM*/
+    char valueArray[12];
+    value.toCharArray(valueArray, 12);
+    EEPROM.put(ADMIN_CARD_ADDRESS, valueArray);
     _value = value;
     _data_error = VMC_DATA_OK;
     return _data_error;
@@ -464,13 +461,18 @@ vmc_data_error_t AdminCard::set(String value){
 String AdminCard::DEFAULT_ADMIN_CARD = "80 D1 BD 2B";
 
 bool AdminCard::load(){
+    /*load value from EEPROM*/
     String value;
-    if (!storage::get_default_instance()->readValue(2, 1, &value)){
+    char valueArray[12];
+    EEPROM.get(ADMIN_CARD_ADDRESS, valueArray);
+    value = String(valueArray);
+    /* data validation,consider if a string is empty */ 
+    if (value.length() == 0 || value == " "){
         _value = DEFAULT_ADMIN_CARD;
         _data_error = VMC_DATA_UNSET;
+        EEPROM.put(ADMIN_CARD_ADDRESS, DEFAULT_ADMIN_CARD);
         return false;
     }
-
     _value = value;
     return true;
 }
@@ -483,13 +485,10 @@ ServiceCard * ServiceCard::get_default_instance(){
 }
 
 vmc_data_error_t ServiceCard::set(String value){
-    /* data validation: */
-    if (!storage::get_default_instance()->writeValue(3, 1, value)){
-        _value = value;
-        _data_error = VMC_DATA_SET_ERROR;
-        return _data_error;
-    }
-
+    /* set value in EEPROM*/
+    char valueArray[12];
+    value.toCharArray(valueArray, 12);
+    EEPROM.put(SERVICE_CARD_ADDRESS, valueArray);
     _value = value;
     _data_error = VMC_DATA_OK;
     return _data_error;
@@ -498,13 +497,18 @@ vmc_data_error_t ServiceCard::set(String value){
 String ServiceCard::DEFAULT_SERVICE_CARD = "F3 79 B3 18";
 
 bool ServiceCard::load(){
+    /*load value from EEPROM*/
     String value;
-    if (!storage::get_default_instance()->readValue(3, 1, &value)){
+    char valueArray[12];
+    EEPROM.get(SERVICE_CARD_ADDRESS, valueArray);
+    value = String(valueArray);
+    /* data validation: */ 
+    if (value.length() == 0 || value == " "){
         _value = DEFAULT_SERVICE_CARD;
         _data_error = VMC_DATA_UNSET;
+        EEPROM.put(SERVICE_CARD_ADDRESS, DEFAULT_SERVICE_CARD);
         return false;
     }
-
     _value = value;
     return true;
 }
@@ -512,12 +516,12 @@ bool ServiceCard::load(){
 /* reset method for Service card*/
 void ServiceCard::reset(){
     _value = DEFAULT_SERVICE_CARD;
-    _data_error = VMC_DATA_UNSET;
+    _data_error = set(DEFAULT_SERVICE_CARD);
 }
 
 /*rest method for Admin Card*/
 void AdminCard::reset(){
     _value = DEFAULT_ADMIN_CARD;
-    _data_error = VMC_DATA_UNSET;
+    _data_error = set(DEFAULT_ADMIN_CARD);
 }
 

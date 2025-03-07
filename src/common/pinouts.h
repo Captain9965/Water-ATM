@@ -32,3 +32,5 @@
 #define SYSTEM_SOLENOID_INTERRUPT_3         PB14
 #define SYSTEM_SOLENOID_INTERRUPT_4         PB15
 #define SYSTEM_BUZZER                       PC5
+#define EEPROM_SCL                          PB10
+#define EEPROM_SDA                          PB11
