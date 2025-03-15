@@ -4,7 +4,7 @@ Water ATM firmware for STM32F103RB on platform io.
 
 The following commands are used to configure the Water ATM via MQTT:
 
-The following commands are used to configure the Water ATM via MQTT on the command line with the mosquitto client. Note that any client can be used, such as [MQTTBox](https://www.thethingsindustries.com/docs/integrations/other-integrations/mqtt/mqtt-clients/mqttbox/). Here is a brief explanation of the arguments used in the commands:
+The following commands are used to configure the Water ATM via MQTT on the command line with the mosquitto client. Note that any client can be used, such as [MQTTBox](https://www.thethingsindustries.com/docs/integrations/other-integrations/mqtt/mqtt-clients/mqttbox/). Brief explanation of the arguments used:
 - `-h`: Specifies the hostname or IP address of the MQTT broker.
 - `-t`: Specifies the topic to which the message is published.
 - `-m`: Specifies the message payload to be sent.
