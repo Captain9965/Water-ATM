@@ -10,7 +10,7 @@ _flowmeter_interrupt_pin(flowmeter_interrupt_pin), _calibration(calibration), _t
     // flowmeter interrupt pin setup:
     digitalWrite(_flowmeter_interrupt_pin, INPUT_PULLUP);
     DEBUG_INFO("Calibration set is: "); DEBUG_INFO_LN(_calibration);
-    bool result = attachInterruptEx(digitalPinToInterrupt(_flowmeter_interrupt_pin), [this]{this->pulse_count++;}, RISING);
+    bool result = attachInterruptEx(digitalPinToInterrupt(_flowmeter_interrupt_pin), [this]{this->pulse_count++;}, CHANGE);
     result ? DEBUG_INFO_LN("Interrupt attached successfully") : DEBUG_INFO_LN("Interrupt failed to attach");
     
     float flow_calculation_interval = 0.0;
@@ -107,9 +107,9 @@ dispensing_state_t DispenseSystem::get_state(){
     return _state;
 }
 
-void DispenseSystem::update_dispensed_quantity(uint32_t time_elapsed){
-    _litres_per_min = pulse_count / (2 * _calibration * (time_elapsed / 1000));
-    _dispensed_quantity += (_litres_per_min / 60);
+void DispenseSystem::update_dispensed_quantity(float time_elapsed){
+    _litres_per_min = (float)pulse_count / (2.0f * _calibration * (time_elapsed / 1000.0f));
+    _dispensed_quantity += (_litres_per_min / 60.0f);
 }
 
 dispensing_state_t DispenseSystem::run(){
