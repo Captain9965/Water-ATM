@@ -55,6 +55,7 @@ static void handle_calib_config_event(JsonDocument* doc){
     float calib2 = (*doc)["calib2"];
     float calib3 = (*doc)["calib3"];
     float calib4 = (*doc)["calib4"];
+    float flowCalibration = (*doc)["flow_calibration"];
 
     DEBUG_INFO("Calibration 1: ");
     DEBUG_INFO(calib1);
@@ -64,6 +65,8 @@ static void handle_calib_config_event(JsonDocument* doc){
     DEBUG_INFO(calib3);
     DEBUG_INFO("Calibration 4: ");
     DEBUG_INFO(calib4);
+    DEBUG_INFO("Flow_calibration: ");
+    DEBUG_INFO(flowCalibration);
 
     calibration_t calib;
     calib.calibration1 = calib1;
@@ -72,6 +75,9 @@ static void handle_calib_config_event(JsonDocument* doc){
     calib.calibration4 = calib4;
     /*set calibration: */
     Calibration::get_default_instance()->set(calib);
+
+    /*set flow calibration: */
+    FlowCalculationTime::get_default_instance()->set(flowCalibration);
     return;
 }
 

@@ -78,7 +78,7 @@ class DispenseSystem{
         bool waiting_for_payment();
         DispenseSystem * next = nullptr;
     private:
-        void update_dispensed_quantity(uint32_t time_elapsed);
+        void update_dispensed_quantity(float time_elapsed);
         void _set_state(dispensing_state_t state);
         dispensing_state_t _state = DISPENSING_IDLE;
         tap_selection_t _tap = TAP_UNSELECTED;
