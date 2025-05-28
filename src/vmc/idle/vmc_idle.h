@@ -15,7 +15,6 @@ class vmc_idle: public State{
     private:
         void check_idle_page_flags();
         void run_sensors();
-        bool isServiceTag(String &uid);
         long long tick_time = 0;
         system_time_t _time;
         

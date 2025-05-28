@@ -45,26 +45,6 @@ class AdminCash: public vmcData<uint32_t> {
         static uint32_t DEFAULT_ADMIN_CASH;
 };
 
-/* Admin card uid string stored in SD card*/
-class AdminCard: public vmcData<String> {
-    public:
-        static AdminCard * get_default_instance();
-        virtual vmc_data_error_t set(String value);
-        virtual bool load();
-        void reset();
-        static String DEFAULT_ADMIN_CARD;
-};
-
-/*service card uid string stored in SD card*/
-class ServiceCard: public vmcData<String> {
-    public:
-        static ServiceCard * get_default_instance();
-        virtual vmc_data_error_t set(String value);
-        virtual bool load();
-        void reset();
-        static String DEFAULT_SERVICE_CARD;
-};
-
 /* Flow calculation stored in EEPROM: */
 
 class FlowCalculationTime: public vmcData<float> {

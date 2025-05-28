@@ -1,6 +1,5 @@
 #include "vmc_idle.h"
 #include "vmc/vmc_errors.h"
-#include "sensors/rfid/rfid.h"
 #include "sensors/rtc/rtc.h"
 #include "storage/storage.h"
 #include "vmc/vmc_data.h"
@@ -60,18 +59,6 @@ void vmc_idle::run_sensors(){
     /* time: */
     systemTime::get_default_instance()->getTime(_time);
     
-}
-bool vmc_idle::isServiceTag(String &uid){
-
-    //get service card uid:
-    String service_uid;
-    ServiceCard::get_default_instance()->get(&service_uid);
-    if (uid.substring(1) == service_uid)
-    {
-        return true;
-    }
-    return false;
-   
 }
 
 void vmc_idle::check_idle_page_flags(){
