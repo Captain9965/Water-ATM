@@ -44,7 +44,7 @@ bool CommsMQTTClient::connect(void){
     }
 
     DEBUG_INFO_LN("Connecting to MQTT broker");
-    if (!_client->connect(MQTT_DEVICE_ID, MQTT_USERNAME, MQTT_PASSWORD)){
+    if (!_client->connect(uid.c_str(), MQTT_USERNAME, MQTT_PASSWORD)){
         DEBUG_INFO_LN("Error connecting to MQTT broker -> ");
         _free_client();
         return false;

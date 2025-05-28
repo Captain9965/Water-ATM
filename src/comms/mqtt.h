@@ -20,7 +20,6 @@
 
 #define MQTT_USERNAME                   "lenny"
 #define MQTT_PASSWORD                   "lenny254"
-#define MQTT_DEVICE_ID                  "any"
 #define MQTT_PUB_TOPIC_PREFIX           "w/p/"
 #define MQTT_SUB_TOPIC_PREFIX           "w/s/"
 #define MQTT_BIRTH_TOPIC                MQTT_PUB_TOPIC_PREFIX "birth"

@@ -6,7 +6,6 @@
 #include "EEPROM.h"
 #include "string.h"
 #include "Wire.h"
-#include <ZEeprom.h>
 
 /* 12c eeprom device base address*/
 #define EEPROM_ADDRESS AT24Cxx_BASE_ADDR
@@ -44,7 +43,6 @@ class storage{
         static storage * get_default_instance();
     private:
         MyTable *settingsTable = nullptr;
-        ZEeprom *eeprom = nullptr;
         Sd2Card card;
         SdVolume volume;
         SdFile root;

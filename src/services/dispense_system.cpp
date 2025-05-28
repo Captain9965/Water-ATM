@@ -1,5 +1,4 @@
 #include "dispense_system.h"
-#include "sensors/rfid/rfid.h"
 #include"ui/ui.h"
 
 DispenseSystem::DispenseSystem(tap_selection_t tap, uint32_t relay_pin, uint32_t flowmeter_interrupt_pin, float calibration, float tariff): _tap(tap),\
@@ -240,14 +239,6 @@ dispensing_state_t DispenseSystem::run(){
         
     }
     return dispense_state;
-}
-
-bool DispenseSystem::is_dispense_tag(String &uid){
-    if (uid.substring(1) == VENDING_CARD)
-    {
-        return true;
-    }
-    return false;
 }
 
 bool DispenseSystem::stopped(){

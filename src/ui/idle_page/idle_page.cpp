@@ -3,9 +3,6 @@
 #include "ui/ui_input.h"
 #include "storage/storage.h"
 #include "../dispensing_page/dispensing_page.h"
-#include "../admin_page/admin_page.h"
-#include "../service_page/service_page.h"
-#include "sensors/rfid/rfid.h"
 
 
 
@@ -20,8 +17,8 @@ int idlePage::load(){
    if(!check_vmc_flag(VMC_NET_CONNECTED)){
         display_net_notConnected();
     }
-   uiInput::get_default_instance()->disable_quantity_buttons();
-   uiInput::get_default_instance()->disable_joystick_button();
+//    uiInput::get_default_instance()->disable_quantity_buttons();
+//    uiInput::get_default_instance()->disable_joystick_button();
    uiInput::get_default_instance()->enable_tap_buttons();
    return 0;
 }
@@ -36,12 +33,12 @@ int idlePage::update(){
     
     display_network_strength();
 
-    if(!uiInput::get_default_instance()->door_closed()){
-        display_info("DOOR OPEN");
+    // if(!uiInput::get_default_instance()->door_closed()){
+    //     display_info("DOOR OPEN");
 
-        // we no longer need to check for tap button presses or the internet connection, simply return
-        return -1;
-    }
+    //     // we no longer need to check for tap button presses or the internet connection, simply return
+    //     return -1;
+    // }
 
     if ((millis() - net_check_timer) >= IDLE_NET_CHECK_TIMER_INTERVAL){
         // DEBUG_INFO_LN("Checking network connection...");
@@ -93,20 +90,6 @@ int idlePage::update(){
         }
     }
 
-    String uid = RFID::get_default_instance()->read_uid();
-        if (is_admin_tag(uid)){
-            get_buzzer()->beep(20);
-            this->ui->set_page(adminPage::get_default_instance());
-        } else if(is_service_tag(uid)){
-            get_buzzer()->beep(20);
-            this->ui->set_page(servicePage::get_default_instance());
-        } else{
-            if(uid.length() > 1){
-                DEBUG_INFO_LN(uid);
-            }
-        }
-
-   
     return 0;
 }
 
@@ -118,26 +101,4 @@ int idlePage::stop(vmc_flags_t tap){
 idlePage* idlePage::get_default_instance(){
     static idlePage page;
     return &page;
-}
-
-bool idlePage::is_admin_tag(String &uid){
-    //get admin card uid:
-    String admin_uid;
-    AdminCard::get_default_instance()->get(&admin_uid);
-    if (uid.substring(1) == admin_uid)
-    {
-        return true;
-    }
-    return false;
-}
-
-bool idlePage::is_service_tag(String &uid){
-    //get service card uid:
-    String service_uid;
-    ServiceCard::get_default_instance()->get(&service_uid);
-    if (uid.substring(1) == service_uid)
-    {
-        return true;
-    }
-    return false;
 }

@@ -1,7 +1,6 @@
 #include "vmc_booting.h"
 #include "../idle/vmc_idle.h"
 #include "../vmc_flags.h"
-#include "sensors/rfid/rfid.h"
 #include "sensors/rtc/rtc.h"
 #include "storage/storage.h"
 #include "vmc/vmc_data.h"
@@ -143,26 +142,13 @@ vmc_error_t vmc_booting::init_settings(){
         DEBUG_INFO_LN("Flow calculation time failed to load");
         return_val = VMC_ERROR_SETTINGS_INIT;
     }
-    if(!AdminCard::get_default_instance()->load()){
-        DEBUG_INFO_LN("Admin card failed to load");
-        return_val = VMC_ERROR_SETTINGS_INIT;
-    }
-
-    if(!ServiceCard::get_default_instance()->load()){
-        DEBUG_INFO_LN("Service card failed to load");
-        return_val = VMC_ERROR_SETTINGS_INIT;
-    }
-
-
+    
    /* create all setting instances here: */
     return return_val;
 }
 
 vmc_error_t vmc_booting::init_sensors(){
     DEBUG_INFO_LN("init_sensors");
-
-    /* initialize rfid: */
-    RFID::get_default_instance()->init();
 
     /* initialize rtc */
     systemTime::get_default_instance()->init();

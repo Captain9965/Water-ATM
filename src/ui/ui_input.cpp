@@ -69,53 +69,13 @@ void quantity_6_ISR(){
 
 uiInput::uiInput(){};
 
-void uiInput::init(){
-    disable_quantity_buttons();
-};
+void uiInput::init(){};
 
 uiInput * uiInput::get_default_instance(){
     static uiInput instance;
     return &instance;
 }
 
-void uiInput::enable_joystick(){
-    joystick_button.enable();
-    clear_input_flag(JOYSTICK_LONG_PRESS);
-    clear_input_flag(JOYSTICK_FLAG_UP);
-    clear_input_flag(JOYSTICK_FLAG_DOWN);
-    clear_input_flag(JOYSTICK_FLAG_LEFT);
-    clear_input_flag(JOYSTICK_PRESS);
-
-}
-
-void uiInput::disable_joystick_button(){
-    joystick_button.disable();
-}
-
-void uiInput::enable_quantity_buttons(){
-    quantity_1_button.enable();
-    quantity_2_button.enable();
-    quantity_3_button.enable();
-    quantity_4_button.enable();
-    quantity_5_button.enable();
-    quantity_6_button.enable();
-    clear_input_flag(QUANTITY_1_BUTTON);
-    clear_input_flag(QUANTITY_2_BUTTON);
-    clear_input_flag(QUANTITY_3_BUTTON);
-    clear_input_flag(QUANTITY_4_BUTTON);
-    clear_input_flag(QUANTITY_5_BUTTON);
-    clear_input_flag(QUANTITY_6_BUTTON);
-}
-
-void uiInput::disable_quantity_buttons(){
-    
-    quantity_1_button.disable();
-    quantity_2_button.disable();
-    quantity_3_button.disable();
-    quantity_4_button.disable();
-    quantity_5_button.disable();
-    quantity_6_button.disable();
-}
 
 void uiInput::enable_tap_buttons(){
     tap_1_button.enable();
@@ -135,22 +95,6 @@ void uiInput::disable_tap_buttons(){
     tap_4_button.disable();
 }
 
-bool uiInput::joystick_button_pressed(){
-    if(check_input_flag(JOYSTICK_PRESS)){
-        clear_input_flag(JOYSTICK_PRESS);
-        return true;
-    }
-    return false;
-}
-
-bool uiInput::joystick_button_long_pressed(){
-    if(check_input_flag(JOYSTICK_LONG_PRESS)){
-        clear_input_flag(JOYSTICK_LONG_PRESS);
-        clear_input_flag(JOYSTICK_PRESS);
-        return true;
-    }
-    return false;
-}
 
 bool uiInput::tap_button_pressed(input_flags_t & tap){
     if(check_input_flag(TAP_1_BUTTON)){
@@ -173,73 +117,8 @@ bool uiInput::tap_button_pressed(input_flags_t & tap){
     return false;
 }
 
-bool uiInput::quantity_button_pressed(input_flags_t &quantity){
-    bool ret = false;
-    if(check_input_flag(QUANTITY_1_BUTTON)){
-        quantity = QUANTITY_1_BUTTON;
-        clear_input_flag(QUANTITY_1_BUTTON);
-        ret = true;
-    } else if (check_input_flag(QUANTITY_2_BUTTON)){
-        quantity = QUANTITY_2_BUTTON;
-        clear_input_flag(QUANTITY_2_BUTTON);
-        ret = true;
-    } else if (check_input_flag(QUANTITY_3_BUTTON)){
-        quantity = QUANTITY_3_BUTTON;
-        clear_input_flag(QUANTITY_3_BUTTON);
-        ret = true;
-    } else if (check_input_flag(QUANTITY_4_BUTTON)){
-        quantity = QUANTITY_4_BUTTON;
-        clear_input_flag(QUANTITY_4_BUTTON);
-        ret = true;
-    } else if (check_input_flag(QUANTITY_5_BUTTON)){
-        quantity = QUANTITY_5_BUTTON;
-        clear_input_flag(QUANTITY_5_BUTTON);
-        ret = true;
-    } else if (check_input_flag(QUANTITY_6_BUTTON)){
-        quantity = QUANTITY_6_BUTTON;
-        clear_input_flag(QUANTITY_6_BUTTON);
-        ret = true;
-    }
-    return ret;
-}
-
-bool uiInput::door_closed(){
-    if(check_input_flag(DOOR_CLOSED)){
-        clear_input_flag(DOOR_CLOSED);
-        return true;
-    }
-    return false;
-}
-
-void uiInput::update_joystick_state(){
-    joystick_state_t state = joystick::get_default_instance()->get_state();
-    switch (state)
-    {
-    case JOYSTICK_UP:
-        set_input_flag(JOYSTICK_FLAG_UP);
-        break;
-    case JOYSTICK_DOWN:
-        set_input_flag(JOYSTICK_FLAG_DOWN);
-        break;
-    case JOYSTICK_RIGHT:
-        set_input_flag(JOYSTICK_FLAG_RIGHT);
-        break;
-    case JOYSTICK_LEFT:
-        set_input_flag(JOYSTICK_FLAG_LEFT);
-        break;
-    default:
-        break;
-    }
-
-}
-
 void uiInput::update_push_button_states(){
    
-    if(joystick_button.is_long_pressed()){
-        set_input_flag(JOYSTICK_LONG_PRESS);
-    } else if (joystick_button.is_pressed()){
-        set_input_flag(JOYSTICK_PRESS);
-    }
     if(tap_1_button.is_pressed()){
         set_input_flag(TAP_1_BUTTON);
     }
@@ -252,56 +131,4 @@ void uiInput::update_push_button_states(){
     if(tap_4_button.is_pressed()){
         set_input_flag(TAP_4_BUTTON);
     }
-    if(quantity_1_button.is_pressed()){
-        set_input_flag(QUANTITY_1_BUTTON);
-    }
-    if(quantity_2_button.is_pressed()){
-        set_input_flag(QUANTITY_2_BUTTON);
-    }
-    if(quantity_3_button.is_pressed()){
-        set_input_flag(QUANTITY_3_BUTTON);
-    }
-    if(quantity_4_button.is_pressed()){
-        set_input_flag(QUANTITY_4_BUTTON);
-    }
-    if(quantity_5_button.is_pressed()){
-        set_input_flag(QUANTITY_5_BUTTON);
-    }
-    if(quantity_6_button.is_pressed()){
-        set_input_flag(QUANTITY_6_BUTTON);
-    }
-    if(door_switch.get_button_state()){
-        set_input_flag(DOOR_CLOSED);
-    }
-}
-bool uiInput::joystick_up(){
-    if(check_input_flag(JOYSTICK_FLAG_UP)){
-        clear_input_flag(JOYSTICK_FLAG_UP);
-        return true;
-    }
-    return false;
-}
-
-bool uiInput::joystick_down(){
-    if(check_input_flag(JOYSTICK_FLAG_DOWN)){
-        clear_input_flag(JOYSTICK_FLAG_DOWN);
-        return true;
-    }
-    return false;
-}
-
-bool uiInput::joystick_right(){
-    if(check_input_flag(JOYSTICK_FLAG_RIGHT)){
-        clear_input_flag(JOYSTICK_FLAG_RIGHT);
-        return true;
-    }
-    return false;
-}
-
-bool uiInput::joystick_left(){
-    if(check_input_flag(JOYSTICK_FLAG_LEFT)){
-        clear_input_flag(JOYSTICK_FLAG_LEFT);
-        return true;
-    }
-    return false;
 }

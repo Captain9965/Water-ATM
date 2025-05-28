@@ -101,7 +101,7 @@ int UI::init(){
     get_display2()->init();
     get_display2()->backlight();
     get_display1()->backlight();
-    joystick::get_default_instance()->init();
+    // joystick::get_default_instance()->init();
     get_display1()->createChar(10,rssLogo);
     return 0;
 
@@ -264,7 +264,7 @@ void display_network_strength(){
 
     /* convert rss to percentage given minimum is 0 and maximum is 30*/
     rss = (rss * 100) / 30;
-    get_display1()->setCursor(16,0);
+    get_display1()->setCursor(15,0);
     get_display1()->write(byte(10));
     // get_display1()->print("rss:");
     // get_display1()->setCursor(18,0);

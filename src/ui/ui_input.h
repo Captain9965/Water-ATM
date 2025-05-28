@@ -42,36 +42,15 @@ class uiInput{
     public:
         uiInput();
         void init();
-        void enable_joystick();
         void enable_tap_buttons();
         void disable_tap_buttons();
-        void enable_quantity_buttons();
-        void disable_quantity_buttons();
-        void disable_joystick_button();
-        bool joystick_button_pressed();
-        bool joystick_button_long_pressed();
         bool tap_button_pressed(input_flags_t & tap);
-        bool quantity_button_pressed(input_flags_t & quantity);
-        bool door_closed();
-        bool joystick_down();
-        bool joystick_up();
-        bool joystick_left();
-        bool joystick_right();
-        void update_joystick_state();
         void update_push_button_states();
         static uiInput * get_default_instance();
     private:
-        pollingButton joystick_button = pollingButton(SYSTEM_JOYSTICK_BUTTON,INPUT_PULLUP);
         pollingButton tap_1_button = pollingButton(SYSTEM_TAP_1, INPUT_PULLDOWN);
         pollingButton tap_2_button = pollingButton(SYSTEM_TAP_2, INPUT_PULLDOWN);
         pollingButton tap_3_button = pollingButton(SYSTEM_TAP_3, INPUT_PULLDOWN);
         pollingButton tap_4_button = pollingButton(SYSTEM_TAP_4, INPUT_PULLDOWN);
-        pollingButton quantity_1_button = pollingButton(SYSTEM_QUANTITY_1, INPUT_PULLDOWN);
-        pollingButton quantity_2_button = pollingButton(SYSTEM_QUANTITY_2, INPUT_PULLDOWN);
-        pollingButton quantity_3_button = pollingButton(SYSTEM_QUANTITY_3, INPUT_PULLDOWN);
-        pollingButton quantity_4_button = pollingButton(SYSTEM_QUANTITY_4, INPUT_PULLDOWN);
-        pollingButton quantity_5_button = pollingButton(SYSTEM_QUANTITY_5, INPUT_PULLDOWN);
-        pollingButton quantity_6_button = pollingButton(SYSTEM_QUANTITY_6, INPUT_PULLDOWN);
-        pollingButton door_switch = pollingButton(SYSTEM_DOORSWITCH, INPUT_PULLDOWN);
 };
 
