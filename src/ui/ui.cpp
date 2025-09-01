@@ -264,6 +264,7 @@ void display_network_strength(){
 
     /* convert rss to percentage given minimum is 0 and maximum is 30*/
     rss = (rss * 100) / 30;
+    if (rss >= 100) rss = 99;
     get_display1()->setCursor(15,0);
     get_display1()->write(byte(10));
     // get_display1()->print("rss:");
