@@ -133,8 +133,8 @@ dispensing_state_t DispenseSystem::run(){
             set_from_event(DISPENSING_PAY_WAIT);
         }
 
-        /* Exit if the user has not paid in 30 seconds*/
-        if (millis() - _state_timer >= 30000){
+        /* Exit if the user has not paid in 3.5 mins*/
+        if (millis() - _state_timer >= 210000){
             _set_state(DISPENSING_EXIT);
         }
 
