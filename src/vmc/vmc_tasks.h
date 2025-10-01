@@ -1,6 +1,7 @@
 #pragma once
 #include "common/common.h"
 #include "comms/comms.h"
+#include "vmc_watchdog.h"
 
 void comms_task(void *pvParameters);
 void main_task(void *pvParameters);

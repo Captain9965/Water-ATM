@@ -36,7 +36,7 @@ int dispensingPage::update(){
             case UI_AWAIT_PAYMENT:
                 {   
     
-                    display_primary_info("Pay via Mpesa", false);
+                    display_primary_info("Pay via M-Money", false);
                     break;
 
                 }

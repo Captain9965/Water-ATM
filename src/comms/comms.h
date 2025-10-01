@@ -1,6 +1,7 @@
 #pragma once
 #include "mqtt.h"
 #include "comms_events.h"
+#include "vmc/vmc_watchdog.h"
 /* comms states:*/
 typedef enum {
     COMMS_STATE_HIGH_FREQUENCY = 0,

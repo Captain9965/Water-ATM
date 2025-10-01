@@ -30,6 +30,7 @@ void Comms::run(){
     init();
     DEBUG_INFO_LN("Comms init success");
     while (1){
+    xTaskLastCheckIn[TASK_IDX_COMMS] = xTaskGetTickCount();
        switch (comms_state){
         case COMMS_STATE_OFF:
             comms_sleep();
