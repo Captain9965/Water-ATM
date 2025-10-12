@@ -152,38 +152,38 @@ void display_dispenses(float amount, int tap_index, bool shadow_string){
     switch(tap_index){
         case 1:
             if(shadow_string){
-                get_display2()->setCursor(1, 0); get_display2()->print("              ");
+                get_display2()->setCursor(0, 0); get_display2()->print("              ");
             } else {
-                get_display2()->setCursor(1, 0); get_display2()->print("Tap 1: ");
-                get_display2()->setCursor(9, 0); get_display2()->print(amount);
-                get_display2()->setCursor(14, 0); get_display2()->print("L");
+                get_display2()->setCursor(0, 0); get_display2()->print("Tap 1: ");
+                get_display2()->setCursor(8, 0); get_display2()->print(amount);
+                get_display2()->setCursor(13, 0); get_display2()->print("Ltrs");
             }
             break;
         case 2:
             if(shadow_string){
-                get_display2()->setCursor(1, 1); get_display2()->print("              ");
+                get_display2()->setCursor(0, 1); get_display2()->print("              ");
             } else {
-                get_display2()->setCursor(1, 1); get_display2()->print("Tap 2: ");
-                get_display2()->setCursor(9, 1); get_display2()->print(amount);
-                get_display2()->setCursor(14, 1); get_display2()->print("L");
+                get_display2()->setCursor(0, 1); get_display2()->print("Tap 2: ");
+                get_display2()->setCursor(8, 1); get_display2()->print(amount);
+                get_display2()->setCursor(16, 1); get_display2()->print("Ltrs");
             }
             break;
         case 3:
             if(shadow_string){
-                get_display2()->setCursor(1, 2); get_display2()->print("              ");
+                get_display2()->setCursor(0, 2); get_display2()->print("              ");
             } else {
-                get_display2()->setCursor(1, 2); get_display2()->print("Tap 3: ");
-                get_display2()->setCursor(9, 2); get_display2()->print(amount);
-                get_display2()->setCursor(14, 2); get_display2()->print("L");
+                get_display2()->setCursor(0, 2); get_display2()->print("Tap 3: ");
+                get_display2()->setCursor(8, 2); get_display2()->print(amount);
+                get_display2()->setCursor(16, 2); get_display2()->print("Ltrs");
             }
             break;
         case 4:
             if(shadow_string){
-                get_display2()->setCursor(1, 3); get_display2()->print("              ");
+                get_display2()->setCursor(0, 3); get_display2()->print("              ");
             } else {
-                get_display2()->setCursor(1, 3); get_display2()->print("Tap 4: ");
-                get_display2()->setCursor(9, 3); get_display2()->print(amount);
-                get_display2()->setCursor(14, 3); get_display2()->print("L");
+                get_display2()->setCursor(0, 3); get_display2()->print("Tap 4: ");
+                get_display2()->setCursor(8, 3); get_display2()->print(amount);
+                get_display2()->setCursor(16, 3); get_display2()->print("Ltrs");
             }
             break;
         default:
