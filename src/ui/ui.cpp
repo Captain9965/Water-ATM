@@ -156,7 +156,7 @@ void display_dispenses(float amount, int tap_index, bool shadow_string){
             } else {
                 get_display2()->setCursor(0, 0); get_display2()->print("Tap 1: ");
                 get_display2()->setCursor(8, 0); get_display2()->print(amount);
-                get_display2()->setCursor(13, 0); get_display2()->print("Ltrs");
+                get_display2()->setCursor(16, 0); get_display2()->print("Ltrs");
             }
             break;
         case 2:
@@ -212,16 +212,16 @@ void update_quantities(float amount, int tap_index){
 void update_dispense_status(const char * status, int tap_index){
     switch (tap_index){
         case 1:
-            get_display2()->setCursor(1, 0); get_display2()->print(status);
+            get_display2()->setCursor(0, 0); get_display2()->print(status);
             break;
         case 2:
-            get_display2()->setCursor(1, 1); get_display2()->print(status);
+            get_display2()->setCursor(0, 1); get_display2()->print(status);
             break;
         case 3:
-            get_display2()->setCursor(1, 2); get_display2()->print(status);
+            get_display2()->setCursor(0, 2); get_display2()->print(status);
             break;
         case 4:
-            get_display2()->setCursor(1, 3); get_display2()->print(status);
+            get_display2()->setCursor(0, 3); get_display2()->print(status);
             break;
         default:
             break;
