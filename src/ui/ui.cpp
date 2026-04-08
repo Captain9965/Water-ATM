@@ -14,12 +14,12 @@ byte rssLogo[] = {
 
 
 LiquidCrystal_I2C * get_display1(){
-    static LiquidCrystal_I2C display1(0x25, 20, 4);
+    static LiquidCrystal_I2C display1(DISPLAY1_I2C_ADDR, 20, 4);
     return &display1;
 }
 
 LiquidCrystal_I2C * get_display2(){
-    static LiquidCrystal_I2C display2(0x26, 20, 4);
+    static LiquidCrystal_I2C display2(DISPLAY2_I2C_ADDR, 20, 4);
     return &display2;
 }
 
