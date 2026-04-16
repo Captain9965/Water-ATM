@@ -20,16 +20,17 @@ static void handle_pay_event(JsonDocument* doc){
     //convert amount to uint32_t
     uint32_t amount_int = atoi(amount);
     //check state id to see whether we are in dispensing state
-    if(VMC::get_default_instance()->get_state()->id == "DISPENSING"){
-        //if we are in dispensing state, we need to acknowledge receipt of funds and set admin cash
+    const char* current_state = VMC::get_default_instance()->get_state()->id;
+    DEBUG_INFO("Current state: ");
+    DEBUG_INFO_LN(current_state);
+    if(current_state != nullptr && strcmp(current_state, "DISPENSING") == 0){
         AdminCash::get_default_instance()->set(amount_int);
         prec_event_t prec_event;
         prec_event.uid = uid;
         publish_prec_event(&prec_event);
         return;
     }
-    //debug
-    DEBUG_INFO("Not in dispensing state, ignoring pay event");
+    DEBUG_INFO_LN("Not in dispensing state, ignoring pay event");
     return;
 }
 
@@ -125,9 +126,9 @@ static void handle_time_config_event(JsonDocument* doc){
 
 void handle_server_side_event(char* event, size_t len)
 {
+    DEBUG_INFO("handle_server_side_event: ");
+    DEBUG_INFO_LN(event);
 
-    
-    //user ArduinoJson to parse the event, event is structued as a json string, with event type denoted as "ev"
     StaticJsonDocument<256> doc;
     DeserializationError error = deserializeJson(doc, event);
     if (error) {

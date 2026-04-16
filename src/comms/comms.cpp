@@ -1,121 +1,59 @@
 #include "comms.h"
 #include "vmc/vmc_flags.h"
 
-
-Comms::Comms(){
-    _network_client = GsmClient::get_instance();
-    _mqtt_client = CommsMQTTClient::get_instance();
-    return;
-}
-
-Comms::~Comms(){
-    if(_network_client){
-        delete _network_client;
-        _network_client = nullptr;
-    }
-    if(_mqtt_client){
-        delete _mqtt_client;
-        _mqtt_client = nullptr;
-    }
-
-}
+Comms::Comms() {}
 
 Comms* Comms::get_instance(){
     static Comms comms;
     return &comms;
 }
 
-void Comms::run(){
-    DEBUG_INFO_LN("Comms::run()");
-    init();
-    DEBUG_INFO_LN("Comms init success");
-    while (1){
-    xTaskLastCheckIn[TASK_IDX_COMMS] = xTaskGetTickCount();
-       switch (comms_state){
-        case COMMS_STATE_OFF:
-            comms_sleep();
-            break;
-        default:
-            comms_loop();
-            break;
-       };
-  
-    wait_ms(30);
-    }
-
+void Comms::init(){
+    ModemSerial.begin(SYSTEM_GSM_BAUDRATE);
+    A7680_MQTT* mqtt = A7680_MQTT::get_default_instance();
+    mqtt->begin(APN_NAME, SYSTEM_GSM_POWER_KEY);
+    mqtt->setCallback(mqtt_server_event_callback);
+    mqtt->powerOn();
 }
 
-/* initialize comms resources here and set state: */
-void Comms::init(){
-    _network_client->init();
-    set_comms_state(COMMS_STATE_HIGH_FREQUENCY);
-    return;
+void Comms::update(){
+    A7680_MQTT* mqtt = A7680_MQTT::get_default_instance();
+    mqtt->update();
+
+    if (mqtt->isConnected()){
+        static bool _imei_printed = false;
+        if (!_imei_printed){
+            DEBUG_INFO("MQTT connected. IMEI: ");
+            DEBUG_INFO_LN(mqtt->getIMEI().c_str());
+            _imei_printed = true;
+        }
+        set_vmc_flag(VMC_NET_CONNECTED);
+    } else {
+        clear_vmc_flag(VMC_NET_CONNECTED);
+    }
+
+    dispatch_comms_queue();
 }
 
 int16_t Comms::get_rss(){
-    return _network_client->get_signal_strength();
+    return (int16_t)A7680_MQTT::get_default_instance()->getRSSI();
 }
 
-
-void Comms::set_comms_state(comms_state_t state){
-    if (comms_state != state){
-        comms_state = state;
-    }
-}
-void Comms::comms_loop(){
-    if (!_network_client->connected() || !_mqtt_client->is_connected()){
-                if(!_network_client->connect()){
-                    DEBUG_INFO_LN("Failed to connect to network || GPRS");
-                    /* clear net connected flag for display */
-                    clear_vmc_flag(VMC_NET_CONNECTED);
-                    return;
-                }
-                _mqtt_client->disconnect();
-                if(!_mqtt_client->connect()){
-                    DEBUG_INFO_LN("Failed to connect to broker");
-                    clear_vmc_flag(VMC_NET_CONNECTED);
-                    return;
-                }
-                last_send_time = millis();
-                COMMS_ON = true;
-        }
-        set_vmc_flag(VMC_NET_CONNECTED);
-        _mqtt_client->loop();
-        // DEBUG_INFO("Signal strength: ");
-        // DEBUG_INFO_LN(_network_client->get_signal_strength());
-
-        
-
-        if(millis() - last_send_time > 20000){
-            last_send_time = millis();
-        }
-        /* dispatch comms event queue: */
-        dispatch_comms_queue();
-
-}
 comms_ev_error_t Comms::dispatch_comms_queue(){
-    outMessage_t msg;
-    if(!xQueueReceive(* CommsOutQueue::get_instance(), (void *)&msg, 0)){
+    if (!A7680_MQTT::get_default_instance()->isConnected()){
         return COMMS_EV_QUEUE_EMPTY;
     }
-    DEBUG_INFO("Received event-> ");
+    outMessage_t msg;
+    if(!CommsOutQueue::get_instance()->peek(msg)){
+        return COMMS_EV_QUEUE_EMPTY;
+    }
+    DEBUG_INFO("Dispatching event-> ");
     DEBUG_INFO_LN(msg.message);
-    std::string uid = stm32f1_uid();
-    std::string topic = std::string(MQTT_PUB_TOPIC_PREFIX) + uid;
-    if(!_mqtt_client->publish_event(topic.c_str(), msg.message)){
-        DEBUG_INFO_LN("Failed to publish message");
+    String imei = A7680_MQTT::get_default_instance()->getIMEI();
+    std::string topic = std::string(MQTT_PUB_TOPIC_PREFIX) + imei.c_str();
+    if(A7680_MQTT::get_default_instance()->publish(topic.c_str(), msg.message)){
+        CommsOutQueue::get_instance()->dequeue(msg);
+        return COMMS_EV_OK;
     }
-
-
-    return COMMS_EV_OK;
-}
-
-void Comms::comms_sleep(){
-    if (COMMS_ON){
-        _mqtt_client->disconnect();
-        _network_client->disconnect();
-        COMMS_ON = false;
-    }
- 
-    return;
+    return COMMS_EV_PAYLOAD_ERROR;
 }

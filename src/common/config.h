@@ -1,6 +1,5 @@
 #pragma once
 
-#define TINY_GSM_MODEM_SIM800
 // #define DUMP_AT_COMMANDS
 #define SYSTEM_DEBUG
 // #define MEM_DEBUG
@@ -17,8 +16,8 @@
  *   BOARD_VARIANT_A  →  display1=0x25, display2=0x26
  *   BOARD_VARIANT_B  →  display1=0x3D, display2=0x3E
  */
-// #define BOARD_VARIANT_A
-#define BOARD_VARIANT_B
+#define BOARD_VARIANT_A
+// #define BOARD_VARIANT_B
 
 #if defined(BOARD_VARIANT_A)
     #define DISPLAY1_I2C_ADDR   0x25

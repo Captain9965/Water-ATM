@@ -1,5 +1,6 @@
 #pragma once
 #include "vmc/vmc.h"
+#include "comms/comms.h"
 #include "comms/comms_events.h"
 #include "sensors/rtc/rtc.h"
 

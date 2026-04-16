@@ -5,5 +5,3 @@
 #include "ui/splash_screen/splash_screen.h"
 #include "ui/ui_input.h"
 #include "comms/comms.h"
-
-

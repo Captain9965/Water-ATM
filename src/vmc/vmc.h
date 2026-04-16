@@ -1,8 +1,9 @@
 #pragma once
 #include "common/common.h"
-#include "vmc_tasks.h"
 #include "vmc_errors.h"
+
 class VMC;
+
 /* Base state class */
 class State{
     protected:
@@ -17,10 +18,11 @@ class State{
         const char* id = nullptr;
         bool started = false;
 };
+
 /* vmc class */
 class VMC{
     protected:
-        State *vmc_state =  nullptr;
+        State *vmc_state = nullptr;
     public:
         ~VMC();
         virtual int start();
@@ -29,6 +31,5 @@ class VMC{
         virtual void set_state(State *state);
         virtual State* get_state();
         static VMC* get_default_instance();
-        // get_state()?
         vmc_error_t error;
 };

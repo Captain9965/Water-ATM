@@ -31,7 +31,7 @@ int dispensingPage::update(){
     /* instance is running : */
     if (!_dispense_group->is_empty() && _current_dispense_instance){
         switch_ui_state();
-        DEBUG_INFO("UI state -> "); DEBUG_INFO_LN(ui_state);
+        // DEBUG_INFO("UI state -> "); DEBUG_INFO_LN(ui_state);
         switch (ui_state){
             case UI_AWAIT_PAYMENT:
                 {   

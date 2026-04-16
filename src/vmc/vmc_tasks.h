@@ -1,12 +1,3 @@
 #pragma once
-#include "common/common.h"
-#include "comms/comms.h"
-#include "vmc_watchdog.h"
-
-void comms_task(void *pvParameters);
-void main_task(void *pvParameters);
-void input_task(void * prParameters);
-
-BaseType_t * get_comms_taskhandle();
-BaseType_t * get_main_taskhandle();
-BaseType_t * get_input_task();
+// FreeRTOS tasks removed. All work runs in the Arduino main loop().
+// See main.cpp loop() for the former comms_task, main_task, and input_task logic.

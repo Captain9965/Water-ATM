@@ -1,6 +1,5 @@
 #pragma once
 #include <Arduino.h>
-#include <STM32FreeRTOS.h>
 #include "pinouts.h"
 #include "config.h"
 #include "stm32f1_uid.h"
@@ -8,6 +7,10 @@
 
 /* debug utils */
 #define SerialDebug Serial
+
+// Hardware serial for the A7680 GSM module
+extern HardwareSerial ModemSerial;
+#define MODEM ModemSerial
 
 void debug_init(int * error);
 char * stack_debug();
@@ -24,6 +27,4 @@ char * stack_debug();
 #endif
 
 /* delay utils */
-#define wait_ms(x) vTaskDelay(x/ portTICK_PERIOD_MS)
-// #define wait_us(x) delayMicroseconds(x)
-
+#define wait_ms(x) delay(x)
