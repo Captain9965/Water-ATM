@@ -2,6 +2,7 @@
 #include "ArduinoJson.h"
 #include "vmc/vmc_data.h"
 #include "vmc/vmc.h"
+#include "ota/mqtt_ota.h"
 
 //event strings
 #define PAY_EVENT_STR "pay"
@@ -9,6 +10,9 @@
 #define CALIBRATON_CONFIG_EVENT_STR "calibration_config"
 #define TARIFF_CONFIG_EVENT_STR "tariff_config"
 #define TIME_CONFIG_EVENT_STR "time_config"
+#define OTA_START_EVENT_STR "ota_start"
+#define OTA_CHUNK_EVENT_STR "ota_chunk"
+#define OTA_ABORT_EVENT_STR "ota_abort"
 
 //event handlers
 static void handle_pay_event(JsonDocument* doc){
@@ -129,7 +133,10 @@ void handle_server_side_event(char* event, size_t len)
     DEBUG_INFO("handle_server_side_event: ");
     DEBUG_INFO_LN(event);
 
-    StaticJsonDocument<256> doc;
+    // 384 bytes is sufficient for all events including OTA chunks.
+    // ArduinoJson stores string values by pointer (zero-copy) when parsing from
+    // a char* buffer, so the pool only needs space for tree nodes (~16 B each).
+    StaticJsonDocument<384> doc;
     DeserializationError error = deserializeJson(doc, event);
     if (error) {
         DEBUG_INFO_LN("Failed to parse event");
@@ -147,5 +154,11 @@ void handle_server_side_event(char* event, size_t len)
     } else if(strcmp(ev, TIME_CONFIG_EVENT_STR) == 0){
         //handle time config event
         handle_time_config_event(&doc);
+    } else if(strcmp(ev, OTA_START_EVENT_STR) == 0){
+        MqttOtaHandler::get_instance()->on_ota_start(&doc);
+    } else if(strcmp(ev, OTA_CHUNK_EVENT_STR) == 0){
+        MqttOtaHandler::get_instance()->on_ota_chunk(&doc);
+    } else if(strcmp(ev, OTA_ABORT_EVENT_STR) == 0){
+        MqttOtaHandler::get_instance()->on_ota_abort();
     }
 }

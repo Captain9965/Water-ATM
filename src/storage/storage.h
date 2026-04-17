@@ -28,6 +28,8 @@
 #define FLOW_CALCULATION_TIME_ADDRESS       56
 #define ADMIN_CARD_ADDRESS                  60
 #define SERVICE_CARD_ADDRESS                72
+// OTA resume state — 16 bytes at addresses 84–99 (see ota/ota.h)
+// #define OTA_STATE_EEPROM_ADDR            84   (defined in ota/ota.h)
 
 class storage{
     public:

@@ -17,4 +17,6 @@ class vmc_booting: public State{
         vmc_error_t init_sensors();
         vmc_error_t init_actuators();
         vmc_error_t init_services();
+        // Returns true and begins the OTA session when a pending update is found
+        bool        check_for_ota_update();
 };

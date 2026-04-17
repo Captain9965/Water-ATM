@@ -3,6 +3,7 @@
 #include "ui/ui_input.h"
 #include "storage/storage.h"
 #include "../dispensing_page/dispensing_page.h"
+#include "../ota_page/ota_page.h"
 
 
 
@@ -28,7 +29,13 @@ int idlePage::update(){
         load();
         loaded = true;
     }
-    
+
+    if (check_vmc_flag(VMC_OTA_ACTIVE)) {
+        clear_displays();
+        this->ui->set_page(otaPage::get_default_instance());
+        return 0;
+    }
+
     display_time();
     
     display_network_strength();
