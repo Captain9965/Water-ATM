@@ -2,6 +2,7 @@
 
 #include "common/common.h"
 #include "server_event_handlers.h"
+#include "comms/apn_list.h"
 
 // function signature for the callback
 typedef void (*MQTTCallback)(String topic, String payload);
@@ -9,7 +10,7 @@ typedef void (*MQTTCallback)(String topic, String payload);
 class A7680_MQTT {
   public:
     A7680_MQTT(Stream& modem, Stream& debug);
-    void begin(String apn, uint8_t power_key);
+    void begin(uint8_t power_key);
     void setCallback(MQTTCallback cb);
     void update();
     bool publish(const char* topic, const char* msg);
@@ -38,6 +39,8 @@ class A7680_MQTT {
     String _topic = "";
     uint8_t _powerKey;
     
+    uint8_t  _apnIndex = 0;
+
     uint32_t _lastHeartbeat;
     uint32_t _lastRSSICheck;
     uint32_t _lastNetCheck  = 0;
@@ -60,6 +63,10 @@ class A7680_MQTT {
     // gap; 100 ms covers any realistic inter-burst pause while still being
     // 10× faster than the original 1000 ms readString() timeout.
     static constexpr uint32_t RX_IDLE_MS = 100;
+
+    // Advances _apnIndex to the next candidate and updates _apn.
+    // Returns false (and wraps back to 0) when the list is exhausted.
+    bool advanceAPN();
 
     bool sendAT(const char* cmd, const char* expected = "OK", uint32_t timeout = 3000);
     void parseCSQ(String rx);

@@ -3,9 +3,10 @@
 A7680_MQTT::A7680_MQTT(Stream& modem, Stream& debug) : 
   _modem(&modem), _debug(&debug), _rssi(99), _currentState(INIT), _callback(nullptr) {}
 
-void A7680_MQTT::begin(String apn, uint8_t power_key) {
-  _apn = apn;
+void A7680_MQTT::begin(uint8_t power_key) {
   _powerKey = power_key;
+  _apnIndex = 0;
+  _apn      = APN_LIST[0].apn;
   pinMode(_powerKey, OUTPUT);
   digitalWrite(_powerKey, LOW);
 }
@@ -13,14 +14,34 @@ void A7680_MQTT::begin(String apn, uint8_t power_key) {
 void A7680_MQTT::powerOn() {
   _debug->println("Triggering Modem Power Key...");
   digitalWrite(_powerKey, HIGH);
-  delay(2000); 
+  delay(2000);
   digitalWrite(_powerKey, LOW);
+  _apnIndex = 0;                      // restart APN search from the top
+  _apn      = APN_LIST[0].apn;
   _debug->println("Waiting for modem boot (approx 10s)...");
   // We don't block for 15s here; we let the state machine poll 'AT'
 }
 
 void A7680_MQTT::setCallback(MQTTCallback cb) {
   _callback = cb;
+}
+
+bool A7680_MQTT::advanceAPN() {
+  _apnIndex++;
+  if (_apnIndex >= APN_LIST_SIZE) {
+    _apnIndex = 0;
+    _apn      = APN_LIST[0].apn;
+    _debug->println("[APN] All candidates exhausted — restarting search.");
+    return false;
+  }
+  _apn = APN_LIST[_apnIndex].apn;
+  _debug->print("[APN] Trying next (");
+  _debug->print(_apnIndex);
+  _debug->print("/");
+  _debug->print(APN_LIST_SIZE - 1);
+  _debug->print("): ");
+  _debug->println(_apn);
+  return true;
 }
 
 bool A7680_MQTT::sendAT(const char* cmd, const char* expected, uint32_t timeout) {
@@ -173,22 +194,23 @@ void A7680_MQTT::update() {
       }
 
       // 6. Open the Network
-      _debug->println("Attempting NETOPEN...");
+      _debug->print("Attempting NETOPEN with APN: ");
+      _debug->println(_apn);
       if (sendAT("AT+NETOPEN", "OK", 5000)) {
           // Wait for the unsolicited result +NETOPEN: 0 (Success)
           // Some firmware versions return OK immediately but take time to finalize
-          delay(1000); 
+          delay(1000);
           if (sendAT("AT+NETOPEN?", "+NETOPEN: 1")) {
-              _debug->println("Network opened successfully.");
+              _debug->print("Network opened successfully. APN: ");
+              _debug->println(_apn);
               _currentState = MQTT_START;
           } else {
-              _debug->println("NETOPEN command accepted but network not open. Retrying...");
-              _currentState = ERROR_RECOVERY;
+              _debug->println("NETOPEN accepted but network not open — trying next APN.");
+              if (!advanceAPN()) _currentState = ERROR_RECOVERY;
           }
-
       } else {
-          _debug->println("Failed to open network.");
-          _currentState = ERROR_RECOVERY;
+          _debug->println("NETOPEN failed — trying next APN.");
+          if (!advanceAPN()) _currentState = ERROR_RECOVERY;
       }
       break;
 

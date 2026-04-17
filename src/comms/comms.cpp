@@ -11,7 +11,7 @@ Comms* Comms::get_instance(){
 void Comms::init(){
     ModemSerial.begin(SYSTEM_GSM_BAUDRATE);
     A7680_MQTT* mqtt = A7680_MQTT::get_default_instance();
-    mqtt->begin(APN_NAME, SYSTEM_GSM_POWER_KEY);
+    mqtt->begin(SYSTEM_GSM_POWER_KEY);
     mqtt->setCallback(mqtt_server_event_callback);
     mqtt->powerOn();
 }
